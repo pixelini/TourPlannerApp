@@ -10,7 +10,7 @@
         <StackPanel Orientation="Vertical">
             <TextBox Text="Von" />
             <TextBox Text="Nach" />
-            <Button Content="Suche" />
+            <Button Content="Suche" Command="{Binding LookupTourCommand}" />
         </StackPanel>
 
             

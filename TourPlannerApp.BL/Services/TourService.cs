@@ -15,7 +15,7 @@ namespace TourPlannerApp.BL.Services
 
         public List<TourItem> GetAllTours()
         {
-            throw new System.NotImplementedException();
+            return _tourDataAccess.GetAllTours();
         }
 
         public int AddTour(TourItem tourItem)

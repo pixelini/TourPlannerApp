@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using TourPlannerApp.ViewModels;
 
 namespace TourPlannerApp.Views
 {
@@ -23,6 +24,7 @@ namespace TourPlannerApp.Views
         public SidebarView()
         {
             InitializeComponent();
+            this.DataContext = new SidebarViewModel();
         }
     }
 }
