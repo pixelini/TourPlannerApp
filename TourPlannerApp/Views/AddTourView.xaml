@@ -7,9 +7,12 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
-        <TextBox Text="Von" />
-        <TextBox Text="Nach" />
-        <Button Content="Suche" />
+        <StackPanel Orientation="Vertical">
+            <TextBox Text="Von" />
+            <TextBox Text="Nach" />
+            <Button Content="Suche" />
+        </StackPanel>
+
             
     </Grid>
 </UserControl>

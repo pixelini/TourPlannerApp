@@ -28,7 +28,7 @@
                     <Button Grid.Column="1" Content="Touren"/>
                     <Button Margin="10 0 0 0" Grid.Column="2" Content="+ Neue Tour erstellen" 
                             Command="{Binding Navigator.UpdateCurrentViewModelCommand}" 
-                            CommandParameter="{x:Static nav:ViewType.TourDetails}"/>
+                            CommandParameter="{x:Static nav:ViewType.AddTour}"/>
 
                 </Grid>
             </Border>
@@ -83,6 +83,10 @@
                             
                             <DataTemplate DataType="{x:Type viewModels:HomeViewModel}">
                                 <views:HomeView />
+                            </DataTemplate>
+                            
+                            <DataTemplate DataType="{x:Type viewModels:AddTourViewModel}">
+                                <views:AddTourView />
                             </DataTemplate>
                         </ContentControl.Resources>
                     </ContentControl>

@@ -18,4 +18,8 @@
     <Resource Include="Images\sample_tour.PNG" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\TourPlannerApp.BL\TourPlannerApp.BL.csproj" />
+  </ItemGroup>
+
 </Project>
