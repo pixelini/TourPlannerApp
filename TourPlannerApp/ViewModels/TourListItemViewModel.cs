@@ -10,6 +10,7 @@ namespace TourPlannerApp.ViewModels
     public class TourListItemViewModel : BaseViewModel
     {
         public string Tourname { get; set; }
+
         public string RouteInfo { get; set; }
 
         public string DistanceInfo { get; set; }

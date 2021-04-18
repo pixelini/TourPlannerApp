@@ -6,11 +6,11 @@ namespace TourPlannerApp.DAL
 {
     public class TourDataAccess : ITourDataAccess
     {
-        private string connectionString;
+        private string _connectionString;
 
         public TourDataAccess()
         {
-            connectionString = SettingsManager.GetSettings().Connection;
+            _connectionString = SettingsManager.GetSettings().Connection;
         }
         
         
@@ -116,7 +116,7 @@ namespace TourPlannerApp.DAL
 
         private NpgsqlConnection Connect()
         {
-            var conn = new NpgsqlConnection(connectionString);
+            var conn = new NpgsqlConnection(_connectionString);
             conn.Open();
             return conn;
         }

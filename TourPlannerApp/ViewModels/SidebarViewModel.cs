@@ -11,11 +11,15 @@ using TourPlannerApp.DAL;
 using TourPlannerApp.Models;
 using TourPlannerApp.ViewModels.Base;
 using System.Diagnostics; //for debug-mode
+using TourPlannerApp.Navigator;
 
 namespace TourPlannerApp.ViewModels
 {
     public class SidebarViewModel : BaseViewModel
     {
+
+        public INavigator Navigator { get; set; }
+
         private ITourService _tourService { get; set; }
 
         public ObservableCollection<TourItem> Items { get; set; }
@@ -72,6 +76,8 @@ namespace TourPlannerApp.ViewModels
 
         public SidebarViewModel()
         {
+            // sets navigator to the static navigator of the MainViewModel
+            Navigator = MainViewModel.Navigator;
             var repository = new TourDataAccess();
             _tourService = new TourService(repository);
             Items = new ObservableCollection<TourItem>(_tourService.GetAllTours());

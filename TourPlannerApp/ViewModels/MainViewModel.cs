@@ -10,7 +10,7 @@ namespace TourPlannerApp.ViewModels
 {
     public class MainViewModel : BaseViewModel
     {
-        public INavigator Navigator { get; set; } = new Navigator.Navigator();
+        public static INavigator Navigator { get; set; } = new Navigator.Navigator();
 
         public MainViewModel()
         {

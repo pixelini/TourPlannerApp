@@ -7,12 +7,32 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
-        <StackPanel Orientation="Vertical">
-            <TextBox Text="Von" />
-            <TextBox Text="Nach" />
-            <Button Content="Suche" Command="{Binding LookupTourCommand}" />
-        </StackPanel>
-
+        <Border Padding="90 20">
+            <StackPanel Orientation="Vertical">
             
+                    <TextBlock Text="Wohin geht's?" FontSize="13pt" FontWeight="Bold" Margin="0 10" />
+
+                    <!-- From-->
+                    <TextBlock Text="Von" />
+                    <TextBox Padding="2" Text="{Binding StartLocationInput, Mode=TwoWay}"  />
+
+                    <!-- To -->
+                    <TextBlock Margin="0 10 0 0" Text="Nach" />
+                    <TextBox Padding="2" Text="{Binding TargetLocationInput, Mode=TwoWay}"  />
+
+                    <!--Route Type-->
+                <TextBlock Margin="0 10 0 0" Text="Typ" />
+                    <ComboBox x:Name="FinishDropdown" SelectedIndex="0" Padding="2">
+                        <ComboBoxItem>Fussweg</ComboBoxItem> <!--TODO Binding-->
+                        <ComboBoxItem>Fahrrad</ComboBoxItem>
+                        <ComboBoxItem>Auto</ComboBoxItem>
+                    </ComboBox>
+
+                <Button Margin="0 30 0 0" Content="Tour suchen" Command="{Binding LookupTourCommand}" />
+            
+            </StackPanel>
+        </Border>
+
+
     </Grid>
 </UserControl>

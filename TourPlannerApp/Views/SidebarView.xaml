@@ -5,6 +5,8 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:TourPlannerApp.Views"
              xmlns:viewModels="clr-namespace:TourPlannerApp.ViewModels"
+             xmlns:nav="clr-namespace:TourPlannerApp.Navigator"
+             
              xmlns:control="clr-namespace:TourPlannerApp.Control"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
@@ -25,7 +27,6 @@
 
         </Grid>
 
-        <Button Margin="5 0 0 0" Grid.Column="1" Content="Gewählte Tour entfernen" Command="{Binding DeleteCommand}" />
 
         <!-- Mode=TwoWay? bei ItemSource -->
 
@@ -33,7 +34,7 @@
         <ListBox 
                 x:Name="listMediaItems" 
                 ItemsSource="{Binding SearchResultItems}" 
-                SelectedItem="{Binding CurrentItem}" 
+                SelectedItem="{Binding CurrentItem}"
                 Margin="0,5,0,20"
          >
 
@@ -48,13 +49,19 @@
                             </ContextMenu>
                         </TextBlock.ContextMenu>
                     </TextBlock>
-                    
+
 
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
 
-        <control:TourListItemControl />
+        <!-- placeholder, will be changed later! -->
+        <Button Margin="0 5 0 0" Content="Gewählte Tour entfernen" Command="{Binding DeleteCommand}" />
+        <Button Margin="0 5 0 0" Content="Gewählte Tour anzeigen" Command="{Binding Navigator.UpdateCurrentViewModelCommand}" 
+                            CommandParameter="{x:Static nav:ViewType.TourDetails}" />
+
+        <!-- show custom control - preview -->
+        <control:TourListItemControl Margin="0 50 0 50" />
 
 
     </StackPanel>
