@@ -7,7 +7,7 @@ namespace TourPlannerApp.Models
     {
         public TourItemType Type { get; set; }
         
-        public string Id { get; set; }
+        public int Id { get; set; }
         
         // Optional
         public string Name { get; set; }

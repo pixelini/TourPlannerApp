@@ -8,14 +8,16 @@
         xmlns:nav="clr-namespace:TourPlannerApp.Navigator"
         xmlns:local="clr-namespace:TourPlannerApp"
         mc:Ignorable="d"
-        Title="MainWindow" Height="650" Width="1000">
+        Title="Tourboo" Height="650" Width="1000"
+        Icon="Images/logo_tourbo_icon.ico"
+        >
 
     <Border Padding="10">
 
-        <StackPanel Orientation="Vertical" Grid.Row="1">
+        <StackPanel Orientation="Vertical">
 
             <!-- Top Nav + Buttons -->
-            <Border Background="WHITE">
+            <Border Background="{StaticResource BrushPrimary1}" >
                 <Grid Margin="10 10">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*" />
@@ -45,23 +47,23 @@
                 </Grid.ColumnDefinitions>
 
                 <!-- Left Side -->
-                <Border Padding="10 0 10 0" Background="BLACK">
+                <Border Grid.Row="0" Padding="10 0 10 0" Background="{StaticResource BrushPrimary2}">
                     <views:SidebarView />
                 </Border>
 
 
                 <!-- Right Side -->
-                <Border Padding="50" Background="RED" Grid.Column="1" >
+                <Border Grid.Row="0" Padding="50" Background="{StaticResource BrushPrimary3}" Grid.Column="1" >
                     <ContentControl Grid.Row="0" Content="{Binding Navigator.CurrentViewModel}">
                         <ContentControl.Resources>
                             <DataTemplate DataType="{x:Type viewModels:TourDetailsViewModel}">
                                 <views:TourDetailsView />
                             </DataTemplate>
-                            
+
                             <DataTemplate DataType="{x:Type viewModels:HomeViewModel}">
                                 <views:HomeView />
                             </DataTemplate>
-                            
+
                             <DataTemplate DataType="{x:Type viewModels:AddTourViewModel}">
                                 <views:AddTourView />
                             </DataTemplate>

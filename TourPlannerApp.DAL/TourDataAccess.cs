@@ -16,10 +16,23 @@ namespace TourPlannerApp.DAL
         
         public List<TourItem> GetAllTours()
         {
+            /*
+            var tourlist = new List<TourItem>
+            {
+                new TourItem() { Name = "Coole Tour", StartLocation = "Wien", TargetLocation = "Graz" },
+                new TourItem() { Name = "Super Tour", StartLocation = "Wien", TargetLocation = "Graz" }, 
+                new TourItem() { Name = "Fade Tour", StartLocation = "Wien", TargetLocation = "Graz" }, 
+                new TourItem() { Name = "Top Tour", StartLocation = "Wien", TargetLocation = "Graz" }, 
+                new TourItem() { Name = "Steile Tour", StartLocation = "Wien", TargetLocation = "Graz" }
+            };
+
+            return tourlist;
+            */
+            
             var allTours = new List<TourItem>();
 
             var conn = Connect();
-            var sql = "SELECT name, start_location, target_location, distance, img_path, creation_time, type FROM swe2_tourplanner.tour";
+            var sql = "SELECT id, name, start_location, target_location, distance, img_path, type FROM swe2_tourplanner.tour";
             using var cmd = new NpgsqlCommand(sql, conn);
             //cmd.Parameters.Add(new NpgsqlParameter("@tour_name", "Coole Radtour"));
 
@@ -28,15 +41,15 @@ namespace TourPlannerApp.DAL
             {
                 while (reader.Read())
                 {
-                    string name = reader.GetString(0);
-                    string startLocation = reader.GetString(1);
-                    string targetLocation = reader.GetString(2);
-                    float distance = reader.GetFloat(3);
-                    string imgPath = reader.GetString(4);
-                    //DateTime creationTime = reader.GetString(5);
+                    int id = reader.GetInt32(0);
+                    string name = reader.GetString(1);
+                    string startLocation = reader.GetString(2);
+                    string targetLocation = reader.GetString(3);
+                    float distance = reader.GetFloat(4);
+                    string imgPath = reader.GetString(5);
                     var tourType = GetTourType(reader.GetString(6));
 
-                    var tour = new TourItem { Name = name, StartLocation = startLocation, TargetLocation = targetLocation, Distance = distance, PathToImg = imgPath };
+                    var tour = new TourItem { Id = id, Name = name, StartLocation = startLocation, TargetLocation = targetLocation, Distance = distance, PathToImg = imgPath };
                     allTours.Add(tour);
                 }
             }
@@ -56,19 +69,46 @@ namespace TourPlannerApp.DAL
             throw new System.NotImplementedException();
         }
 
-        public List<TourItem> Search(string tourName)
+        public bool DeleteTour(TourItem tourItem)
+        {
+            bool success = false;
+
+            var conn = Connect();
+            var sql = "DELETE FROM swe2_tourplanner.tour WHERE id = @id";
+
+            using var cmd = new NpgsqlCommand(sql, conn);
+            cmd.Parameters.Add(new NpgsqlParameter("@id", tourItem.Id));
+            cmd.Prepare();
+
+            if (cmd.ExecuteNonQuery() == 1)
+            {
+                success = true;
+            }
+
+            conn.Close();
+            return success;
+        }
+
+        public List<TourItem> SearchByName(string tourName)
         {
             throw new System.NotImplementedException();
         }
 
-        public bool DeleteTour(TourItem tourItem)
-        {
-            return false;
-        }
 
         public bool Exists(TourItem tourItem)
         {
-            throw new System.NotImplementedException();
+            bool success = false;
+            var conn = Connect();
+            var sql = "SELECT * FROM swe2_tourplanner.tour WHERE id = @id";
+
+            using var cmd = new NpgsqlCommand(sql, conn);
+            cmd.Parameters.Add(new NpgsqlParameter("@id", tourItem.Id));
+            cmd.Prepare();
+
+            var reader = cmd.ExecuteReader();
+            success = reader.HasRows;
+            conn.Close();
+            return success;
         }
 
 

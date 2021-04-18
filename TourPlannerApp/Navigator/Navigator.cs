@@ -9,7 +9,7 @@ using TourPlannerApp.ViewModels.Base;
 
 namespace TourPlannerApp.Navigator
 {
-    public class Navigator : BaseViewModel, INavigator
+    public class Navigator : BaseViewModel, INavigator //BaseViewModel nötig?
     {
         private BaseViewModel _currentViewModel;
 
@@ -23,7 +23,7 @@ namespace TourPlannerApp.Navigator
 
             set
             {
-                _currentViewModel = value;
+                _currentViewModel = value; //woher kommt value?
                 RaisePropertyChangedEvent(nameof(CurrentViewModel));
             }
 

@@ -1,0 +1,35 @@
+﻿<UserControl x:Class="TourPlannerApp.Control.TourListItemControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:TourPlannerApp.Control"
+             mc:Ignorable="d" 
+             d:DesignHeight="60" d:DesignWidth="300">
+    <Grid Background="White">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <Border Background="{StaticResource BrushPrimary1}" Width="5" />
+        <Border Grid.Column="1" Padding="8">
+            <Border Background="{StaticResource BrushPrimary1}" Width="{Binding ActualHeight, RelativeSource={RelativeSource Self}}" CornerRadius="{Binding ActualHeight, RelativeSource={RelativeSource Self}}" />
+        </Border>
+
+
+        <StackPanel Grid.Column="2"  Orientation="Horizontal">
+            <StackPanel VerticalAlignment="Center">
+                <TextBlock Text="Tolle Wander-Tour" FontWeight="Bold" />
+                <TextBlock Text="Wien - Graz | 5 km" />
+            </StackPanel>
+
+            <StackPanel Margin="100, 0, 0, 0" VerticalAlignment="Center">
+                <!--<Button Content="..." />-->
+                <TextBlock Text="..." />
+            </StackPanel>
+        </StackPanel>
+
+    </Grid>
+</UserControl>

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics;
 using TourPlannerApp.DAL;
 using TourPlannerApp.Models;
 
@@ -31,22 +32,34 @@ namespace TourPlannerApp.BL.Services
         public bool DeleteTour(TourItem tourItem)
         {
             // find by id
-            if (_tourDataAccess.Exists(tourItem))
+            if (Exists(tourItem))
             {
+                Debug.WriteLine("Tour exists.");
+                // delete if tour exists
+                if (_tourDataAccess.DeleteTour(tourItem))
+                {
+                    Debug.WriteLine("Tour was successfully deleted.");
+                    return true;
+                }
+
+                Debug.WriteLine("Tour couldn't be deleted.");
                 return false;
             }
 
-            return _tourDataAccess.DeleteTour(tourItem);
+            Debug.WriteLine("Tour does not exist.");
+            return false;
         }
 
         public List<TourItem> SearchByName(string tourName)
         {
+
+
             throw new System.NotImplementedException();
         }
 
         public bool Exists(TourItem tourItem)
         {
-            throw new System.NotImplementedException();
+            return _tourDataAccess.Exists(tourItem);
         }
     }
 }
