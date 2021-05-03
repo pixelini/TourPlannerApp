@@ -1,7 +1,7 @@
 ﻿namespace TourPlannerApp.Models
 {
-    public class TourLookupItem
-    {
+    //public class TourLookupItem
+    //{
         
-    }
+    //}
 }

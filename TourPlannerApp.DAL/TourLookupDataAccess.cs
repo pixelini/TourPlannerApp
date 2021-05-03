@@ -8,6 +8,7 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using TourPlannerApp.Models;
+using TourPlannerApp.Models.Models;
 
 namespace TourPlannerApp.DAL
 {
@@ -44,14 +45,19 @@ namespace TourPlannerApp.DAL
             var bodyAsJson = new StringContent(bodyAsString, Encoding.UTF8, "application/json");
             HttpResponseMessage response = await _client.PostAsync(_baseAddress + "directions/v2/route?key=" + _apiKey, bodyAsJson);
 
-            Debug.WriteLine(response);
+            //Debug.WriteLine(response);
 
             if (response.IsSuccessStatusCode)
             {
                 Debug.WriteLine("Successful");
                 content = await response.Content.ReadAsStringAsync();
-                var test = JObject.Parse(content);
                 Debug.WriteLine(content);
+                //var test = JObject.Parse(content);
+                var myDeserializedClass = JsonConvert.DeserializeObject<TourLookup.TourLookupItem>(content);
+
+                Debug.WriteLine("Distance: " + myDeserializedClass.Route.Distance);
+                Debug.WriteLine("Von: " + myDeserializedClass.Route.Locations[0].AdminArea4);
+                Debug.WriteLine("Nach: " + myDeserializedClass.Route.Locations[1].AdminArea4);
             }
 
           
