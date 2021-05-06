@@ -23,6 +23,7 @@ namespace TourPlannerApp.Models.Models
         {
             public RouteError RouteError { get; set; }
             public string SessionId { get; set; }
+            public BoundingBox boundingBox { get; set; }
             public List<Location> Locations { get; set; }
             public double Distance { get; set; }
             public List<Leg> Legs { get; set; }
@@ -37,14 +38,33 @@ namespace TourPlannerApp.Models.Models
 
         public class Location
         {
-            public string AdminArea4 { get; set; } // City
-            public string AdminArea5 { get; set; } // District
+            public string AdminArea4 { get; set; } // County / District
+            public string AdminArea5 { get; set; } // City
             public string PostalCode { get; set; }
-            public string AdminArea1 { get; set; }
-            public string AdminArea3 { get; set; }
+            public string Street { get; set; }
+            public string AdminArea1 { get; set; } // Country
+            public string AdminArea3 { get; set; } // State
             public string AdminArea5Type { get; set; }
             public string AdminArea1Type { get; set; }
             public string AdminArea3Type { get; set; }
+        }
+
+        public class BoundingBox
+        {
+            public Lr lr { get; set; }
+            public Ul ul { get; set; }
+        }
+
+        public class Lr
+        {
+            public double lng { get; set; }
+            public double lat { get; set; }
+        }
+
+        public class Ul
+        {
+            public double lng { get; set; }
+            public double lat { get; set; }
         }
 
         public class Leg

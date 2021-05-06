@@ -52,8 +52,6 @@ namespace TourPlannerApp.BL.Services
 
         public List<TourItem> SearchByName(string tourName)
         {
-
-
             throw new System.NotImplementedException();
         }
 

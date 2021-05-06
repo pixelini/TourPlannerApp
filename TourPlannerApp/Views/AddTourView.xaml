@@ -4,8 +4,11 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:TourPlannerApp.Views"
+             xmlns:converter="clr-namespace:TourPlannerApp.Converter"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
+
+    
     <Grid>
         <Border Padding="130 20">
             <StackPanel Orientation="Vertical">
@@ -29,8 +32,11 @@
                     </ComboBox>
 
                 <Button Padding="5" Margin="0 30 0 0" Content="Tour suchen" Command="{Binding LookupTourCommand}" />
-            
+
+                <Image Width="200" Margin="3" Source="{Binding TourImage, Converter={x:Static converter:ByteArrayToBitmapImageConverter.Instance}, Mode=TwoWay}" />
+
             </StackPanel>
+
         </Border>
 
 
