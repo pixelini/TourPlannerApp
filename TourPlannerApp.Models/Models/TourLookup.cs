@@ -23,7 +23,7 @@ namespace TourPlannerApp.Models.Models
         {
             public RouteError RouteError { get; set; }
             public string SessionId { get; set; }
-            public BoundingBox boundingBox { get; set; }
+            public BoundingBox BoundingBox { get; set; }
             public List<Location> Locations { get; set; }
             public double Distance { get; set; }
             public List<Leg> Legs { get; set; }
@@ -51,20 +51,20 @@ namespace TourPlannerApp.Models.Models
 
         public class BoundingBox
         {
-            public Lr lr { get; set; }
-            public Ul ul { get; set; }
+            public Lr Lr { get; set; }
+            public Ul Ul { get; set; }
         }
 
         public class Lr
         {
-            public double lng { get; set; }
-            public double lat { get; set; }
+            public double Lng { get; set; }
+            public double Lat { get; set; }
         }
 
         public class Ul
         {
-            public double lng { get; set; }
-            public double lat { get; set; }
+            public double Lng { get; set; }
+            public double Lat { get; set; }
         }
 
         public class Leg

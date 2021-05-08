@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:TourPlannerApp.Views"
              xmlns:converter="clr-namespace:TourPlannerApp.Converter"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+             d:DesignHeight="950" d:DesignWidth="800">
 
     
     <Grid>
@@ -24,7 +24,7 @@
                     <TextBox Padding="5" Text="{Binding TargetLocationInput, Mode=TwoWay}"  />
 
                     <!--Route Type-->
-                <TextBlock Margin="0 10 0 0" Text="Typ" />
+                    <TextBlock Margin="0 10 0 0" Text="Typ" />
                     <ComboBox x:Name="FinishDropdown" SelectedIndex="0" Padding="2">
                         <ComboBoxItem >Fussweg</ComboBoxItem> <!--TODO Binding-->
                         <ComboBoxItem>Fahrrad</ComboBoxItem>
@@ -33,10 +33,70 @@
 
                 <Button Padding="5" Margin="0 30 0 0" Content="Tour suchen" Command="{Binding LookupTourCommand}" />
 
-                <Image Width="200" Margin="3" Source="{Binding TourImage, Converter={x:Static converter:ByteArrayToBitmapImageConverter.Instance}, Mode=OneWay}" />
-                <TextBlock Margin="0 10 0 0" Text="{Binding CurrentTour.Route.Distance, Mode=TwoWay}" />
-                
-                
+                <!-- Show Results (temp) -->
+                <TextBlock Margin="0 50 0 0"  Text="{Binding Status}" FontSize="18" FontWeight="Bold" />
+                <Border Margin="0 10 0 0" BorderBrush="{StaticResource BrushPrimary1}" Background="#eeeeee" Padding="20">
+                    <StackPanel>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition />
+                                <RowDefinition />
+                                <RowDefinition />
+                                <RowDefinition />
+                                <RowDefinition />
+                            </Grid.RowDefinitions>
+
+                            <!-- Top Left Side -->
+                            <StackPanel Grid.Column="0" Grid.Row="0" Margin="0 10" Orientation="Horizontal">
+                                <TextBlock MinWidth="80" Text="Start:" />
+                                <TextBlock Text="{Binding StartLocationResult, Mode=TwoWay}" FontWeight="Bold"/>
+                            </StackPanel>
+
+                            <StackPanel Grid.Column="0" Grid.Row="1" Margin="0 10" Orientation="Horizontal">
+                                <TextBlock MinWidth="80" Text="Ziel:" />
+                                <TextBlock Text="{Binding TargetLocationResult, Mode=TwoWay}" FontWeight="Bold"/>
+                            </StackPanel>
+
+                            <StackPanel Grid.Column="0" Grid.Row="2" Margin="0 10" Orientation="Horizontal">
+                                <TextBlock MinWidth="80" Text="Distanz:" />
+                                <TextBlock Text="{Binding Distance, Mode=TwoWay}" FontWeight="Bold"/>
+                                <TextBlock Text=" km" FontWeight="Bold"/>
+                            </StackPanel>
+
+
+                            <Image Grid.Column="1" Grid.RowSpan="4" Width="200" HorizontalAlignment="Right" Source="{Binding TourImage, Converter={x:Static converter:ByteArrayToBitmapImageConverter.Instance}, Mode=OneWay}" />
+
+                        </Grid>
+
+                        <!-- Top Right Side -->
+                        <Expander Grid.Row="4" Margin="0 10" Header="Beschreibung">
+                            <ListView ItemsSource="{Binding Description, Mode=TwoWay}">
+                                <ListView.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Narrative}" FontWeight="Bold" />
+                                    </DataTemplate>
+                                </ListView.ItemTemplate>
+                            </ListView>
+                        </Expander>
+
+                        <StackPanel Margin="0 10" Orientation="Vertical">
+                            <TextBlock Margin="0 0 0 10" Text="Gib deiner Tour einen Namen:" />
+                            <TextBox Margin="0 0 100 0" Padding="5" Text=""  />
+                        </StackPanel>
+
+                        <StackPanel Orientation="Horizontal">
+                            <Button Padding="5" Margin="0 30 0 0" Content="Abbrechen" Command="{Binding }" />
+                            <Button Padding="5" Margin="15 30 0 0" Content="Speichern" Command="{Binding }" />
+                        </StackPanel>
+
+                    </StackPanel>
+                </Border>
+
+
             </StackPanel>
 
         </Border>

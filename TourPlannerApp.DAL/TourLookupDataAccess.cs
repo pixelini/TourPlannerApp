@@ -90,7 +90,7 @@ namespace TourPlannerApp.DAL
         {
             byte[] content = null;
 
-            string coordinates = GetFormattedCoordinatesString(tour.Route.boundingBox);
+            string coordinates = GetFormattedCoordinatesString(tour.Route.BoundingBox);
 
             string requestString = String.Format(
                 "{0}staticmap/v5/map?key={1}&size={2}&defaultMarker={3}&routeColor={4}&zoom={5}&rand={6}&session={7}&boundingBox={8}&type={9}&routeWidth={10}",
@@ -125,10 +125,10 @@ namespace TourPlannerApp.DAL
         private static string GetFormattedCoordinatesString(BoundingBox boundingBox)
         {
             string coordinatesString = String.Format("{0},{1},{2},{3}",
-                boundingBox.ul.lat.ToString(CultureInfo.GetCultureInfo("en-EN").NumberFormat),
-                boundingBox.ul.lng.ToString(CultureInfo.GetCultureInfo("en-EN").NumberFormat),
-                boundingBox.lr.lat.ToString(CultureInfo.GetCultureInfo("en-EN").NumberFormat),
-                boundingBox.lr.lng.ToString(CultureInfo.GetCultureInfo("en-EN").NumberFormat)
+                boundingBox.Ul.Lat.ToString(CultureInfo.GetCultureInfo("en-EN").NumberFormat),
+                boundingBox.Ul.Lng.ToString(CultureInfo.GetCultureInfo("en-EN").NumberFormat),
+                boundingBox.Lr.Lat.ToString(CultureInfo.GetCultureInfo("en-EN").NumberFormat),
+                boundingBox.Lr.Lng.ToString(CultureInfo.GetCultureInfo("en-EN").NumberFormat)
                 );
 
             return coordinatesString;
