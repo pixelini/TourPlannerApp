@@ -17,6 +17,9 @@ namespace TourPlannerApp.ViewModels
 {
     public class SidebarViewModel : BaseViewModel
     {
+        // TEST
+        public TourListViewModel TourListVM { get; set; }
+        // TEST
 
         public INavigator Navigator { get; set; }
 
@@ -84,6 +87,10 @@ namespace TourPlannerApp.ViewModels
             SearchResultItems = new ObservableCollection<TourItem>(Items);
             SearchInput = "";
             currentItem = new TourItem();
+
+            // TEST
+            TourListVM = new TourListViewModel();
+            // TEST
         }
 
 

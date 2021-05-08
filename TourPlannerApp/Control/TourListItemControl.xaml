@@ -5,30 +5,42 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:TourPlannerApp.Control"
              mc:Ignorable="d" 
-             d:DesignHeight="60" d:DesignWidth="300">
-    <Grid Background="White">
+             Height="60" Width="Auto"
+             d:DesignHeight="60" d:DesignWidth="280">
+    <Grid Background="{StaticResource BrushPrimary2}">
         <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
 
-        <Border Background="{StaticResource BrushPrimary1}" Width="5" />
+        <Border Grid.Column="0" Background="{StaticResource BrushPrimary2}" Width="5" />
         <Border Grid.Column="1" Padding="8">
             <Border Background="{StaticResource BrushPrimary1}" Width="{Binding ActualHeight, RelativeSource={RelativeSource Self}}" CornerRadius="{Binding ActualHeight, RelativeSource={RelativeSource Self}}" />
         </Border>
 
 
-        <StackPanel Grid.Column="2"  Orientation="Horizontal">
+        <StackPanel Grid.Column="2" Orientation="Horizontal">
             <StackPanel VerticalAlignment="Center">
-                <TextBlock Text="Tolle Wander-Tour" FontWeight="Bold" />
-                <TextBlock Text="Wien - Graz | 5 km" />
+                <TextBlock Text="{Binding Name}" FontWeight="Bold" />
+                <StackPanel Grid.Column="2"  Orientation="Horizontal">
+                    <WrapPanel Width="130">
+                        <TextBlock Text="{Binding StartLocation}" />
+                        <TextBlock Text=" - " />
+                        <TextBlock Text="{Binding TargetLocation}" />
+                    </WrapPanel>
+                </StackPanel>
             </StackPanel>
 
-            <StackPanel Margin="100, 0, 0, 0" VerticalAlignment="Center">
-                <!--<Button Content="..." />-->
-                <TextBlock Text="..." />
-            </StackPanel>
+        </StackPanel>
+
+        <StackPanel Grid.Column="3" Margin="5 0 0 0" Orientation="Horizontal" VerticalAlignment="Center">
+            <WrapPanel>
+                <TextBlock Width="40" TextAlignment="Right" Text="{Binding Distance}" />
+                <TextBlock TextAlignment="Right" Text=" km" />
+            </WrapPanel>
+            <Button Margin="12 0 15 0" Content="..." />
         </StackPanel>
 
     </Grid>

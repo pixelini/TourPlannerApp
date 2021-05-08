@@ -43,6 +43,25 @@ namespace TourPlannerApp.ViewModels
             }
         }
 
+        private TourLookupItem currentTour;
+
+        public TourLookupItem CurrentTour
+        {
+            get
+            {
+                return currentTour;
+            }
+
+            set
+            {
+                if (currentTour != value)
+                {
+                    currentTour = value;
+                    RaisePropertyChangedEvent(nameof(CurrentTour));
+                }
+            }
+        }
+
 
         private void LookupTour()
         {
@@ -55,7 +74,7 @@ namespace TourPlannerApp.ViewModels
             Debug.WriteLine("Von Street: " + tourResult.Route.Locations[0].Street);
             Debug.WriteLine("Nach: " + tourResult.Route.Locations[1].AdminArea5);
             Debug.WriteLine("Nach Street: " + tourResult.Route.Locations[1].Street);
-
+            CurrentTour = tourResult;
             TourImage = _tourLookupService.GetTourImage(tourResult);
         }
 
@@ -67,16 +86,7 @@ namespace TourPlannerApp.ViewModels
             var api = new TourLookupDataAccess();
             _tourLookupService = new TourLookupService(api);
             TourImage = null;
-        }
-
-        public BitmapImage ImageFromBuffer(Byte[] bytes)
-        {
-            MemoryStream stream = new MemoryStream(bytes);
-            BitmapImage image = new BitmapImage();
-            image.BeginInit();
-            image.StreamSource = stream;
-            image.EndInit();
-            return image;
+            CurrentTour = null;
         }
 
     }

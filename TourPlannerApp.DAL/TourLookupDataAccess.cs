@@ -45,7 +45,6 @@ namespace TourPlannerApp.DAL
         private static async Task<TourLookupItem> GetTourAsync(string from, string to)
         {
             var content = "";
-
             var bodyAsString = GetPostRequestBodyAsJson(from, to);
             var bodyAsJson = new StringContent(bodyAsString, Encoding.UTF8, "application/json");
 

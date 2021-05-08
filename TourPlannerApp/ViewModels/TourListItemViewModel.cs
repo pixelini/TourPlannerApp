@@ -14,5 +14,11 @@ namespace TourPlannerApp.ViewModels
         public string RouteInfo { get; set; }
 
         public string DistanceInfo { get; set; }
+
+        public string SelectionColorRGB { get; set; } // or icon?
+
+        public bool IsSelected { get; set; }
+
+
     }
 }

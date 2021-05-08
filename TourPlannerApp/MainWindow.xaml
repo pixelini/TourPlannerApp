@@ -39,7 +39,7 @@
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="3*" />
+                    <ColumnDefinition Width="2.35*" />
                 </Grid.ColumnDefinitions>
 
                 <!-- Left Side -->
