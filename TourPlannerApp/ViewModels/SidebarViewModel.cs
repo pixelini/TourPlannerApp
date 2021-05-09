@@ -25,15 +25,28 @@ namespace TourPlannerApp.ViewModels
 
         public ObservableCollection<TourItem> SearchResultItems { get; set; }
 
-
         private string searchInput;
+        public string SearchInput
+        {
+            get
+            {
+                return searchInput;
+            }
+
+            set
+            {
+                if (searchInput != value)
+                {
+                    searchInput = value;
+
+                    RaisePropertyChangedEvent(nameof(SearchInput));
+                    Search(SearchInput);
+
+                }
+            }
+        }
+
         private TourItem currentItem;
-
-        private ICommand searchCommand;
-        private ICommand deleteCommand;
-        public ICommand SearchCommand => searchCommand ??= new RelayCommand(Search);
-        public ICommand DeleteCommand => deleteCommand ??= new RelayCommand(Delete);
-
         public TourItem CurrentItem
         {
             get
@@ -52,25 +65,10 @@ namespace TourPlannerApp.ViewModels
 
         }
 
-        public string SearchInput
-        {
-            get
-            {
-                return searchInput;
-            }
-
-            set
-            {
-                if (searchInput != value)
-                {
-                    searchInput = value;
-                    
-                    RaisePropertyChangedEvent(nameof(SearchInput));
-                    Search(SearchInput);
-                    
-                }
-            }
-        }
+        private ICommand searchCommand;
+        private ICommand deleteCommand;
+        public ICommand SearchCommand => searchCommand ??= new RelayCommand(Search);
+        public ICommand DeleteCommand => deleteCommand ??= new RelayCommand(Delete);
 
 
         public SidebarViewModel()

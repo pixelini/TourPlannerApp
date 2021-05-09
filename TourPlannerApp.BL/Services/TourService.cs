@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using TourPlannerApp.DAL;
 using TourPlannerApp.Models;
+using static TourPlannerApp.Models.Models.TourLookup;
 
 namespace TourPlannerApp.BL.Services
 {
@@ -19,9 +20,29 @@ namespace TourPlannerApp.BL.Services
             return _tourDataAccess.GetAllTours();
         }
 
-        public int AddTour(TourItem tourItem)
+        public int AddTour(TourLookupItem tourLookupItem, string name, string startLocation, string targetLocation)
         {
-            throw new System.NotImplementedException();
+            /*
+            // Prepare TourLookupItem as TourItem
+            var newTourItem = ConvertTourLookupToTourItem(tourLookupItem, name, startLocation, targetLocation);
+
+            if (!Exists(newTourItem))
+            {
+                int tourId = _tourDataAccess.AddTour(newTourItem);
+                if (tourId >= 0)
+                {
+                    Debug.WriteLine("Tour was successfully added.");
+                    return tourId;
+                }
+
+                Debug.WriteLine("Tour couldn't be added.");
+                return tourId;
+            }
+
+            Debug.WriteLine("Tour already exits.");
+            
+            */
+            return -1;
         }
 
         public bool UpdateTour(TourItem tourItem)
@@ -59,5 +80,24 @@ namespace TourPlannerApp.BL.Services
         {
             return _tourDataAccess.Exists(tourItem);
         }
+
+        //private TourItem ConvertTourLookupToTourItem(TourLookupItem tourLookupItem, string name, string startLocation, string targetLocation)
+        //{
+        //    TourItem tour = new TourItem();
+        //    tour.Name = name;
+        //    tour.StartLocation = startLocation;
+        //    tour.TargetLocation = targetLocation;
+        //    tour.Distance = tourLookupItem.Route.Distance;
+        //    tour.NavigationDetails = new List<string>();
+
+        //    foreach (var maneuver in tourLookupItem.Route.Legs[0].Maneuvers)
+        //    {
+        //        tour.NavigationDetails.Add(maneuver.Narrative);
+        //    }
+
+        //    return tour;
+           
+        //}
+
     }
 }

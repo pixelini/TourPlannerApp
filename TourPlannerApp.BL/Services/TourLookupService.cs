@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using TourPlannerApp.DAL;
 using TourPlannerApp.Models;
+using TourPlannerApp.Models.Models;
 using static TourPlannerApp.Models.Models.TourLookup;
 
 namespace TourPlannerApp.BL.Services
@@ -14,12 +15,31 @@ namespace TourPlannerApp.BL.Services
             _tourLookupDataAccess = tourLookupDataAccess;
         }
 
-        public TourLookupItem GetTour(string from, string to)
+        public TourItem GetTour(string from, string to)
         {
-            return _tourLookupDataAccess.GetTour(from, to);
+            var tourLookup = _tourLookupDataAccess.GetTour(from, to);
+
+            // if tour lookup successful
+            if (tourLookup != null)
+            {
+                var image = GetTourImage(tourLookup);
+                var tourItem = TourLookup.ConvertTourLookupToTourItem(tourLookup);
+
+                if (image != null)
+                {
+                    tourItem.Image = image;
+                    return tourItem;
+                } else
+                {
+                    // tour item without image is returned
+                    return tourItem;
+                }
+            }
+
+            return null;
         }
 
-        public byte[] GetTourImage(TourLookupItem tour)
+        private byte[] GetTourImage(TourLookupItem tour)
         {
             return _tourLookupDataAccess.GetTourImage(tour);
         }

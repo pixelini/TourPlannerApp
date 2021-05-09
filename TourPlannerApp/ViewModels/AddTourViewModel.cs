@@ -7,6 +7,8 @@ using System.Windows.Input;
 using System.Windows.Media.Imaging;
 using TourPlannerApp.BL.Services;
 using TourPlannerApp.DAL;
+using TourPlannerApp.Models;
+using TourPlannerApp.Models.Models;
 using TourPlannerApp.ViewModels.Base;
 using static TourPlannerApp.Models.Models.TourLookup;
 
@@ -46,7 +48,6 @@ namespace TourPlannerApp.ViewModels
             }
         }
 
-
         private string startLocationResult;
 
         public string StartLocationResult
@@ -85,137 +86,106 @@ namespace TourPlannerApp.ViewModels
             }
         }
 
-        private string distance;
+        private string tourNameInput;
 
-        public string Distance
+        public string TourNameInput
         {
             get
             {
-                return distance;
+                return tourNameInput;
             }
 
             set
             {
-                if (distance != value)
+                if (tourNameInput != value)
                 {
-                    distance = value;
-                    RaisePropertyChangedEvent(nameof(Distance));
+                    tourNameInput = value;
+                    RaisePropertyChangedEvent(nameof(TourNameInput));
                 }
             }
         }
 
-        public ObservableCollection<Maneuver> Description { get; set; }
+        private TourItem currentTourLookup;
 
-
-        private Byte[] tourImage;
-
-        public Byte[] TourImage
+        public TourItem CurrentTourLookup
         {
             get
             {
-                return tourImage;
-            }
-
-            set
-            {
-                if (tourImage != value)
-                {
-                    tourImage = value;
-                    RaisePropertyChangedEvent(nameof(TourImage));
-                }
-            }
-        }
-
-        private TourLookupItem currentTour;
-
-        public TourLookupItem CurrentTour
-        {
-            get
-            {
-                return currentTour;
+                return currentTourLookup;
             }
 
             set
             {
 
-                if (currentTour != value)
+                if (currentTourLookup != value)
                 {
-                    currentTour = value;
-                    // Set all other properties
-                    SetResultProperties(currentTour);
-                    RaisePropertyChangedEvent(nameof(CurrentTour));
+                    currentTourLookup = value;
+                    SetFormattedProperties();
+                    RaisePropertyChangedEvent(nameof(CurrentTourLookup));
                     Status = "Tour gefunden!";
                 }
             }
         }
 
-        private void SetResultProperties(TourLookupItem currentTour)
+        private ICommand saveTourLookupCommand;
+        public ICommand SaveTourLookupCommand => saveTourLookupCommand ??= new RelayCommand(SaveTour);
+
+        public AddTourViewModel()
         {
-
-            if (currentTour.Route.Locations != null)
-            {
-                StartLocationResult = FormatLocation(currentTour.Route.Locations[0]);
-                TargetLocationResult = FormatLocation(currentTour.Route.Locations[1]);
-            }
-
-            Distance = currentTour.Route.Distance.ToString();
-            Description = new ObservableCollection<Maneuver>(GetAllManeuvers(currentTour));
-            TourImage = _tourLookupService.GetTourImage(currentTour); // //TODO: success? -> add image couldn't be loaded -> other properties are ok
-            RaisePropertyChangedEvent(nameof(Description));
-
+            var repository = new TourDataAccess();
+            _tourService = new TourService(repository);
+            var api = new TourLookupDataAccess();
+            _tourLookupService = new TourLookupService(api);
+            Status = "Noch keine Suche gestartet.";
         }
 
-        private ObservableCollection<Maneuver> GetAllManeuvers(TourLookupItem currentTour)
+
+        private void SetFormattedProperties()
         {
-            var allManeuvers = new ObservableCollection<Maneuver>();
-
-            foreach (var maneuver in currentTour.Route.Legs[0].Maneuvers)
-            {
-                allManeuvers.Add(maneuver);
-            }
-
-            return allManeuvers;
-
+            StartLocationResult = FormatLocationData(CurrentTourLookup.StartLocation);
+            TargetLocationResult = FormatLocationData(CurrentTourLookup.TargetLocation);
+            TourNameInput = "Meine Tour 1";
         }
+
 
         private void LookupTour()
         {
-            Debug.WriteLine("Tour Lookup...");
-            Debug.WriteLine(StartLocationInput);
-            Debug.WriteLine(TargetLocationInput);
             var tourResult = _tourLookupService.GetTour(StartLocationInput, TargetLocationInput);
-            CurrentTour = tourResult;
-            
+            CurrentTourLookup = tourResult;
         }
 
 
-        private string FormatLocation(Location location)
+        private void SaveTour(object commandParameter)
+        {
+            Debug.WriteLine("Add Tour...");
+            //_tourService.AddTour(CurrentTourLookup, TourNameInput, StartLocationInput, TargetLocationInput);
+            //RefreshTourList();
+        }
+
+        #region Helpers
+
+        private string FormatLocationData(TourItem.Address address)
         {
             var fullLocation = "";
 
-            if (location.Street != null)
+            if (address.Street != null)
             {
-                fullLocation = AddToLocationString(fullLocation, location.Street);
+                fullLocation = AddToLocationString(fullLocation, address.Street);
             }
 
-            if (location.PostalCode != null)
+            if (address.PostalCode != null)
             {
-                fullLocation = AddToLocationString(fullLocation, location.PostalCode);
+                fullLocation = AddToLocationString(fullLocation, address.PostalCode);
             }
 
-            if (location.AdminArea4 != null)
+            if (address.County != null)
             {
-                fullLocation = AddToLocationString(fullLocation, location.AdminArea4);
+                fullLocation = AddToLocationString(fullLocation, address.County);
             }
 
-            if (location.AdminArea3 != null)
+            if (address.Country != null)
             {
-                fullLocation = AddToLocationString(fullLocation, location.AdminArea3);
-            }
-
-            if (location.AdminArea1 != null)
-            {
-                fullLocation = AddToLocationString(fullLocation, location.AdminArea1);
+                fullLocation = AddToLocationString(fullLocation, address.Country);
             }
 
             return fullLocation;
@@ -226,7 +196,8 @@ namespace TourPlannerApp.ViewModels
             if (locationString == "")
             {
                 locationString += locationDetail;
-            } else
+            }
+            else
             {
                 locationString += ", " + locationDetail;
             }
@@ -235,20 +206,12 @@ namespace TourPlannerApp.ViewModels
         }
 
 
+        #endregion
 
-        public AddTourViewModel()
-        {
-            var repository = new TourDataAccess();
-            _tourService = new TourService(repository);
-            var api = new TourLookupDataAccess();
-            _tourLookupService = new TourLookupService(api);
-            TourImage = null;
-            CurrentTour = null;
-            Status = "Noch keine Suche gestartet.";
-        }
+
 
     }
-    
-    
-    
+
+
+
 }

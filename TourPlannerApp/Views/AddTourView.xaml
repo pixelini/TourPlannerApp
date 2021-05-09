@@ -35,7 +35,7 @@
 
                 <!-- Show Results (temp) -->
                 <TextBlock Margin="0 50 0 0"  Text="{Binding Status}" FontSize="18" FontWeight="Bold" />
-                <Border Margin="0 10 0 0" BorderBrush="{StaticResource BrushPrimary1}" Background="#eeeeee" Padding="20">
+                <Border Margin="0 10 0 0" BorderBrush="{StaticResource BrushPrimary1}" Background="#dddddd" Padding="20">
                     <StackPanel>
                         <Grid>
                             <Grid.ColumnDefinitions>
@@ -63,21 +63,20 @@
 
                             <StackPanel Grid.Column="0" Grid.Row="2" Margin="0 10" Orientation="Horizontal">
                                 <TextBlock MinWidth="80" Text="Distanz:" />
-                                <TextBlock Text="{Binding Distance, Mode=TwoWay}" FontWeight="Bold"/>
+                                <TextBlock Text="{Binding CurrentTourLookup.Distance, Mode=TwoWay}" FontWeight="Bold"/>
                                 <TextBlock Text=" km" FontWeight="Bold"/>
                             </StackPanel>
 
-
-                            <Image Grid.Column="1" Grid.RowSpan="4" Width="200" HorizontalAlignment="Right" Source="{Binding TourImage, Converter={x:Static converter:ByteArrayToBitmapImageConverter.Instance}, Mode=OneWay}" />
+                            <Image Grid.Column="1" Grid.RowSpan="4" Width="200" HorizontalAlignment="Right" Source="{Binding CurrentTourLookup.Image, Converter={x:Static converter:ByteArrayToBitmapImageConverter.Instance}, Mode=OneWay}" />
 
                         </Grid>
 
                         <!-- Top Right Side -->
                         <Expander Grid.Row="4" Margin="0 10" Header="Beschreibung">
-                            <ListView ItemsSource="{Binding Description, Mode=TwoWay}">
+                            <ListView ItemsSource="{Binding CurrentTourLookup.NavigationDetails, Mode=TwoWay}">
                                 <ListView.ItemTemplate>
                                     <DataTemplate>
-                                        <TextBlock Text="{Binding Narrative}" FontWeight="Bold" />
+                                        <TextBlock Text="{Binding}" FontWeight="Bold" />
                                     </DataTemplate>
                                 </ListView.ItemTemplate>
                             </ListView>
@@ -85,12 +84,12 @@
 
                         <StackPanel Margin="0 10" Orientation="Vertical">
                             <TextBlock Margin="0 0 0 10" Text="Gib deiner Tour einen Namen:" />
-                            <TextBox Margin="0 0 100 0" Padding="5" Text=""  />
+                            <TextBox Margin="0 0 100 0" Padding="5" Text="{Binding TourNameInput, Mode=TwoWay}" />
                         </StackPanel>
 
                         <StackPanel Orientation="Horizontal">
                             <Button Padding="5" Margin="0 30 0 0" Content="Abbrechen" Command="{Binding }" />
-                            <Button Padding="5" Margin="15 30 0 0" Content="Speichern" Command="{Binding }" />
+                            <Button Padding="5" Margin="15 30 0 0" Content="Speichern" Command="{Binding SaveTourLookupCommand}" />
                         </StackPanel>
 
                     </StackPanel>

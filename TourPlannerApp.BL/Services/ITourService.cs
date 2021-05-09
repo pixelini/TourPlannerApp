@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using TourPlannerApp.Models;
+using static TourPlannerApp.Models.Models.TourLookup;
 
 namespace TourPlannerApp.BL.Services
 {
@@ -7,7 +8,7 @@ namespace TourPlannerApp.BL.Services
     {
         public List<TourItem> GetAllTours();
 
-        public int AddTour(TourItem tourItem);
+        public int AddTour(TourLookupItem tourLookupItem, string name, string startLocation, string targetLocation);
 
         public bool UpdateTour(TourItem tourItem);
 

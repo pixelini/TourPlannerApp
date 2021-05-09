@@ -6,8 +6,8 @@ namespace TourPlannerApp.BL.Services
 {
     public interface ITourLookupService
     {
-        public TourLookupItem GetTour(string from, string to);
+        public TourItem GetTour(string from, string to);
 
-        public byte[] GetTourImage(TourLookupItem tour);
+        //public byte[] GetTourImage(TourLookupItem tour);
     }
 }

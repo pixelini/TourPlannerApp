@@ -1,6 +1,7 @@
 ﻿using Npgsql;
 using System.Collections.Generic;
 using TourPlannerApp.Models;
+using static TourPlannerApp.Models.TourItem;
 
 namespace TourPlannerApp.DAL
 {
@@ -32,7 +33,11 @@ namespace TourPlannerApp.DAL
             var allTours = new List<TourItem>();
 
             var conn = Connect();
-            var sql = "SELECT id, name, start_location, target_location, distance, img_path, type FROM swe2_tourplanner.tour";
+            //var sql = "SELECT id, name, start_location, target_location, distance, img_path, type FROM swe2_tourplanner.tour";
+
+            var sql = "SELECT id, name, sl_street, sl_zip, sl_county, sl_country, tl_street, tl_zip, tl_county, tl_country, distance, img_path, type FROM swe2_tourplanner.tour";
+
+
             using var cmd = new NpgsqlCommand(sql, conn);
             //cmd.Parameters.Add(new NpgsqlParameter("@tour_name", "Coole Radtour"));
 
@@ -43,13 +48,22 @@ namespace TourPlannerApp.DAL
                 {
                     int id = reader.GetInt32(0);
                     string name = reader.GetString(1);
-                    string startLocation = reader.GetString(2);
-                    string targetLocation = reader.GetString(3);
-                    float distance = reader.GetFloat(4);
-                    string imgPath = reader.GetString(5);
-                    var tourType = GetTourType(reader.GetString(6));
 
-                    var tour = new TourItem { Id = id, Name = name, StartLocation = startLocation, TargetLocation = targetLocation, Distance = distance, PathToImg = imgPath };
+                    var startAddress = new Address();
+                    startAddress.Street = reader.GetString(2);
+                    startAddress.PostalCode = reader.GetString(3);
+                    startAddress.County = reader.GetString(4);
+                    startAddress.Country = reader.GetString(5);
+                    var targetAddress = new Address();
+                    targetAddress.Street = reader.GetString(6);
+                    targetAddress.PostalCode = reader.GetString(7);
+                    targetAddress.County = reader.GetString(8);
+                    targetAddress.Country = reader.GetString(9);
+                    float distance = reader.GetFloat(10);
+                    string imgPath = reader.GetString(11);
+                    var tourType = GetTourType(reader.GetString(12));
+
+                    var tour = new TourItem { Id = id, Name = name, StartLocation = startAddress, TargetLocation = targetAddress, Distance = distance, PathToImg = imgPath };
                     allTours.Add(tour);
                 }
             }

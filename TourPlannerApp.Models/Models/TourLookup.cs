@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static TourPlannerApp.Models.TourItem;
 
 namespace TourPlannerApp.Models.Models
 {
@@ -82,6 +83,63 @@ namespace TourPlannerApp.Models.Models
             public string RouteType { get; set; }
         }
 
+
+        public static TourItem ConvertTourLookupToTourItem(TourLookupItem tourLookupItem)
+        {
+            TourItem tour = new TourItem();
+            //tour.Name = name;
+            //tour.StartLocation = startLocation;
+            //tour.TargetLocation = targetLocation;
+
+            if (tourLookupItem.Route.Locations[0] != null && tourLookupItem.Route.Locations[1] != null)
+            {
+                FillTourItemWithLocationData(tour, tourLookupItem.Route.Locations);
+            }
+
+            tour.Distance = tourLookupItem.Route.Distance;
+            tour.NavigationDetails = new List<string>();
+
+            foreach (var maneuver in tourLookupItem.Route.Legs[0].Maneuvers)
+            {
+                tour.NavigationDetails.Add(maneuver.Narrative);
+            }
+
+            return tour;
+        }
+
+        private static void FillTourItemWithLocationData(TourItem tour, List<Location> locations)
+        {
+            // start location data
+            var startLocation = new Address();
+            startLocation.Street = locations[0].Street ??= "";
+            startLocation.PostalCode = locations[0].PostalCode ??= "";
+            startLocation.County = locations[0].AdminArea4 ??= "";
+            startLocation.Country = locations[0].AdminArea1 ??= "";
+
+            tour.StartLocation = startLocation;
+
+            // target location data
+            var targetLocation = new Address();
+            targetLocation.Street = locations[1].Street ??= "";
+            targetLocation.PostalCode = locations[1].PostalCode ??= "";
+            targetLocation.County = locations[1].AdminArea4 ??= "";
+            targetLocation.Country = locations[1].AdminArea1 ??= "";
+
+            tour.TargetLocation = targetLocation;
+
+            /*
+            tour.StartLocationStreet = locations[0].Street ??= "";
+            tour.StartLocationPostalCode = locations[0].PostalCode ??= "";
+            tour.StartLocationCounty = locations[0].AdminArea4 ??= "";
+            tour.StartLocationCountry = locations[0].AdminArea1 ??= "";
+
+            // target location data
+            tour.TargetLocationStreet = locations[1].Street ??= "";
+            tour.TargetLocationPostalCode = locations[1].PostalCode ??= "";
+            tour.TargetLocationCounty = locations[1].AdminArea4 ??= "";
+            tour.TargetLocationCountry = locations[1].AdminArea1 ??= "";
+            */
+        }
 
     }
 }

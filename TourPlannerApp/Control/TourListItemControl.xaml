@@ -26,9 +26,13 @@
                 <TextBlock Text="{Binding Name}" FontWeight="Bold" />
                 <StackPanel Grid.Column="2"  Orientation="Horizontal">
                     <WrapPanel Width="130">
-                        <TextBlock Text="{Binding StartLocation}" />
+                        <TextBlock Text="{Binding StartLocation.PostalCode}" />
+                        <TextBlock Text=" " />
+                        <TextBlock Text="{Binding StartLocation.County}" />
                         <TextBlock Text=" - " />
-                        <TextBlock Text="{Binding TargetLocation}" />
+                        <TextBlock Text="{Binding StartLocation.PostalCode}" />
+                        <TextBlock Text=" " />
+                        <TextBlock Text="{Binding TargetLocation.County}" />
                     </WrapPanel>
                 </StackPanel>
             </StackPanel>
@@ -37,7 +41,7 @@
 
         <StackPanel Grid.Column="3" Margin="5 0 0 0" Orientation="Horizontal" VerticalAlignment="Center">
             <WrapPanel>
-                <TextBlock Width="40" TextAlignment="Right" Text="{Binding Distance}" />
+                <TextBlock Width="40" TextAlignment="Right" Text="{Binding Distance, StringFormat=#.00}" />
                 <TextBlock TextAlignment="Right" Text=" km" />
             </WrapPanel>
             <Button Margin="12 0 15 0" Content="..." />
