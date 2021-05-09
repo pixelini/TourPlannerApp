@@ -75,7 +75,33 @@ namespace TourPlannerApp.DAL
 
         public int AddTour(TourItem tourItem)
         {
-            throw new System.NotImplementedException();
+            int success = 1;
+
+            var conn = Connect();
+            var sql = "INSERT INTO swe2_tourplanner.tour(name, sl_street, sl_zip, sl_country, sl_county, tl_street, tl_zip, tl_country, tl_county, distance, img_path, type) VALUES (@name, @sl_street, @sl_postalcode, @sl_country, @sl_county, @tl_street, @tl_postalcode, @tl_country, @tl_county, @distance, @img_path, @type)";
+
+            using var cmd = new NpgsqlCommand(sql, conn);
+            cmd.Parameters.Add(new NpgsqlParameter("@name", tourItem.Name));
+            cmd.Parameters.Add(new NpgsqlParameter("@sl_street", tourItem.StartLocation.Street));
+            cmd.Parameters.Add(new NpgsqlParameter("@sl_postalcode", tourItem.StartLocation.PostalCode));
+            cmd.Parameters.Add(new NpgsqlParameter("@sl_country", tourItem.StartLocation.Country));
+            cmd.Parameters.Add(new NpgsqlParameter("@sl_county", tourItem.StartLocation.County));
+            cmd.Parameters.Add(new NpgsqlParameter("@tl_street", tourItem.TargetLocation.Street));
+            cmd.Parameters.Add(new NpgsqlParameter("@tl_postalcode", tourItem.TargetLocation.PostalCode));
+            cmd.Parameters.Add(new NpgsqlParameter("@tl_country", tourItem.TargetLocation.Country));
+            cmd.Parameters.Add(new NpgsqlParameter("@tl_county", tourItem.TargetLocation.County));
+            cmd.Parameters.Add(new NpgsqlParameter("@distance", tourItem.Distance));
+            cmd.Parameters.Add(new NpgsqlParameter("@img_path", "/img/test.png"));
+            cmd.Parameters.Add(new NpgsqlParameter("@type", "Fussweg"));
+            cmd.Prepare();
+
+            if (cmd.ExecuteNonQuery() == 1)
+            {
+                success = 1;
+            }
+
+            conn.Close();
+            return success;
         }
 
         public bool UpdateTour(TourItem tourItem)

@@ -151,6 +151,10 @@ namespace TourPlannerApp.ViewModels
         private void LookupTour()
         {
             var tourResult = _tourLookupService.GetTour(StartLocationInput, TargetLocationInput);
+            if (tourResult == null)
+            {
+                Status = "Keine Tour gefunden.";
+            }
             CurrentTourLookup = tourResult;
         }
 
@@ -158,7 +162,8 @@ namespace TourPlannerApp.ViewModels
         private void SaveTour(object commandParameter)
         {
             Debug.WriteLine("Add Tour...");
-            //_tourService.AddTour(CurrentTourLookup, TourNameInput, StartLocationInput, TargetLocationInput);
+            CurrentTourLookup.Name = TourNameInput;
+            _tourService.AddTour(CurrentTourLookup);
             //RefreshTourList();
         }
 

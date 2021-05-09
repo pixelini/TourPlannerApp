@@ -19,6 +19,11 @@ namespace TourPlannerApp.BL.Services
         {
             var tourLookup = _tourLookupDataAccess.GetTour(from, to);
 
+            if (tourLookup.Info.Statuscode != 0)
+            {
+                return null;
+            }
+
             // if tour lookup successful
             if (tourLookup != null)
             {

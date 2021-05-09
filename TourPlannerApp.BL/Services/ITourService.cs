@@ -8,7 +8,7 @@ namespace TourPlannerApp.BL.Services
     {
         public List<TourItem> GetAllTours();
 
-        public int AddTour(TourLookupItem tourLookupItem, string name, string startLocation, string targetLocation);
+        public int AddTour(TourItem newTourItem);
 
         public bool UpdateTour(TourItem tourItem);
 

@@ -20,12 +20,8 @@ namespace TourPlannerApp.BL.Services
             return _tourDataAccess.GetAllTours();
         }
 
-        public int AddTour(TourLookupItem tourLookupItem, string name, string startLocation, string targetLocation)
+        public int AddTour(TourItem newTourItem)
         {
-            /*
-            // Prepare TourLookupItem as TourItem
-            var newTourItem = ConvertTourLookupToTourItem(tourLookupItem, name, startLocation, targetLocation);
-
             if (!Exists(newTourItem))
             {
                 int tourId = _tourDataAccess.AddTour(newTourItem);
@@ -41,7 +37,6 @@ namespace TourPlannerApp.BL.Services
 
             Debug.WriteLine("Tour already exits.");
             
-            */
             return -1;
         }
 
