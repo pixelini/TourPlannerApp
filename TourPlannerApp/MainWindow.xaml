@@ -8,7 +8,7 @@
         xmlns:nav="clr-namespace:TourPlannerApp.Navigator"
         xmlns:local="clr-namespace:TourPlannerApp"
         mc:Ignorable="d"
-        Title="Tourboo" Height="750" Width="1200"
+        Title="Tourboo" Height="900" Width="1200"
         Icon="Images/logo_tourbo_icon.ico"
         >
 
@@ -43,7 +43,7 @@
                 </Grid.ColumnDefinitions>
 
                 <!-- Left Side -->
-                <Border Grid.Row="0" Padding="10 0 10 0" Background="{StaticResource BrushPrimary2}">
+                <Border Grid.Row="0" Padding="10 0 10 300" Background="{StaticResource BrushPrimary2}">
                     <views:SidebarView />
                 </Border>
 

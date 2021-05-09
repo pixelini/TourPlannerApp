@@ -15,7 +15,7 @@
 
 
     <Grid>
-        <Border Padding="130 20">
+        <Border Padding="130 10">
             <StackPanel Orientation="Vertical">
             
                     <TextBlock Text="Wohin geht's?" FontSize="13pt" FontWeight="Bold" Margin="0 5 0 15" />
@@ -39,7 +39,7 @@
                 <Button Padding="5" Margin="0 30 0 0" Content="Tour suchen" Command="{Binding LookupTourCommand}" />
 
                 <!-- Show Results (temp) -->
-                <TextBlock Margin="0 50 0 0"  Text="{Binding Status}" FontSize="18" FontWeight="Bold" />
+                <TextBlock Margin="0 30 0 0"  Text="{Binding Status}" FontSize="18" FontWeight="Bold" />
                 <Border Visibility="{Binding ShowResult, Converter={StaticResource VisibilityConverter}}" Margin="0 10 0 0" BorderBrush="{StaticResource BrushPrimary1}" Background="#dddddd" Padding="20">
                     <StackPanel>
                         <Grid>
@@ -93,8 +93,7 @@
                         </StackPanel>
 
                         <StackPanel Orientation="Horizontal">
-                            <Button Padding="5" Margin="0 30 0 0" Content="Abbrechen" Command="{Binding }" />
-                            <Button Padding="5" Margin="15 30 0 0" Content="Speichern" Command="{Binding SaveTourLookupCommand}" />
+                            <Button Padding="5" Margin="0 20 0 0" Content="Speichern" Command="{Binding SaveTourLookupCommand}" />
                         </StackPanel>
 
                     </StackPanel>
