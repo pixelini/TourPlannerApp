@@ -9,6 +9,8 @@ using TourPlannerApp.BL.Services;
 using TourPlannerApp.DAL;
 using TourPlannerApp.Models;
 using TourPlannerApp.Models.Models;
+using TourPlannerApp.Navigator;
+using TourPlannerApp.Store;
 using TourPlannerApp.ViewModels.Base;
 using static TourPlannerApp.Models.Models.TourLookup;
 
@@ -29,97 +31,110 @@ namespace TourPlannerApp.ViewModels
 
 
         // necessary for tour results
-        private string status;
-
-        public string Status
+        private bool _showResult;
+        public bool ShowResult
         {
             get
             {
-                return status;
+                return _showResult;
             }
 
             set
             {
-                if (status != value)
+                if (_showResult != value)
                 {
-                    status = value;
+                    _showResult = value;
+                    RaisePropertyChangedEvent(nameof(ShowResult));
+                }
+            }
+        }
+
+        private string _status;
+        public string Status
+        {
+            get
+            {
+                return _status;
+            }
+
+            set
+            {
+                if (_status != value)
+                {
+                    _status = value;
                     RaisePropertyChangedEvent(nameof(Status));
                 }
             }
         }
 
-        private string startLocationResult;
-
+        private string _startLocationResult;
         public string StartLocationResult
         {
             get
             {
-                return startLocationResult;
+                return _startLocationResult;
             }
 
             set
             {
-                if (startLocationResult != value)
+                if (_startLocationResult != value)
                 {
-                    startLocationResult = value;
+                    _startLocationResult = value;
                     RaisePropertyChangedEvent(nameof(StartLocationResult));
                 }
             }
         }
 
-        private string targetLocationResult;
-
+        private string _targetLocationResult;
         public string TargetLocationResult
         {
             get
             {
-                return targetLocationResult;
+                return _targetLocationResult;
             }
 
             set
             {
-                if (targetLocationResult != value)
+                if (_targetLocationResult != value)
                 {
-                    targetLocationResult = value;
+                    _targetLocationResult = value;
                     RaisePropertyChangedEvent(nameof(TargetLocationResult));
                 }
             }
         }
 
-        private string tourNameInput;
-
+        private string _tourNameInput;
         public string TourNameInput
         {
             get
             {
-                return tourNameInput;
+                return _tourNameInput;
             }
 
             set
             {
-                if (tourNameInput != value)
+                if (_tourNameInput != value)
                 {
-                    tourNameInput = value;
+                    _tourNameInput = value;
                     RaisePropertyChangedEvent(nameof(TourNameInput));
                 }
             }
         }
 
-        private TourItem currentTourLookup;
-
+        private TourItem _currentTourLookup;
         public TourItem CurrentTourLookup
         {
             get
             {
-                return currentTourLookup;
+                return _currentTourLookup;
             }
 
             set
             {
 
-                if (currentTourLookup != value)
+                if (_currentTourLookup != value)
                 {
-                    currentTourLookup = value;
+                    _currentTourLookup = value;
                     SetFormattedProperties();
                     RaisePropertyChangedEvent(nameof(CurrentTourLookup));
                     Status = "Tour gefunden!";
@@ -127,8 +142,8 @@ namespace TourPlannerApp.ViewModels
             }
         }
 
-        private ICommand saveTourLookupCommand;
-        public ICommand SaveTourLookupCommand => saveTourLookupCommand ??= new RelayCommand(SaveTour);
+        private ICommand _saveTourLookupCommand;
+        public ICommand SaveTourLookupCommand => _saveTourLookupCommand ??= new RelayCommand(SaveTour);
 
         public AddTourViewModel()
         {
@@ -137,6 +152,7 @@ namespace TourPlannerApp.ViewModels
             var api = new TourLookupDataAccess();
             _tourLookupService = new TourLookupService(api);
             Status = "Noch keine Suche gestartet.";
+            ShowResult = false;
         }
 
 
@@ -154,7 +170,10 @@ namespace TourPlannerApp.ViewModels
             if (tourResult == null)
             {
                 Status = "Keine Tour gefunden.";
+                ShowResult = false;
+                return;
             }
+            ShowResult = true;
             CurrentTourLookup = tourResult;
         }
 
@@ -165,6 +184,8 @@ namespace TourPlannerApp.ViewModels
             CurrentTourLookup.Name = TourNameInput;
             _tourService.AddTour(CurrentTourLookup);
             //RefreshTourList();
+            TourEvents.AnnounceNewTour();
+
         }
 
         #region Helpers

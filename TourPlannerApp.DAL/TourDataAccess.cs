@@ -139,10 +139,10 @@ namespace TourPlannerApp.DAL
         {
             bool success = false;
             var conn = Connect();
-            var sql = "SELECT * FROM swe2_tourplanner.tour WHERE id = @id";
+            var sql = "SELECT * FROM swe2_tourplanner.tour WHERE name = @name";
 
             using var cmd = new NpgsqlCommand(sql, conn);
-            cmd.Parameters.Add(new NpgsqlParameter("@id", tourItem.Id));
+            cmd.Parameters.Add(new NpgsqlParameter("@name", tourItem.Name));
             cmd.Prepare();
 
             var reader = cmd.ExecuteReader();

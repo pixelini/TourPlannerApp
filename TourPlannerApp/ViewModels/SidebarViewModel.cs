@@ -12,6 +12,7 @@ using TourPlannerApp.Models;
 using TourPlannerApp.ViewModels.Base;
 using System.Diagnostics; //for debug-mode
 using TourPlannerApp.Navigator;
+using TourPlannerApp.Store;
 
 namespace TourPlannerApp.ViewModels
 {
@@ -25,19 +26,19 @@ namespace TourPlannerApp.ViewModels
 
         public ObservableCollection<TourItem> SearchResultItems { get; set; }
 
-        private string searchInput;
+        private string _searchInput;
         public string SearchInput
         {
             get
             {
-                return searchInput;
+                return _searchInput;
             }
 
             set
             {
-                if (searchInput != value)
+                if (_searchInput != value)
                 {
-                    searchInput = value;
+                    _searchInput = value;
 
                     RaisePropertyChangedEvent(nameof(SearchInput));
                     Search(SearchInput);
@@ -46,29 +47,29 @@ namespace TourPlannerApp.ViewModels
             }
         }
 
-        private TourItem currentItem;
+        private TourItem _currentItem;
         public TourItem CurrentItem
         {
             get
             {
-                return currentItem;
+                return _currentItem;
             }
 
             set
             {
-                if ((currentItem != value) && (value != null))
+                if ((_currentItem != value) && (value != null))
                 {
-                    currentItem = value;
+                    _currentItem = value;
                     RaisePropertyChangedEvent(nameof(CurrentItem));
                 }
             }
 
         }
 
-        private ICommand searchCommand;
-        private ICommand deleteCommand;
-        public ICommand SearchCommand => searchCommand ??= new RelayCommand(Search);
-        public ICommand DeleteCommand => deleteCommand ??= new RelayCommand(Delete);
+        private ICommand _searchCommand;
+        private ICommand _deleteCommand;
+        public ICommand SearchCommand => _searchCommand ??= new RelayCommand(Search);
+        public ICommand DeleteCommand => _deleteCommand ??= new RelayCommand(Delete);
 
 
         public SidebarViewModel()
@@ -80,9 +81,16 @@ namespace TourPlannerApp.ViewModels
             Items = new ObservableCollection<TourItem>(_tourService.GetAllTours());
             SearchResultItems = new ObservableCollection<TourItem>(Items);
             SearchInput = "";
-            currentItem = new TourItem();
+            _currentItem = new TourItem();
+
+            TourEvents.TourCreated += OnTourCreated;
+
         }
 
+        private void OnTourCreated()
+        {
+            RefreshTourList();
+        }
 
         private void Search(object commandParameter)
         {
