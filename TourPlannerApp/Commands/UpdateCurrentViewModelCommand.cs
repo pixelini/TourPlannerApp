@@ -39,7 +39,7 @@ namespace TourPlannerApp.Commands
                         _navigator.CurrentViewModel = new AddTourViewModel();
                         break;
                     case ViewType.TourDetails:
-                        _navigator.CurrentViewModel = new TourDetailsViewModel();
+                        //_navigator.CurrentViewModel = new TourDetailsViewModel();
                         break;
                     default:
                         break;

@@ -67,9 +67,13 @@ namespace TourPlannerApp.ViewModels
         }
 
         private ICommand _searchCommand;
-        private ICommand _deleteCommand;
         public ICommand SearchCommand => _searchCommand ??= new RelayCommand(Search);
+        
+        private ICommand _deleteCommand;
         public ICommand DeleteCommand => _deleteCommand ??= new RelayCommand(Delete);
+
+        private ICommand _showSelectedTourCommand;
+        public ICommand ShowSelectedTourCommand => _showSelectedTourCommand ??= new RelayCommand(ShowTour);
 
 
         public SidebarViewModel()
@@ -110,8 +114,14 @@ namespace TourPlannerApp.ViewModels
                 }
             }
         }
-        
-        
+
+        private void ShowTour(object commandParameter)
+        {
+            Debug.WriteLine("Show Tour: " + CurrentItem.Name + "(ID: " + CurrentItem.Id + ")");
+            Navigator.CurrentViewModel = new TourDetailsViewModel(CurrentItem);
+        }
+
+
         private void Delete(object commandParameter)
         {
             Debug.WriteLine("Delete Tour: " + CurrentItem.Name + "(ID: " + CurrentItem.Id + ")");
