@@ -27,28 +27,54 @@
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
 
-                <Image Grid.Column="0" Source="/Images/sample_tour.png" Margin="0" Height="140" Width="200"></Image>
+                <Image Grid.Column="0" Source="/Images/sample_tour.png" Margin="0" Height="Auto" Width="Auto"></Image>
 
-                <StackPanel Orientation="Vertical" Grid.Column="1" Margin="10 0 10 0">
-                    <TextBlock Margin="0 10" Text="Langweiliger Spaziergang" FontSize="13pt" FontWeight="Bold"/>
-                    <TextBlock Grid.Column="0" Text="Route: Wien - Graz" />
-                    <TextBlock Grid.Column="0" Text="Distanz: 20km" />
-                    <TextBlock Grid.Column="0" Text="Dauer: ~10h" />
+                <StackPanel Orientation="Vertical" Grid.Column="1" Margin="40 0 10 0">
+                    <TextBlock Margin="0 10" Text="{Binding SelectedTour.Name, Mode=TwoWay}" FontSize="13pt" FontWeight="Bold"/>
+                    
+                    <!--Start Location-->
+                    <TextBlock MinWidth="70" Margin="0 10 10 0" Text="Startpunkt: " />
+                    <TextBlock Text="{Binding SelectedTour.StartLocation.Street, Mode=TwoWay}" FontWeight="Bold" />
                     <StackPanel Orientation="Horizontal">
-                        <Button Padding="5" Margin="0 10 0 0" Content="Aktivität hinzufügen"/>
+                        <TextBlock Text="{Binding SelectedTour.StartLocation.PostalCode, Mode=TwoWay}" FontWeight="Bold" />
+                        <TextBlock Text=" " />
+                        <TextBlock Text="{Binding SelectedTour.StartLocation.County, Mode=TwoWay}" FontWeight="Bold" />
+                    </StackPanel>
+
+                    <!--Target Location-->
+                    <TextBlock MinWidth="70" Margin="0 10 10 0" Text="Zielort: " />
+                    <TextBlock Text="{Binding SelectedTour.TargetLocation.Street, Mode=TwoWay}" FontWeight="Bold" />
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="{Binding SelectedTour.TargetLocation.PostalCode, Mode=TwoWay}" FontWeight="Bold" />
+                        <TextBlock Text=" " />
+                        <TextBlock Text="{Binding SelectedTour.TargetLocation.County, Mode=TwoWay}" FontWeight="Bold" />
+                    </StackPanel>
+                    <TextBlock Margin="0 10 10 0" Grid.Column="0" Text="Distanz:" />
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="20" FontWeight="Bold"/>
+                        <TextBlock Text=" km" FontWeight="Bold"/>
+                    </StackPanel>
+
+                    <StackPanel Orientation="Horizontal">
+                        <Button Padding="5" Margin="0 10 0 0" Content="Aktivität hinzufügen" Command="{Binding AddLogEntryCommand}"/>
                     </StackPanel>
                     
                 </StackPanel>
             </Grid>
 
-
-            <TextBlock Margin="0 30 0 0" Text="Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod 
-tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy..." TextWrapping="Wrap" />
+            <Expander Grid.Row="4" Margin="0 10" Header="Beschreibung">
+                <ListView ItemsSource="{Binding SelectedTour.NavigationDetails, Mode=TwoWay}">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="1. Abbiegen" />
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </Expander>
 
             <TextBlock Text="Bisherige Aktivitäten" FontWeight="Bold" Margin="0 30 0 0" />
             <DataGrid Margin="0 10 0 0" Name="dgLogs"></DataGrid>
-            
-            
+
         </StackPanel>
     </Grid>
 </UserControl>

@@ -7,6 +7,7 @@ namespace TourPlannerApp
     {
         public MainWindow()
         {
+            App.Log.Info("Hello Tourlogging!");
             InitializeComponent();
             this.DataContext = new MainViewModel();
         }

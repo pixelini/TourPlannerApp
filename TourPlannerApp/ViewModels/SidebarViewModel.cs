@@ -12,12 +12,12 @@ using TourPlannerApp.Models;
 using TourPlannerApp.ViewModels.Base;
 using System.Diagnostics; //for debug-mode
 using TourPlannerApp.Navigator;
+using TourPlannerApp.Store;
 
 namespace TourPlannerApp.ViewModels
 {
     public class SidebarViewModel : BaseViewModel
     {
-
         public INavigator Navigator { get; set; }
 
         private ITourService _tourService { get; set; }
@@ -26,52 +26,54 @@ namespace TourPlannerApp.ViewModels
 
         public ObservableCollection<TourItem> SearchResultItems { get; set; }
 
-
-        private string searchInput;
-        private TourItem currentItem;
-
-        private ICommand searchCommand;
-        private ICommand deleteCommand;
-        public ICommand SearchCommand => searchCommand ??= new RelayCommand(Search);
-        public ICommand DeleteCommand => deleteCommand ??= new RelayCommand(Delete);
-
-        public TourItem CurrentItem
+        private string _searchInput;
+        public string SearchInput
         {
             get
             {
-                return currentItem;
+                return _searchInput;
             }
 
             set
             {
-                if ((currentItem != value) && (value != null))
+                if (_searchInput != value)
                 {
-                    currentItem = value;
+                    _searchInput = value;
+
+                    RaisePropertyChangedEvent(nameof(SearchInput));
+                    Search(SearchInput);
+
+                }
+            }
+        }
+
+        private TourItem _currentItem;
+        public TourItem CurrentItem
+        {
+            get
+            {
+                return _currentItem;
+            }
+
+            set
+            {
+                if ((_currentItem != value) && (value != null))
+                {
+                    _currentItem = value;
                     RaisePropertyChangedEvent(nameof(CurrentItem));
                 }
             }
 
         }
 
-        public string SearchInput
-        {
-            get
-            {
-                return searchInput;
-            }
+        private ICommand _searchCommand;
+        public ICommand SearchCommand => _searchCommand ??= new RelayCommand(Search);
+        
+        private ICommand _deleteCommand;
+        public ICommand DeleteCommand => _deleteCommand ??= new RelayCommand(Delete);
 
-            set
-            {
-                if (searchInput != value)
-                {
-                    searchInput = value;
-                    
-                    RaisePropertyChangedEvent(nameof(SearchInput));
-                    Search(SearchInput);
-                    
-                }
-            }
-        }
+        private ICommand _showSelectedTourCommand;
+        public ICommand ShowSelectedTourCommand => _showSelectedTourCommand ??= new RelayCommand(ShowTour);
 
 
         public SidebarViewModel()
@@ -83,9 +85,16 @@ namespace TourPlannerApp.ViewModels
             Items = new ObservableCollection<TourItem>(_tourService.GetAllTours());
             SearchResultItems = new ObservableCollection<TourItem>(Items);
             SearchInput = "";
-            currentItem = new TourItem();
+            _currentItem = new TourItem();
+
+            TourEvents.TourCreated += OnTourCreated;
+
         }
 
+        private void OnTourCreated()
+        {
+            RefreshTourList();
+        }
 
         private void Search(object commandParameter)
         {
@@ -105,8 +114,14 @@ namespace TourPlannerApp.ViewModels
                 }
             }
         }
-        
-        
+
+        private void ShowTour(object commandParameter)
+        {
+            Debug.WriteLine("Show Tour: " + CurrentItem.Name + "(ID: " + CurrentItem.Id + ")");
+            Navigator.CurrentViewModel = new TourDetailsViewModel(CurrentItem);
+        }
+
+
         private void Delete(object commandParameter)
         {
             Debug.WriteLine("Delete Tour: " + CurrentItem.Name + "(ID: " + CurrentItem.Id + ")");

@@ -23,7 +23,7 @@ namespace TourPlannerApp.Navigator
 
             set
             {
-                _currentViewModel = value; //woher kommt value?
+                _currentViewModel = value;
                 RaisePropertyChangedEvent(nameof(CurrentViewModel));
             }
 

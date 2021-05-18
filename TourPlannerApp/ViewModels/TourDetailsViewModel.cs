@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using TourPlannerApp.Models;
 using TourPlannerApp.ViewModels.Base;
+using TourPlannerApp.Views;
 
 namespace TourPlannerApp.ViewModels
 {
@@ -12,9 +14,18 @@ namespace TourPlannerApp.ViewModels
     {
         public TourItem SelectedTour { get; set; }
 
-        public TourDetailsViewModel()
+        private ICommand _addLogEntryCommand;
+        public ICommand AddLogEntryCommand => _addLogEntryCommand ??= new RelayCommand(AddLogEntry);
+
+        public TourDetailsViewModel(TourItem selectedTour)
         {
-            //SelectedTour = selectedTour;
+            SelectedTour = selectedTour;
+        }
+        private void AddLogEntry()
+        {
+            var window = new AddLogEntryDialog();
+            window.ShowDialog();
+            //throw new NotImplementedException();
         }
 
     }

@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using TourPlannerApp.DAL;
 using TourPlannerApp.Models;
+using static TourPlannerApp.Models.Models.TourLookup;
 
 namespace TourPlannerApp.BL.Services
 {
@@ -19,9 +20,24 @@ namespace TourPlannerApp.BL.Services
             return _tourDataAccess.GetAllTours();
         }
 
-        public int AddTour(TourItem tourItem)
+        public int AddTour(TourItem newTourItem)
         {
-            throw new System.NotImplementedException();
+            if (!Exists(newTourItem))
+            {
+                int tourId = _tourDataAccess.AddTour(newTourItem);
+                if (tourId >= 0)
+                {
+                    Debug.WriteLine("Tour was successfully added.");
+                    return tourId;
+                }
+
+                Debug.WriteLine("Tour couldn't be added.");
+                return tourId;
+            }
+
+            Debug.WriteLine("Tour already exits.");
+            
+            return -1;
         }
 
         public bool UpdateTour(TourItem tourItem)
@@ -52,8 +68,6 @@ namespace TourPlannerApp.BL.Services
 
         public List<TourItem> SearchByName(string tourName)
         {
-
-
             throw new System.NotImplementedException();
         }
 
@@ -61,5 +75,6 @@ namespace TourPlannerApp.BL.Services
         {
             return _tourDataAccess.Exists(tourItem);
         }
+
     }
 }

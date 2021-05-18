@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -38,7 +39,7 @@ namespace TourPlannerApp.Commands
                         _navigator.CurrentViewModel = new AddTourViewModel();
                         break;
                     case ViewType.TourDetails:
-                        _navigator.CurrentViewModel = new TourDetailsViewModel();
+                        //_navigator.CurrentViewModel = new TourDetailsViewModel();
                         break;
                     default:
                         break;

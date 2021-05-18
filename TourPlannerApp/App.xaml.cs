@@ -13,5 +13,6 @@ namespace TourPlannerApp
     /// </summary>
     public partial class App : Application
     {
+        public static readonly log4net.ILog Log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
     }
 }
