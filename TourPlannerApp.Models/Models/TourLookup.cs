@@ -118,7 +118,6 @@ namespace TourPlannerApp.Models.Models
 
             tour.StartLocation = startLocation;
 
-            // target location data
             var targetLocation = new Address();
             targetLocation.Street = locations[1].Street ??= "";
             targetLocation.PostalCode = locations[1].PostalCode ??= "";
@@ -127,18 +126,6 @@ namespace TourPlannerApp.Models.Models
 
             tour.TargetLocation = targetLocation;
 
-            /*
-            tour.StartLocationStreet = locations[0].Street ??= "";
-            tour.StartLocationPostalCode = locations[0].PostalCode ??= "";
-            tour.StartLocationCounty = locations[0].AdminArea4 ??= "";
-            tour.StartLocationCountry = locations[0].AdminArea1 ??= "";
-
-            // target location data
-            tour.TargetLocationStreet = locations[1].Street ??= "";
-            tour.TargetLocationPostalCode = locations[1].PostalCode ??= "";
-            tour.TargetLocationCounty = locations[1].AdminArea4 ??= "";
-            tour.TargetLocationCountry = locations[1].AdminArea1 ??= "";
-            */
         }
 
     }

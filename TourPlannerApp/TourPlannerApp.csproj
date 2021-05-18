@@ -15,6 +15,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="log4net" Version="2.0.12" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Resource Include="Images\logo_tourbo.png" />
     <Resource Include="Images\logo_tourbo_icon.ico" />
     <Resource Include="Images\logo_tourplanner.png" />
@@ -24,6 +28,12 @@
 
   <ItemGroup>
     <ProjectReference Include="..\TourPlannerApp.BL\TourPlannerApp.BL.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="log4net.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

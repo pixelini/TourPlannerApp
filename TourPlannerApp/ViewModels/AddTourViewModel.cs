@@ -1,18 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Diagnostics;
-using System.IO;
+﻿using System.Diagnostics;
 using System.Windows.Input;
-using System.Windows.Media.Imaging;
 using TourPlannerApp.BL.Services;
 using TourPlannerApp.DAL;
 using TourPlannerApp.Models;
-using TourPlannerApp.Models.Models;
-using TourPlannerApp.Navigator;
 using TourPlannerApp.Store;
 using TourPlannerApp.ViewModels.Base;
-using static TourPlannerApp.Models.Models.TourLookup;
 
 namespace TourPlannerApp.ViewModels
 {
@@ -30,7 +22,7 @@ namespace TourPlannerApp.ViewModels
         public ICommand LookupTourCommand => lookupTourCommand ??= new RelayCommand(LookupTour);
 
 
-        // necessary for tour results
+        // tour results
         private bool _showResult;
         public bool ShowResult
         {
@@ -147,6 +139,7 @@ namespace TourPlannerApp.ViewModels
 
         public AddTourViewModel()
         {
+            App.Log.Info("Add Tour...");
             var repository = new TourDataAccess();
             _tourService = new TourService(repository);
             var api = new TourLookupDataAccess();
@@ -183,7 +176,6 @@ namespace TourPlannerApp.ViewModels
             Debug.WriteLine("Add Tour...");
             CurrentTourLookup.Name = TourNameInput;
             _tourService.AddTour(CurrentTourLookup);
-            //RefreshTourList();
             TourEvents.AnnounceNewTour();
 
         }

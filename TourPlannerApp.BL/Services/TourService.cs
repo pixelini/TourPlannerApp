@@ -76,23 +76,5 @@ namespace TourPlannerApp.BL.Services
             return _tourDataAccess.Exists(tourItem);
         }
 
-        //private TourItem ConvertTourLookupToTourItem(TourLookupItem tourLookupItem, string name, string startLocation, string targetLocation)
-        //{
-        //    TourItem tour = new TourItem();
-        //    tour.Name = name;
-        //    tour.StartLocation = startLocation;
-        //    tour.TargetLocation = targetLocation;
-        //    tour.Distance = tourLookupItem.Route.Distance;
-        //    tour.NavigationDetails = new List<string>();
-
-        //    foreach (var maneuver in tourLookupItem.Route.Legs[0].Maneuvers)
-        //    {
-        //        tour.NavigationDetails.Add(maneuver.Narrative);
-        //    }
-
-        //    return tour;
-           
-        //}
-
     }
 }
