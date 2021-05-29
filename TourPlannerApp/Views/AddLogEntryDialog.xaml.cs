@@ -11,6 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using TourPlannerApp.ViewModels;
 
 namespace TourPlannerApp.Views
 {
@@ -19,9 +20,10 @@ namespace TourPlannerApp.Views
     /// </summary>
     public partial class AddLogEntryDialog : Window
     {
-        public AddLogEntryDialog()
+        public AddLogEntryDialog(AddLogEntryDialogViewModel dataContext)
         {
             InitializeComponent();
+            DataContext = dataContext;
         }
     }
 }

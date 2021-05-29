@@ -49,8 +49,7 @@ namespace TourPlannerApp.Models
         public DateTime CreationTime { get; set; }
 
         // Optional
-        public Dictionary<string, string> Log { get; set; }
-
+        public List<LogEntry> Log { get; set; }
 
 
         public string GetStartLocationAsString()

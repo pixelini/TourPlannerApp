@@ -99,7 +99,7 @@
                         </StackPanel>
 
                         <StackPanel Orientation="Horizontal">
-                                <Button Padding="5" Margin="0 20 0 0" Content="Speichern" Command="{Binding SaveTourLookupCommand}" />
+                            <Button IsDefault="True" Padding="5" Margin="0 20 0 0" Content="Speichern" Command="{Binding SaveTourLookupCommand}" />
                             </StackPanel>
 
                         </StackPanel>

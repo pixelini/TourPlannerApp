@@ -61,157 +61,16 @@ namespace TourPlannerApp.ViewModels
 
         public event EventHandler Save;
 
-        public RelayCommand SaveCommand { get; set; }
+        private ICommand _saveCommand;
+        public ICommand SaveCommand => _saveCommand ??= new RelayCommand(x => Save(this, new EventArgs()));
 
         public EditTourDialogViewModel(TourItem currentTour)
         {
             CurrentTour = currentTour;
             _tournameInput = CurrentTour.Name;
             _descriptionInput = CurrentTour.Description;
-
-            SaveCommand = new RelayCommand(x => this.Save(this, new EventArgs()));
         }
 
-
-        /*
-
-        private bool _closeDialog;
-        public bool CloseDialog
-        {
-            get {
-                return _closeDialog; 
-            }
-
-            set
-            {
-                if (_closeDialog != value)
-                {
-                    _closeDialog = value;
-                    RaisePropertyChangedEvent(nameof(CloseDialog));
-                }
-            }
-
-        }
-
-        private string _tourname;
-        public string Tourname
-        {
-            get
-            {
-                return _tourname;
-            }
-
-            set
-            {
-                if ((_tourname != value) && (value != null))
-                {
-                    _tourname = value;
-                    RaisePropertyChangedEvent(nameof(Tourname));
-                }
-            }
-
-        }
-
-        private string _startLocation;
-        public string StartLocation
-        {
-            get
-            {
-                return _startLocation;
-            }
-
-            set
-            {
-                if ((_startLocation != value) && (value != null))
-                {
-                    _startLocation = value;
-                    RaisePropertyChangedEvent(nameof(StartLocation));
-                }
-            }
-
-        }
-
-        private string _targetLocation;
-        public string TargetLocation
-        {
-            get
-            {
-                return _targetLocation;
-            }
-
-            set
-            {
-                if ((_targetLocation != value) && (value != null))
-                {
-                    _targetLocation = value;
-                    RaisePropertyChangedEvent(nameof(TargetLocation));
-                }
-            }
-
-        }
-
-        private double _distance;
-        public double Distance
-        {
-            get
-            {
-                return _distance;
-            }
-
-            set
-            {
-                if ((_distance != value) && (value != null))
-                {
-                    _distance = value;
-                    RaisePropertyChangedEvent(nameof(Distance));
-                }
-            }
-
-        }
-
-        private string _description;
-        public string Description
-        {
-            get
-            {
-                return _description;
-            }
-
-            set
-            {
-                if ((_description != value) && (value != null))
-                {
-                    _description = value;
-                    RaisePropertyChangedEvent(nameof(Description));
-                }
-            }
-
-        }
-
-        private ICommand _updateTourCommand;
-        public ICommand UpdateTourCommand => _updateTourCommand ??= new RelayCommand(UpdateTour);
-
-        public EditTourDialogViewModel(TourItem currentTour)
-        {
-            _tourname = currentTour.Name;
-            _startLocation = currentTour.GetStartLocationAsString();
-            _targetLocation = currentTour.GetTargetLocationAsString();
-            _distance = currentTour.Distance;
-            _description = "Blablabla...";
-        }
-
-        private void UpdateTour()
-        {
-            TourItem item = null;
-
-            // if successful
-            CloseDialog = true;
-            return;
-            
-            //throw new NotImplementedException();
-        }
-
-        */
 
 
     }

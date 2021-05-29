@@ -137,13 +137,6 @@ namespace TourPlannerApp.ViewModels
             Debug.WriteLine("Edit Tour: " + CurrentItem.Name + "(ID: " + CurrentItem.Id + ")");
             Navigator.CurrentViewModel = new HomeViewModel();             
 
-            /*
-            EditTourDialogViewModel = new EditTourDialogViewModel(CurrentItem);
-            var editDialog = new EditTourDialog(EditTourDialogViewModel);
-            editDialog.ShowDialog();
-            EditTourDialogViewModel.Save += EditTourDialogViewModelOnSave;
-            */
-
             EditTourDialogViewModel = new EditTourDialogViewModel(CurrentItem);
             EditTourDialogViewModel.Save += EditTourDialogViewModelOnSave;
             EditTourDialog = new EditTourDialog(EditTourDialogViewModel);
@@ -161,7 +154,6 @@ namespace TourPlannerApp.ViewModels
             Debug.WriteLine("Edited Tourname: " + CurrentItem.Name);
 
             // TODO: Validate it
-            // TODO: save it
             _tourService.UpdateTour(CurrentItem);
             RefreshTourList();
 
