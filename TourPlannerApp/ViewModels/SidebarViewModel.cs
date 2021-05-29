@@ -18,6 +18,8 @@ namespace TourPlannerApp.ViewModels
 {
     public class SidebarViewModel : BaseViewModel
     {
+        private readonly log4net.ILog _log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
         public INavigator Navigator { get; set; }
 
         private ITourService _tourService { get; set; }

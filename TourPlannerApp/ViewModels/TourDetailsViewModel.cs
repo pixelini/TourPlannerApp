@@ -12,6 +12,8 @@ namespace TourPlannerApp.ViewModels
 {
     public class TourDetailsViewModel : BaseViewModel
     {
+        private readonly log4net.ILog _log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
         public TourItem SelectedTour { get; set; }
 
         private ICommand _addLogEntryCommand;

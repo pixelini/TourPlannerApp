@@ -5,9 +5,11 @@ namespace TourPlannerApp
 {
     public partial class MainWindow : Window
     {
+        private readonly log4net.ILog _log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
         public MainWindow()
         {
-            App.Log.Info("Hello Tourlogging!");
+            _log.Info("Hello Tourlogging!");
             InitializeComponent();
             this.DataContext = new MainViewModel();
         }

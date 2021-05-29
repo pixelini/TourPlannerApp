@@ -10,6 +10,8 @@ namespace TourPlannerApp.ViewModels
 {
     public class AddTourViewModel : BaseViewModel
     {
+        private readonly log4net.ILog _log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
         private ITourService _tourService { get; set; }
 
         private ITourLookupService _tourLookupService { get; set; }
@@ -139,7 +141,7 @@ namespace TourPlannerApp.ViewModels
 
         public AddTourViewModel()
         {
-            App.Log.Info("Add Tour...");
+            _log.Info("Add Tour...");
             var repository = new TourDataAccess();
             _tourService = new TourService(repository);
             var api = new TourLookupDataAccess();
