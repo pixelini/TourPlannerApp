@@ -30,7 +30,7 @@
                         <TextBlock Text=" " />
                         <TextBlock Text="{Binding StartLocation.County}" />
                         <TextBlock Text=" - " />
-                        <TextBlock Text="{Binding StartLocation.PostalCode}" />
+                        <TextBlock Text="{Binding TargetLocation.PostalCode}" />
                         <TextBlock Text=" " />
                         <TextBlock Text="{Binding TargetLocation.County}" />
                     </WrapPanel>

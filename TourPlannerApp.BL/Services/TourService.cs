@@ -42,7 +42,23 @@ namespace TourPlannerApp.BL.Services
 
         public bool UpdateTour(TourItem tourItem)
         {
-            throw new System.NotImplementedException();
+            if (Exists(tourItem))
+            {
+                // update
+                bool success = _tourDataAccess.UpdateTour(tourItem);
+                if (success)
+                {
+                    Debug.WriteLine("Tour was successfully updated.");
+                    return true;
+                }
+
+                Debug.WriteLine("Tour couldn't be updated.");
+                return false;
+            }
+
+            Debug.WriteLine("Tour doesn't exits.");
+
+            return false;
         }
 
         public bool DeleteTour(TourItem tourItem)

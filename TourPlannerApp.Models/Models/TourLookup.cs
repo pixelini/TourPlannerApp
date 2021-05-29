@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -113,7 +114,9 @@ namespace TourPlannerApp.Models.Models
             var startLocation = new Address();
             startLocation.Street = locations[0].Street ??= "";
             startLocation.PostalCode = locations[0].PostalCode ??= "";
+            startLocation.City = locations[0].AdminArea5 ??= "";
             startLocation.County = locations[0].AdminArea4 ??= "";
+            startLocation.State = locations[0].AdminArea3 ??= "";
             startLocation.Country = locations[0].AdminArea1 ??= "";
 
             tour.StartLocation = startLocation;
@@ -121,7 +124,9 @@ namespace TourPlannerApp.Models.Models
             var targetLocation = new Address();
             targetLocation.Street = locations[1].Street ??= "";
             targetLocation.PostalCode = locations[1].PostalCode ??= "";
+            targetLocation.City = locations[1].AdminArea5 ??= "";
             targetLocation.County = locations[1].AdminArea4 ??= "";
+            targetLocation.State = locations[1].AdminArea3 ??= "";
             targetLocation.Country = locations[1].AdminArea1 ??= "";
 
             tour.TargetLocation = targetLocation;

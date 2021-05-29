@@ -35,7 +35,7 @@ namespace TourPlannerApp.DAL
             var conn = Connect();
             //var sql = "SELECT id, name, start_location, target_location, distance, img_path, type FROM swe2_tourplanner.tour";
 
-            var sql = "SELECT id, name, sl_street, sl_zip, sl_county, sl_country, tl_street, tl_zip, tl_county, tl_country, distance, img_path, type FROM swe2_tourplanner.tour";
+            var sql = "SELECT id, name, sl_street, sl_zip, sl_county, sl_country, tl_street, tl_zip, tl_county, tl_country, distance, img_path, type, description FROM swe2_tourplanner.tour";
 
 
             using var cmd = new NpgsqlCommand(sql, conn);
@@ -48,7 +48,6 @@ namespace TourPlannerApp.DAL
                 {
                     int id = reader.GetInt32(0);
                     string name = reader.GetString(1);
-
                     var startAddress = new Address();
                     startAddress.Street = reader.GetString(2);
                     startAddress.PostalCode = reader.GetString(3);
@@ -62,8 +61,9 @@ namespace TourPlannerApp.DAL
                     float distance = reader.GetFloat(10);
                     string imgPath = reader.GetString(11);
                     var tourType = GetTourType(reader.GetString(12));
+                    var description = reader.GetString(13);
 
-                    var tour = new TourItem { Id = id, Name = name, StartLocation = startAddress, TargetLocation = targetAddress, Distance = distance, PathToImg = imgPath };
+                    var tour = new TourItem { Id = id, Name = name, StartLocation = startAddress, TargetLocation = targetAddress, Distance = distance, PathToImg = imgPath, Description = description };
                     allTours.Add(tour);
                 }
             }
@@ -78,7 +78,7 @@ namespace TourPlannerApp.DAL
             int success = 1;
 
             var conn = Connect();
-            var sql = "INSERT INTO swe2_tourplanner.tour(name, sl_street, sl_zip, sl_country, sl_county, tl_street, tl_zip, tl_country, tl_county, distance, img_path, type) VALUES (@name, @sl_street, @sl_postalcode, @sl_country, @sl_county, @tl_street, @tl_postalcode, @tl_country, @tl_county, @distance, @img_path, @type)";
+            var sql = "INSERT INTO swe2_tourplanner.tour(name, sl_street, sl_zip, sl_country, sl_county, tl_street, tl_zip, tl_country, tl_county, distance, img_path, type, description) VALUES (@name, @sl_street, @sl_postalcode, @sl_country, @sl_county, @tl_street, @tl_postalcode, @tl_country, @tl_county, @distance, @img_path, @type, @description)";
 
             using var cmd = new NpgsqlCommand(sql, conn);
             cmd.Parameters.Add(new NpgsqlParameter("@name", tourItem.Name));
@@ -93,6 +93,7 @@ namespace TourPlannerApp.DAL
             cmd.Parameters.Add(new NpgsqlParameter("@distance", tourItem.Distance));
             cmd.Parameters.Add(new NpgsqlParameter("@img_path", "/img/test.png"));
             cmd.Parameters.Add(new NpgsqlParameter("@type", "Fussweg"));
+            cmd.Parameters.Add(new NpgsqlParameter("@description", tourItem.Description));
             cmd.Prepare();
 
             if (cmd.ExecuteNonQuery() == 1)
@@ -106,7 +107,24 @@ namespace TourPlannerApp.DAL
 
         public bool UpdateTour(TourItem tourItem)
         {
-            throw new System.NotImplementedException();
+            bool success = false;
+
+            var conn = Connect();
+            var sql = "UPDATE swe2_tourplanner.tour SET name=@name, description=@description WHERE id = @id";
+
+            using var cmd = new NpgsqlCommand(sql, conn);
+            cmd.Parameters.Add(new NpgsqlParameter("@name", tourItem.Name));
+            cmd.Parameters.Add(new NpgsqlParameter("@description", tourItem.Description));
+            cmd.Parameters.Add(new NpgsqlParameter("@id", tourItem.Id));
+            cmd.Prepare();
+
+            if (cmd.ExecuteNonQuery() == 1)
+            {
+                success = true;
+            }
+
+            conn.Close();
+            return success;
         }
 
         public bool DeleteTour(TourItem tourItem)
@@ -139,10 +157,10 @@ namespace TourPlannerApp.DAL
         {
             bool success = false;
             var conn = Connect();
-            var sql = "SELECT * FROM swe2_tourplanner.tour WHERE name = @name";
+            var sql = "SELECT * FROM swe2_tourplanner.tour WHERE id = @id";
 
             using var cmd = new NpgsqlCommand(sql, conn);
-            cmd.Parameters.Add(new NpgsqlParameter("@name", tourItem.Name));
+            cmd.Parameters.Add(new NpgsqlParameter("@id", tourItem.Id));
             cmd.Prepare();
 
             var reader = cmd.ExecuteReader();

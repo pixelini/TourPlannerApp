@@ -10,6 +10,7 @@
         mc:Ignorable="d"
         Title="Tourboo" Height="900" Width="1200"
         Icon="Images/logo_tourbo_icon.ico"
+        WindowStartupLocation="CenterScreen"
         >
 
     <Border>
