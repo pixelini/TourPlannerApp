@@ -25,5 +25,7 @@ namespace TourPlannerApp.BL.Services
         public List<LogEntry> GetAllLogsForTour(TourItem selectedTour);
 
         public bool DeleteLogEntry(TourItem selectedTour, LogEntry selectedLogEntry);
+
+        public bool UpdateTourLog(int tourId, LogEntry editedLogEntry);
     }
 }

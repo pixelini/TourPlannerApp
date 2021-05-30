@@ -25,5 +25,6 @@ namespace TourPlannerApp.DAL
 
         public bool DeleteLogEntry(TourItem selectedTour, LogEntry selectedLogEntry);
 
+        public bool UpdateTourLog(int tourId, LogEntry editedLogEntry);
     }
 }

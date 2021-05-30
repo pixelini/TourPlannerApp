@@ -28,7 +28,6 @@ namespace TourPlannerApp.ViewModels
         private ITourService _tourService { get; set; }
 
         public ObservableCollection<TourItem> Items { get; set; }
-
         public ObservableCollection<TourItem> SearchResultItems { get; set; }
 
         private string _searchInput;

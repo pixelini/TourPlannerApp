@@ -164,15 +164,8 @@ namespace TourPlannerApp.ViewModels
         public AddLogEntryDialogViewModel() 
         {
 
-            Ratings = new List<SelectableItem>
-            {
-                new SelectableItem { ItemValue = 5, ItemDescription = "Sehr gut", IsSelected = true },
-                new SelectableItem { ItemValue = 4, ItemDescription = "Gut" },
-                new SelectableItem { ItemValue = 3, ItemDescription = "So lala" },
-                new SelectableItem { ItemValue = 2, ItemDescription = "Meeh" },
-                new SelectableItem { ItemValue = 1, ItemDescription = "Nie wieder!" }
-            };
-
+            Ratings = CreateRatings();
+            Ratings[0].IsSelected = true; // first element is default option
             _logEntry = new LogEntry();
             _startTimeInput = DateTime.Today.ToString();
             _endTimeInput = DateTime.Today.ToString();
@@ -185,9 +178,10 @@ namespace TourPlannerApp.ViewModels
 
         public AddLogEntryDialogViewModel(LogEntry logEntry)
         {
-
+            Ratings = CreateRatings();
+            var selectedRating = Ratings.FirstOrDefault(s => s.ItemValue == logEntry.Rating); // LINQ :)
+            selectedRating.IsSelected = true;
             _logEntry = logEntry;
-
             _startTimeInput = logEntry.StartTime.ToString();
             _endTimeInput = logEntry.EndTime.ToString();
             _descriptionInput = logEntry.Description;
@@ -195,6 +189,20 @@ namespace TourPlannerApp.ViewModels
             _overallTimeInput = logEntry.OverallTime.ToString();
             _altitudeInput = logEntry.Altitude;
 
+        }
+
+        private List<SelectableItem> CreateRatings()
+        {
+            Ratings = new List<SelectableItem>
+            {
+                new SelectableItem { ItemValue = 5, ItemDescription = "Sehr gut"},
+                new SelectableItem { ItemValue = 4, ItemDescription = "Gut" },
+                new SelectableItem { ItemValue = 3, ItemDescription = "So lala" },
+                new SelectableItem { ItemValue = 2, ItemDescription = "Meeh" },
+                new SelectableItem { ItemValue = 1, ItemDescription = "Nie wieder!" }
+            };
+
+            return Ratings;
         }
 
 

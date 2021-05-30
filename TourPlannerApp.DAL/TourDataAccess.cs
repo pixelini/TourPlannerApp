@@ -200,12 +200,41 @@ namespace TourPlannerApp.DAL
             return success;
         }
 
+        public bool UpdateTourLog(int tourId, LogEntry editedLogEntry)
+        {
+            bool success = false;
+
+            var conn = Connect();
+            var sql = " UPDATE swe2_tourplanner.log SET start_time=@startTime, end_time=@endTime, description=@description, distance=@distance, overall_time=@overallTime, rating=@rating, altitude=@altitude WHERE id=@id AND tour_id=@tourId";
+
+            using var cmd = new NpgsqlCommand(sql, conn);
+            cmd.Parameters.Add(new NpgsqlParameter("@startTime", editedLogEntry.StartTime));
+            cmd.Parameters.Add(new NpgsqlParameter("@endTime", editedLogEntry.EndTime));
+            cmd.Parameters.Add(new NpgsqlParameter("@description", editedLogEntry.Description));
+            cmd.Parameters.Add(new NpgsqlParameter("@distance", editedLogEntry.Distance));
+            cmd.Parameters.Add(new NpgsqlParameter("@overallTime", editedLogEntry.OverallTime));
+            cmd.Parameters.Add(new NpgsqlParameter("@rating", editedLogEntry.Rating));
+            cmd.Parameters.Add(new NpgsqlParameter("@altitude", editedLogEntry.Altitude));
+            cmd.Parameters.Add(new NpgsqlParameter("@id", editedLogEntry.Id));
+            cmd.Parameters.Add(new NpgsqlParameter("@tourId", tourId));
+
+            cmd.Prepare();
+
+            if (cmd.ExecuteNonQuery() == 1)
+            {
+                success = true;
+            }
+
+            conn.Close();
+            return success;
+        }
+
         public List<LogEntry> GetAllLogsForTour(TourItem selectedTour)
         {
             var allLogs = new List<LogEntry>();
 
             var conn = Connect();
-            var sql = "SELECT id, start_time, end_time, description, distance, overall_time, rating, altitude FROM swe2_tourplanner.log WHERE tour_id = @id";
+            var sql = "SELECT id, start_time, end_time, description, distance, overall_time, rating, altitude FROM swe2_tourplanner.log WHERE tour_id=@id";
 
             using var cmd = new NpgsqlCommand(sql, conn);
             cmd.Parameters.Add(new NpgsqlParameter("@id", selectedTour.Id));
@@ -239,7 +268,7 @@ namespace TourPlannerApp.DAL
             bool success = false;
 
             var conn = Connect();
-            var sql = "DELETE FROM swe2_tourplanner.log WHERE id = @id AND tour_id = @tourId";
+            var sql = "DELETE FROM swe2_tourplanner.log WHERE id=@id AND tour_id=@tourId";
 
             using var cmd = new NpgsqlCommand(sql, conn);
             cmd.Parameters.Add(new NpgsqlParameter("@id", selectedLogEntry.Id));

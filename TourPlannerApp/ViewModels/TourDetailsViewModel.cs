@@ -24,9 +24,17 @@ namespace TourPlannerApp.ViewModels
 
         public TourItem SelectedTour { get; set; }
 
-        public ObservableCollection<LogEntry> Infos { get; set; }
+        private ObservableCollection<LogEntry> _logEntryInfos { get; set; }
 
-        //public List<LogEntry> Log { get { return SelectedTour.Log; } }
+        public ObservableCollection<LogEntry> LogEntryInfos
+        {
+            get { return _logEntryInfos; }
+            set
+            {
+                _logEntryInfos = value;
+                RaisePropertyChangedEvent(nameof(LogEntryInfos));
+            }
+        }
 
         private ICommand _addLogEntryCommand;
         public ICommand AddLogEntryCommand => _addLogEntryCommand ??= new RelayCommand(AddLogEntry);
@@ -78,6 +86,7 @@ namespace TourPlannerApp.ViewModels
             // TODO: Validate it
             _tourService.AddTourLog(SelectedTour.Id, newLogEntry);
             SelectedTour.Log =_tourService.GetAllLogsForTour(SelectedTour);
+            LogEntryInfos = new ObservableCollection<LogEntry>(_tourService.GetAllLogsForTour(SelectedTour));
             Debug.WriteLine("Current Log: " + SelectedTour.Log);
 
 
@@ -90,20 +99,31 @@ namespace TourPlannerApp.ViewModels
 
         private void EditLogEntry(object parameter)
         {
-            Debug.WriteLine(parameter);
-            //throw new NotImplementedException();
+            var selectedLogEntry = (LogEntry)parameter;
+            AddLogEntryDialogViewModel = new AddLogEntryDialogViewModel(selectedLogEntry);
+            AddLogEntryDialogViewModel.Save += UpdateLogEntryDialogViewModelOnSave;
+            AddLogEntryDialog = new AddLogEntryDialog(AddLogEntryDialogViewModel);
+            AddLogEntryDialog.ShowDialog();
+
         }
 
-
-        public ObservableCollection<LogEntry> LogEntryInfos
+        private void UpdateLogEntryDialogViewModelOnSave(object sender, EventArgs e)
         {
-            get { return Infos; }
-            set
+            Debug.WriteLine("Update LogEntry: " + AddLogEntryDialogViewModel.LogEntry);
+
+            var editedLogEntry = AddLogEntryDialogViewModel.LogEntry;
+
+            // TODO: Validate it
+            if (_tourService.UpdateTourLog(SelectedTour.Id, editedLogEntry))
             {
-                Infos = value;
-                RaisePropertyChangedEvent(nameof(LogEntryInfos));
+                SelectedTour.Log = _tourService.GetAllLogsForTour(SelectedTour);
+                LogEntryInfos = new ObservableCollection<LogEntry>(_tourService.GetAllLogsForTour(SelectedTour));
             }
+
+            // TODO: if successfull -> close
+            AddLogEntryDialog.Close();
         }
+
 
         private void DeleteLogEntry(object parameter)
         {
@@ -113,8 +133,6 @@ namespace TourPlannerApp.ViewModels
             // Delete Entry from log
             if (_tourService.DeleteLogEntry(SelectedTour, selectedLogEntry))
             {
-                //var toDelete = LogEntryInfos.Where(x => x.Id == selectedLogEntry.Id);
-                //Debug.WriteLine("Linq to delete: " + toDelete);
                 LogEntryInfos.Remove(selectedLogEntry);
             } else
             {

@@ -102,6 +102,11 @@ namespace TourPlannerApp.BL.Services
             return _tourDataAccess.AddTourLog(tourId, newLogEntry);
         }
 
+        public bool UpdateTourLog(int tourId, LogEntry editedLogEntry)
+        {
+            return _tourDataAccess.UpdateTourLog(tourId, editedLogEntry);
+        }
+
         public List<LogEntry> GetAllLogsForTour(TourItem selectedTour)
         {
             return _tourDataAccess.GetAllLogsForTour(selectedTour);
