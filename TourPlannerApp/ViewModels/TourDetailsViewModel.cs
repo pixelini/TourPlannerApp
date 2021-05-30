@@ -19,8 +19,8 @@ namespace TourPlannerApp.ViewModels
         private readonly log4net.ILog _log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         private ITourService _tourService { get; set; }
 
-        public AddLogEntryDialog AddLogEntryDialog { get; set; }
-        public AddLogEntryDialogViewModel AddLogEntryDialogViewModel { get; set; }
+        public LogEntryDialog LogEntryDialog { get; set; }
+        public LogEntryDialogViewModel LogEntryDialogViewModel { get; set; }
 
         public TourItem SelectedTour { get; set; }
 
@@ -48,7 +48,7 @@ namespace TourPlannerApp.ViewModels
         public TourDetailsViewModel(TourItem selectedTour, ITourService tourService)
         {
             SelectedTour = selectedTour;
-            Debug.WriteLine("neuew TourDetailsViewModel erstellt");
+            Debug.WriteLine("TourDetailsViewModel: PATHTOIMG: " + SelectedTour.PathToImg);
             Debug.WriteLine("SelectedTour: "+ SelectedTour.Id);
             _tourService = tourService;
             SelectedTour.Log = _tourService.GetAllLogsForTour(SelectedTour);
@@ -60,20 +60,20 @@ namespace TourPlannerApp.ViewModels
         private void AddLogEntry()
         {
             //var newLogEntry = new LogEntry();
-            AddLogEntryDialogViewModel = new AddLogEntryDialogViewModel();
-            AddLogEntryDialogViewModel.Save += AddLogEntryDialogViewModelOnSave;
-            AddLogEntryDialog = new AddLogEntryDialog(AddLogEntryDialogViewModel);
+            LogEntryDialogViewModel = new LogEntryDialogViewModel();
+            LogEntryDialogViewModel.Save += AddLogEntryDialogViewModelOnSave;
+            LogEntryDialog = new LogEntryDialog(LogEntryDialogViewModel);
 
-            AddLogEntryDialog.ShowDialog();
+            LogEntryDialog.ShowDialog();
             //throw new NotImplementedException();
         }
 
         public void AddLogEntryDialogViewModelOnSave(object sender, EventArgs eventArgs)
         {
             //SelectedTour.Log.Add(AddLogEntryDialogViewModel.LogEntry);
-            Debug.WriteLine("Added LogEntry: " + AddLogEntryDialogViewModel.LogEntry);
+            Debug.WriteLine("Added LogEntry: " + LogEntryDialogViewModel.LogEntry);
 
-            var newLogEntry = AddLogEntryDialogViewModel.LogEntry;
+            var newLogEntry = LogEntryDialogViewModel.LogEntry;
 
             // Get all class properties with reflection
             var type = typeof(LogEntry);
@@ -93,25 +93,24 @@ namespace TourPlannerApp.ViewModels
             //RefreshTourList();
 
             // TODO: if successfull -> close
-            AddLogEntryDialog.Close();
+            LogEntryDialog.Close();
         }
 
 
         private void EditLogEntry(object parameter)
         {
             var selectedLogEntry = (LogEntry)parameter;
-            AddLogEntryDialogViewModel = new AddLogEntryDialogViewModel(selectedLogEntry);
-            AddLogEntryDialogViewModel.Save += UpdateLogEntryDialogViewModelOnSave;
-            AddLogEntryDialog = new AddLogEntryDialog(AddLogEntryDialogViewModel);
-            AddLogEntryDialog.ShowDialog();
-
+            LogEntryDialogViewModel = new LogEntryDialogViewModel(selectedLogEntry);
+            LogEntryDialogViewModel.Save += UpdateLogEntryDialogViewModelOnSave;
+            LogEntryDialog = new LogEntryDialog(LogEntryDialogViewModel);
+            LogEntryDialog.ShowDialog();
         }
 
         private void UpdateLogEntryDialogViewModelOnSave(object sender, EventArgs e)
         {
-            Debug.WriteLine("Update LogEntry: " + AddLogEntryDialogViewModel.LogEntry);
+            Debug.WriteLine("Update LogEntry: " + LogEntryDialogViewModel.LogEntry);
 
-            var editedLogEntry = AddLogEntryDialogViewModel.LogEntry;
+            var editedLogEntry = LogEntryDialogViewModel.LogEntry;
 
             // TODO: Validate it
             if (_tourService.UpdateTourLog(SelectedTour.Id, editedLogEntry))
@@ -121,7 +120,7 @@ namespace TourPlannerApp.ViewModels
             }
 
             // TODO: if successfull -> close
-            AddLogEntryDialog.Close();
+            LogEntryDialog.Close();
         }
 
 

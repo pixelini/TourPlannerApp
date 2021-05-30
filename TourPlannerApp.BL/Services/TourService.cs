@@ -10,9 +10,12 @@ namespace TourPlannerApp.BL.Services
     {
         private ITourDataAccess _tourDataAccess;
 
-        public TourService(ITourDataAccess tourDataAccess)
+        private IFileSystem _tourImgAccess;
+
+        public TourService(ITourDataAccess tourDataAccess, IFileSystem tourImgAccess)
         {
             _tourDataAccess = tourDataAccess;
+            _tourImgAccess = tourImgAccess;
         }
 
         public List<TourItem> GetAllTours()
@@ -28,6 +31,10 @@ namespace TourPlannerApp.BL.Services
                 if (tourId >= 0)
                 {
                     Debug.WriteLine("Tour was successfully added.");
+
+                    // Save tour img in file system
+                    var pathToImg = _tourImgAccess.SaveImg(newTourItem.Image);
+                    _tourDataAccess.SaveImgPathToTourData(tourId, pathToImg);
                     return tourId;
                 }
 
@@ -71,6 +78,9 @@ namespace TourPlannerApp.BL.Services
                 if (_tourDataAccess.DeleteTour(tourItem))
                 {
                     Debug.WriteLine("Tour was successfully deleted.");
+
+                    // Delete Image
+                    _tourImgAccess.DeleteImg(tourItem.PathToImg);
                     return true;
                 }
 

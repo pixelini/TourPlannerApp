@@ -163,7 +163,8 @@ namespace TourPlannerApp.ViewModels
         {
             _log.Info("Add Tour...");
             var repository = new TourDataAccess();
-            _tourService = new TourService(repository);
+            var imgFolder = new FileSystem();
+            _tourService = new TourService(repository, imgFolder);
             var api = new TourLookupDataAccess();
             _tourLookupService = new TourLookupService(api);
             Status = "Noch keine Suche gestartet.";

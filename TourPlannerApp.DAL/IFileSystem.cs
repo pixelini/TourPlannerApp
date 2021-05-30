@@ -9,7 +9,8 @@ namespace TourPlannerApp.DAL
 {
     public interface IFileSystem
     {
-        public byte[] GetImg(TourItem tourItem);
-        public string SaveImg(TourItem tourItem, string fileName);
+        public string SaveImg(byte[] image);
+
+        public bool DeleteImg(string path);
     }
 }

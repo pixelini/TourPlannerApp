@@ -1,4 +1,4 @@
-﻿<Window x:Class="TourPlannerApp.Views.AddLogEntryDialog"
+﻿<Window x:Class="TourPlannerApp.Views.LogEntryDialog"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -12,7 +12,7 @@
             <TextBlock Text="Neue Aktivität hinzufügen" FontWeight="Bold" Margin="0 10" />
 
             <TextBlock Margin="0 0 0 5" Text="Tourstart" />
-            <DatePicker Text="{Binding StartTimeInput, Mode=TwoWay}"></DatePicker>
+            <DatePicker Text="{Binding StartTimeInput, Mode=TwoWay}" SelectedDateFormat="Long"></DatePicker>
 
             <TextBlock Margin="0 10 0 5" Text="Tourende" />
             <DatePicker Text="{Binding EndTimeInput, Mode=TwoWay}"></DatePicker>
@@ -29,8 +29,7 @@
             <TextBlock Margin="0 10 0 5" Text="Dauer in hh:mm:ss" />
             <TextBox Text="{Binding OverallTimeInput, StringFormat=HH:mm:ss, Mode=TwoWay}" Padding="2" />
 
-    
-
+  
             <!--<TextBlock Margin="0 10 0 5" Text="Dauer" />
             <StackPanel Orientation="Horizontal">
                 <TextBox MinWidth="40" Padding="2" Text="hh" TextAlignment="Center"/>
@@ -38,16 +37,6 @@
                 <TextBox MinWidth="40" Padding="2" Text="mm" TextAlignment="Center"/>
                 <TextBlock Padding="2" Text=":" TextAlignment="Center"/>
                 <TextBox MinWidth="40" Padding="2" Text="ss" TextAlignment="Center"/>
-            </StackPanel>-->
-                   
-
-            <!--<TextBlock Margin="0 20 0 10">Wie gut hat dir die Tour gefallen?</TextBlock>
-            <StackPanel Orientation="Vertical">
-                <RadioButton GroupName="Rating" Margin="0 0 20 10">5 - Sehr gut</RadioButton>
-                <RadioButton GroupName="Rating" Margin="0 0 20 10">4 - Gut</RadioButton>
-                <RadioButton GroupName="Rating" Margin="0 0 20 10">3 - So lala</RadioButton>
-                <RadioButton GroupName="Rating" Margin="0 0 20 10">2 - Meeh</RadioButton>
-                <RadioButton GroupName="Rating" Margin="0 0 20 10">1 - Nie wieder!</RadioButton>
             </StackPanel>-->
 
             <StackPanel>

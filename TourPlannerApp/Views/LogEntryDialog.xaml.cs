@@ -18,9 +18,9 @@ namespace TourPlannerApp.Views
     /// <summary>
     /// Interaktionslogik für AddLogEntryDialog.xaml
     /// </summary>
-    public partial class AddLogEntryDialog : Window
+    public partial class LogEntryDialog : Window
     {
-        public AddLogEntryDialog(AddLogEntryDialogViewModel dataContext)
+        public LogEntryDialog(LogEntryDialogViewModel dataContext)
         {
             InitializeComponent();
             DataContext = dataContext;

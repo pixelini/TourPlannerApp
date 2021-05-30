@@ -46,6 +46,7 @@ namespace TourPlannerApp.DAL
                     targetAddress.Country = reader.GetString(9);
                     float distance = reader.GetFloat(10);
                     string imgPath = reader.GetString(11);
+                    imgPath.Replace("/", "\\");
                     var tourType = GetTourType(reader.GetString(12));
                     var description = reader.GetString(13);
 
@@ -61,7 +62,7 @@ namespace TourPlannerApp.DAL
 
         public int AddTour(TourItem tourItem)
         {
-            int success = 1;
+            int id = -1;
 
             var conn = Connect();
             var sql = "INSERT INTO swe2_tourplanner.tour (name, sl_street, sl_zip, sl_country, sl_county, tl_street, tl_zip, tl_country, tl_county, distance, img_path, type, description) VALUES (@name, @sl_street, @sl_postalcode, @sl_country, @sl_county, @tl_street, @tl_postalcode, @tl_country, @tl_county, @distance, @img_path, @type, @description)";
@@ -77,14 +78,43 @@ namespace TourPlannerApp.DAL
             cmd.Parameters.Add(new NpgsqlParameter("@tl_country", tourItem.TargetLocation.Country));
             cmd.Parameters.Add(new NpgsqlParameter("@tl_county", tourItem.TargetLocation.County));
             cmd.Parameters.Add(new NpgsqlParameter("@distance", tourItem.Distance));
-            cmd.Parameters.Add(new NpgsqlParameter("@img_path", "/img/test.png"));
+            cmd.Parameters.Add(new NpgsqlParameter("@img_path", "/Images/default.png"));
+
             cmd.Parameters.Add(new NpgsqlParameter("@type", "Fussweg"));
             cmd.Parameters.Add(new NpgsqlParameter("@description", tourItem.Description));
             cmd.Prepare();
 
             if (cmd.ExecuteNonQuery() == 1)
             {
-                success = 1;
+                // get ID from new Item
+                id = GetIdFromTourname(tourItem.Name);
+
+            }
+
+            conn.Close();
+            return id;
+        }
+
+        public bool SaveImgPathToTourData(int tourId, string pathToImg)
+        {
+            bool success = false;
+
+            var conn = Connect();
+            var sql = "UPDATE swe2_tourplanner.tour SET img_path=@imgPath WHERE id = @id";
+
+            using var cmd = new NpgsqlCommand(sql, conn);
+            Debug.WriteLine("TERFSDFDA ");
+
+            Debug.WriteLine("path: "+ pathToImg);
+            Debug.WriteLine("id: " + tourId);
+
+            cmd.Parameters.Add(new NpgsqlParameter("@imgPath", pathToImg));
+            cmd.Parameters.Add(new NpgsqlParameter("@id", tourId));
+            cmd.Prepare();
+
+            if (cmd.ExecuteNonQuery() == 1)
+            {
+                success = true;
             }
 
             conn.Close();
@@ -313,6 +343,30 @@ namespace TourPlannerApp.DAL
             }
 
             return type;
+        }
+
+        private int GetIdFromTourname(string tourName)
+        {
+            var id = -1;
+
+            var conn = Connect();
+            var sql = "SELECT id FROM swe2_tourplanner.tour WHERE name=@name";
+
+            using var cmd = new NpgsqlCommand(sql, conn);
+            cmd.Parameters.Add(new NpgsqlParameter("@name", tourName));
+            cmd.Prepare();
+
+            var reader = cmd.ExecuteReader();
+            if (reader.HasRows)
+            {
+                while (reader.Read())
+                {
+                    id = reader.GetInt32(0);
+                }
+            }
+
+            conn.Close();
+            return id;
         }
 
         #endregion

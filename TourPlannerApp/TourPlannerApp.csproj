@@ -7,11 +7,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Images\default.png" />
     <None Remove="Images\logo_tourbo.png" />
     <None Remove="Images\logo_tourbo_icon.ico" />
     <None Remove="Images\logo_tourplanner.png" />
     <None Remove="Images\sample_tour.PNG" />
-    <None Remove="Views\logo_tourbo.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -19,11 +19,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="Images\default.png" />
     <Resource Include="Images\logo_tourbo.png" />
     <Resource Include="Images\logo_tourbo_icon.ico" />
     <Resource Include="Images\logo_tourplanner.png" />
     <Resource Include="Images\sample_tour.PNG" />
-    <Resource Include="Views\logo_tourbo.png" />
   </ItemGroup>
 
   <ItemGroup>

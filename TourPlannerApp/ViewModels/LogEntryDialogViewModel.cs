@@ -12,7 +12,7 @@ using TourPlannerApp.ViewModels.Base;
 
 namespace TourPlannerApp.ViewModels
 {
-    public class AddLogEntryDialogViewModel : BaseViewModel
+    public class LogEntryDialogViewModel : BaseViewModel
     {
 
         private LogEntry _logEntry;
@@ -161,7 +161,7 @@ namespace TourPlannerApp.ViewModels
         private ICommand _saveCommand;
         public ICommand SaveCommand => _saveCommand ??= new RelayCommand(x => Save(this, new EventArgs()));
 
-        public AddLogEntryDialogViewModel() 
+        public LogEntryDialogViewModel() 
         {
 
             Ratings = CreateRatings();
@@ -176,7 +176,7 @@ namespace TourPlannerApp.ViewModels
 
         }
 
-        public AddLogEntryDialogViewModel(LogEntry logEntry)
+        public LogEntryDialogViewModel(LogEntry logEntry)
         {
             Ratings = CreateRatings();
             var selectedRating = Ratings.FirstOrDefault(s => s.ItemValue == logEntry.Rating); // LINQ :)
