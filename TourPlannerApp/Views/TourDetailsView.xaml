@@ -76,7 +76,7 @@
             </Expander>
 
             <TextBlock Text="Bisherige Aktivitäten" FontWeight="Bold" Margin="0 30 0 0" />
-            <DataGrid Margin="0 10 0 0" Name="dgLogs"></DataGrid>
+            <DataGrid Margin="0 10 0 0" Name="dgLogs" ItemsSource="{Binding Log}"></DataGrid>
 
         </StackPanel>
     </Grid>

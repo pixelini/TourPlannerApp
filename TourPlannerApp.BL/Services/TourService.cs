@@ -92,5 +92,14 @@ namespace TourPlannerApp.BL.Services
             return _tourDataAccess.Exists(tourItem);
         }
 
+        public int AddTourLog(int id, LogEntry newLogEntry)
+        {
+            return _tourDataAccess.AddTourLog(id, newLogEntry);
+        }
+
+        public List<LogEntry> GetAllLogsForTour(TourItem selectedTour)
+        {
+            return _tourDataAccess.GetAllLogsForTour(selectedTour);
+        }
     }
 }

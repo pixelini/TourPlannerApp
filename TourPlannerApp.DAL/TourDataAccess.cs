@@ -1,5 +1,7 @@
 ﻿using Npgsql;
+using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using TourPlannerApp.Models;
 using static TourPlannerApp.Models.TourItem;
 
@@ -17,29 +19,13 @@ namespace TourPlannerApp.DAL
         
         public List<TourItem> GetAllTours()
         {
-            /*
-            var tourlist = new List<TourItem>
-            {
-                new TourItem() { Name = "Coole Tour", StartLocation = "Wien", TargetLocation = "Graz" },
-                new TourItem() { Name = "Super Tour", StartLocation = "Wien", TargetLocation = "Graz" }, 
-                new TourItem() { Name = "Fade Tour", StartLocation = "Wien", TargetLocation = "Graz" }, 
-                new TourItem() { Name = "Top Tour", StartLocation = "Wien", TargetLocation = "Graz" }, 
-                new TourItem() { Name = "Steile Tour", StartLocation = "Wien", TargetLocation = "Graz" }
-            };
-
-            return tourlist;
-            */
             
             var allTours = new List<TourItem>();
 
             var conn = Connect();
-            //var sql = "SELECT id, name, start_location, target_location, distance, img_path, type FROM swe2_tourplanner.tour";
-
             var sql = "SELECT id, name, sl_street, sl_zip, sl_county, sl_country, tl_street, tl_zip, tl_county, tl_country, distance, img_path, type, description FROM swe2_tourplanner.tour";
 
-
             using var cmd = new NpgsqlCommand(sql, conn);
-            //cmd.Parameters.Add(new NpgsqlParameter("@tour_name", "Coole Radtour"));
 
             var reader = cmd.ExecuteReader();
             if (reader.HasRows)
@@ -78,7 +64,7 @@ namespace TourPlannerApp.DAL
             int success = 1;
 
             var conn = Connect();
-            var sql = "INSERT INTO swe2_tourplanner.tour(name, sl_street, sl_zip, sl_country, sl_county, tl_street, tl_zip, tl_country, tl_county, distance, img_path, type, description) VALUES (@name, @sl_street, @sl_postalcode, @sl_country, @sl_county, @tl_street, @tl_postalcode, @tl_country, @tl_county, @distance, @img_path, @type, @description)";
+            var sql = "INSERT INTO swe2_tourplanner.tour (name, sl_street, sl_zip, sl_country, sl_county, tl_street, tl_zip, tl_country, tl_county, distance, img_path, type, description) VALUES (@name, @sl_street, @sl_postalcode, @sl_country, @sl_county, @tl_street, @tl_postalcode, @tl_country, @tl_county, @distance, @img_path, @type, @description)";
 
             using var cmd = new NpgsqlCommand(sql, conn);
             cmd.Parameters.Add(new NpgsqlParameter("@name", tourItem.Name));
@@ -167,6 +153,67 @@ namespace TourPlannerApp.DAL
             success = reader.HasRows;
             conn.Close();
             return success;
+        }
+
+        public int AddTourLog(int id, LogEntry newLogEntry)
+        {
+            int success = 1;
+
+            var conn = Connect();
+            var sql = "INSERT INTO swe2_tourplanner.log (tour_id, start_time, end_time, description, distance, overall_time, rating, altitude) VALUES (@tour_id, @start_time, @end_time, @description, @distance, @overall_time, @rating, @altitude)";
+
+            using var cmd = new NpgsqlCommand(sql, conn);
+            cmd.Parameters.Add(new NpgsqlParameter("@tour_id", id));
+            cmd.Parameters.Add(new NpgsqlParameter("@start_time", newLogEntry.StartTime));
+            cmd.Parameters.Add(new NpgsqlParameter("@end_time", newLogEntry.EndTime));
+            cmd.Parameters.Add(new NpgsqlParameter("@description", newLogEntry.Description));
+            cmd.Parameters.Add(new NpgsqlParameter("@distance", newLogEntry.Distance));
+            cmd.Parameters.Add(new NpgsqlParameter("@overall_time", newLogEntry.OverallTime));
+            cmd.Parameters.Add(new NpgsqlParameter("@rating", newLogEntry.Rating));
+            cmd.Parameters.Add(new NpgsqlParameter("@altitude", newLogEntry.Altitude));
+            cmd.Prepare();
+
+            if (cmd.ExecuteNonQuery() == 1)
+            {
+                success = 1;
+            }
+
+            conn.Close();
+            return success;
+        }
+
+        public List<LogEntry> GetAllLogsForTour(TourItem selectedTour)
+        {
+            var allLogs = new List<LogEntry>();
+
+            var conn = Connect();
+            var sql = "SELECT tour_id, start_time, end_time, description, distance, overall_time, rating, altitude FROM swe2_tourplanner.log WHERE tour_id = @id";
+
+            using var cmd = new NpgsqlCommand(sql, conn);
+            cmd.Parameters.Add(new NpgsqlParameter("@id", selectedTour.Id));
+            cmd.Prepare();
+
+            var reader = cmd.ExecuteReader();
+            if (reader.HasRows)
+            {
+                while (reader.Read())
+                {
+                    int id = reader.GetInt32(0);
+                    DateTime startTime = reader.GetDateTime(1);
+                    DateTime endTime = reader.GetDateTime(2);
+                    string description = reader.GetString(3);
+                    float distance = reader.GetFloat(4);
+                    TimeSpan overallTime = reader.GetTimeSpan(5);
+                    int rating = reader.GetInt32(6);
+                    float altitude = reader.GetFloat(7);
+
+                    var logEntry = new LogEntry { Id = id, StartTime = startTime, EndTime = endTime, Description = description, Distance = distance, OverallTime = overallTime, Rating = rating, Altitude = altitude };
+                    allLogs.Add(logEntry);
+                }
+            }
+
+            conn.Close();
+            return allLogs;
         }
 
 

@@ -129,7 +129,7 @@ namespace TourPlannerApp.ViewModels
         private void ShowTour(object commandParameter)
         {
             Debug.WriteLine("Show Tour: " + CurrentItem.Name + "(ID: " + CurrentItem.Id + ")");
-            Navigator.CurrentViewModel = new TourDetailsViewModel(CurrentItem);
+            Navigator.CurrentViewModel = new TourDetailsViewModel(CurrentItem, _tourService);
         }
 
         private void EditTour()
@@ -142,7 +142,7 @@ namespace TourPlannerApp.ViewModels
             EditTourDialog = new EditTourDialog(EditTourDialogViewModel);
             bool? isClosed = EditTourDialog.ShowDialog();
             Debug.WriteLine("Is Open: " + isClosed);
-            Navigator.CurrentViewModel = new TourDetailsViewModel(CurrentItem);
+            Navigator.CurrentViewModel = new TourDetailsViewModel(CurrentItem, _tourService);
 
         }
 
