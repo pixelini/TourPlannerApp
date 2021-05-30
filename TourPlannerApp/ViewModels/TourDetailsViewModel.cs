@@ -24,10 +24,18 @@ namespace TourPlannerApp.ViewModels
 
         public TourItem SelectedTour { get; set; }
 
-        public List<LogEntry> Log { get { return SelectedTour.Log; } }
+        public ObservableCollection<LogEntry> Infos { get; set; }
+
+        //public List<LogEntry> Log { get { return SelectedTour.Log; } }
 
         private ICommand _addLogEntryCommand;
         public ICommand AddLogEntryCommand => _addLogEntryCommand ??= new RelayCommand(AddLogEntry);
+
+        private ICommand _editLogEntryCommand;
+        public ICommand EditLogEntryCommand => _editLogEntryCommand ??= new RelayCommand(EditLogEntry);
+
+        private ICommand _deleteLogEntryCommand;
+        public ICommand DeleteLogEntryCommand => _deleteLogEntryCommand ??= new RelayCommand(DeleteLogEntry);
 
         public TourDetailsViewModel(TourItem selectedTour, ITourService tourService)
         {
@@ -37,6 +45,9 @@ namespace TourPlannerApp.ViewModels
             _tourService = tourService;
             SelectedTour.Log = _tourService.GetAllLogsForTour(SelectedTour);
             Debug.WriteLine("Current Log: " + SelectedTour.Log);
+
+            LogEntryInfos = new ObservableCollection<LogEntry>(_tourService.GetAllLogsForTour(SelectedTour));
+
         }
         private void AddLogEntry()
         {
@@ -76,5 +87,46 @@ namespace TourPlannerApp.ViewModels
             AddLogEntryDialog.Close();
         }
 
+
+        private void EditLogEntry(object parameter)
+        {
+            Debug.WriteLine(parameter);
+            //throw new NotImplementedException();
+        }
+
+
+        public ObservableCollection<LogEntry> LogEntryInfos
+        {
+            get { return Infos; }
+            set
+            {
+                Infos = value;
+                RaisePropertyChangedEvent(nameof(LogEntryInfos));
+            }
+        }
+
+        private void DeleteLogEntry(object parameter)
+        {
+            var selectedLogEntry = (LogEntry)parameter;
+            Debug.WriteLine("Delete LogEntry with ID: " + selectedLogEntry.Id);
+
+            // Delete Entry from log
+            if (_tourService.DeleteLogEntry(SelectedTour, selectedLogEntry))
+            {
+                //var toDelete = LogEntryInfos.Where(x => x.Id == selectedLogEntry.Id);
+                //Debug.WriteLine("Linq to delete: " + toDelete);
+                LogEntryInfos.Remove(selectedLogEntry);
+            } else
+            {
+                Debug.WriteLine("TourLog konnte nicht geloescht werden.");
+            }
+
+        }
     }
+
+
+
+
+
+    
 }

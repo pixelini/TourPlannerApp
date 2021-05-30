@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Windows.Controls;
 using TourPlannerApp.Models;
+using TourPlannerApp.ViewModels;
 
 namespace TourPlannerApp.Views
 {
@@ -13,6 +14,8 @@ namespace TourPlannerApp.Views
         public TourDetailsView()
         {
             InitializeComponent();
+            //this.DataContext = new TourDetailsViewModel();
+
 
             //// Todo --> back to data access
             //List<LogEntry> logs = new List<LogEntry>();

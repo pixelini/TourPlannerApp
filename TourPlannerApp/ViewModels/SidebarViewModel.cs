@@ -128,6 +128,7 @@ namespace TourPlannerApp.ViewModels
 
         private void ShowTour(object commandParameter)
         {
+            //Debug.WriteLine("TESTSTETS: " + commandParameter);
             Debug.WriteLine("Show Tour: " + CurrentItem.Name + "(ID: " + CurrentItem.Id + ")");
             Navigator.CurrentViewModel = new TourDetailsViewModel(CurrentItem, _tourService);
         }

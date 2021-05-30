@@ -92,14 +92,40 @@ namespace TourPlannerApp.BL.Services
             return _tourDataAccess.Exists(tourItem);
         }
 
-        public int AddTourLog(int id, LogEntry newLogEntry)
+        public bool Exists(int tourId, LogEntry logEntry)
         {
-            return _tourDataAccess.AddTourLog(id, newLogEntry);
+            return _tourDataAccess.Exists(tourId, logEntry);
+        }
+
+        public int AddTourLog(int tourId, LogEntry newLogEntry)
+        {
+            return _tourDataAccess.AddTourLog(tourId, newLogEntry);
         }
 
         public List<LogEntry> GetAllLogsForTour(TourItem selectedTour)
         {
             return _tourDataAccess.GetAllLogsForTour(selectedTour);
+        }
+
+        public bool DeleteLogEntry(TourItem selectedTour, LogEntry selectedLogEntry)
+        {
+            // find by id
+            if (Exists(selectedTour.Id, selectedLogEntry))
+            {
+                Debug.WriteLine("Log exists.");
+                // delete if log exists
+                if (_tourDataAccess.DeleteLogEntry(selectedTour, selectedLogEntry))
+                {
+                    Debug.WriteLine("Log was successfully deleted.");
+                    return true;
+                }
+
+                Debug.WriteLine("Log couldn't be deleted.");
+                return false;
+            }
+
+            Debug.WriteLine("Log does not exist.");
+            return false;
         }
     }
 }

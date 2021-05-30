@@ -16,5 +16,6 @@ namespace TourPlannerApp.Models
         public float Altitude { get; set; }
         public TimeSpan OverallTime { get; set; }
         public int Rating { get; set; }
+
     }
 }

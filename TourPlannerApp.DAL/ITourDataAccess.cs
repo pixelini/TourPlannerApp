@@ -16,7 +16,14 @@ namespace TourPlannerApp.DAL
         List<TourItem> SearchByName(string tourName);
 
         public bool Exists(TourItem tourItem);
-        public int AddTourLog(int id, LogEntry newLogEntry);
+
+        public bool Exists(int tourId, LogEntry logEntry);
+
+        public int AddTourLog(int tourId, LogEntry newLogEntry);
+
         public List<LogEntry> GetAllLogsForTour(TourItem selectedTour);
+
+        public bool DeleteLogEntry(TourItem selectedTour, LogEntry selectedLogEntry);
+
     }
 }

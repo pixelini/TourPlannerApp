@@ -155,7 +155,25 @@ namespace TourPlannerApp.DAL
             return success;
         }
 
-        public int AddTourLog(int id, LogEntry newLogEntry)
+        public bool Exists(int tourId, LogEntry logEntry)
+        {
+            bool success = false;
+            var conn = Connect();
+            var sql = "SELECT * FROM swe2_tourplanner.log WHERE id = @id AND tour_id = @tourId";
+
+            using var cmd = new NpgsqlCommand(sql, conn);
+            cmd.Parameters.Add(new NpgsqlParameter("@id", logEntry.Id));
+            cmd.Parameters.Add(new NpgsqlParameter("@tourId", tourId));
+
+            cmd.Prepare();
+
+            var reader = cmd.ExecuteReader();
+            success = reader.HasRows;
+            conn.Close();
+            return success;
+        }
+
+        public int AddTourLog(int tourId, LogEntry newLogEntry)
         {
             int success = 1;
 
@@ -163,7 +181,7 @@ namespace TourPlannerApp.DAL
             var sql = "INSERT INTO swe2_tourplanner.log (tour_id, start_time, end_time, description, distance, overall_time, rating, altitude) VALUES (@tour_id, @start_time, @end_time, @description, @distance, @overall_time, @rating, @altitude)";
 
             using var cmd = new NpgsqlCommand(sql, conn);
-            cmd.Parameters.Add(new NpgsqlParameter("@tour_id", id));
+            cmd.Parameters.Add(new NpgsqlParameter("@tour_id", tourId));
             cmd.Parameters.Add(new NpgsqlParameter("@start_time", newLogEntry.StartTime));
             cmd.Parameters.Add(new NpgsqlParameter("@end_time", newLogEntry.EndTime));
             cmd.Parameters.Add(new NpgsqlParameter("@description", newLogEntry.Description));
@@ -187,7 +205,7 @@ namespace TourPlannerApp.DAL
             var allLogs = new List<LogEntry>();
 
             var conn = Connect();
-            var sql = "SELECT tour_id, start_time, end_time, description, distance, overall_time, rating, altitude FROM swe2_tourplanner.log WHERE tour_id = @id";
+            var sql = "SELECT id, start_time, end_time, description, distance, overall_time, rating, altitude FROM swe2_tourplanner.log WHERE tour_id = @id";
 
             using var cmd = new NpgsqlCommand(sql, conn);
             cmd.Parameters.Add(new NpgsqlParameter("@id", selectedTour.Id));
@@ -214,6 +232,27 @@ namespace TourPlannerApp.DAL
 
             conn.Close();
             return allLogs;
+        }
+
+        public bool DeleteLogEntry(TourItem selectedTour, LogEntry selectedLogEntry)
+        {
+            bool success = false;
+
+            var conn = Connect();
+            var sql = "DELETE FROM swe2_tourplanner.log WHERE id = @id AND tour_id = @tourId";
+
+            using var cmd = new NpgsqlCommand(sql, conn);
+            cmd.Parameters.Add(new NpgsqlParameter("@id", selectedLogEntry.Id));
+            cmd.Parameters.Add(new NpgsqlParameter("@tourId", selectedTour.Id));
+            cmd.Prepare();
+
+            if (cmd.ExecuteNonQuery() == 1)
+            {
+                success = true;
+            }
+
+            conn.Close();
+            return success;
         }
 
 
