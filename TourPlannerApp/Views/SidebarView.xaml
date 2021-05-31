@@ -6,10 +6,10 @@
              xmlns:local="clr-namespace:TourPlannerApp.Views"
              xmlns:viewModels="clr-namespace:TourPlannerApp.ViewModels"
              xmlns:nav="clr-namespace:TourPlannerApp.Navigator"
-             
              xmlns:control="clr-namespace:TourPlannerApp.Control"
              mc:Ignorable="d"
-             d:DesignHeight="450" d:DesignWidth="800">
+             Width="331"
+             d:DesignHeight="550" d:DesignWidth="800">
 
     <Border Padding="10">
         <StackPanel Orientation="Vertical" Grid.Column="0">
@@ -29,8 +29,9 @@
             
             <ListBox
                 x:Name="listMediaItems" 
-                ItemsSource="{Binding SearchResultItems}" 
+                ItemsSource="{Binding SearchResultItems}"
                 SelectedItem="{Binding CurrentItem}"
+                MaxHeight="500"
                 Margin="0,5,0,20">
 
                 <ListBox.ItemTemplate>

@@ -48,12 +48,8 @@ namespace TourPlannerApp.ViewModels
         public TourDetailsViewModel(TourItem selectedTour, ITourService tourService)
         {
             SelectedTour = selectedTour;
-            Debug.WriteLine("TourDetailsViewModel: PATHTOIMG: " + SelectedTour.PathToImg);
-            Debug.WriteLine("SelectedTour: "+ SelectedTour.Id);
             _tourService = tourService;
             SelectedTour.Log = _tourService.GetAllLogsForTour(SelectedTour);
-            Debug.WriteLine("Current Log: " + SelectedTour.Log);
-
             LogEntryInfos = new ObservableCollection<LogEntry>(_tourService.GetAllLogsForTour(SelectedTour));
 
         }
@@ -65,14 +61,10 @@ namespace TourPlannerApp.ViewModels
             LogEntryDialog = new LogEntryDialog(LogEntryDialogViewModel);
 
             LogEntryDialog.ShowDialog();
-            //throw new NotImplementedException();
         }
 
         public void AddLogEntryDialogViewModelOnSave(object sender, EventArgs eventArgs)
         {
-            //SelectedTour.Log.Add(AddLogEntryDialogViewModel.LogEntry);
-            Debug.WriteLine("Added LogEntry: " + LogEntryDialogViewModel.LogEntry);
-
             var newLogEntry = LogEntryDialogViewModel.LogEntry;
 
             // Get all class properties with reflection
@@ -87,10 +79,6 @@ namespace TourPlannerApp.ViewModels
             _tourService.AddTourLog(SelectedTour.Id, newLogEntry);
             SelectedTour.Log =_tourService.GetAllLogsForTour(SelectedTour);
             LogEntryInfos = new ObservableCollection<LogEntry>(_tourService.GetAllLogsForTour(SelectedTour));
-            Debug.WriteLine("Current Log: " + SelectedTour.Log);
-
-
-            //RefreshTourList();
 
             // TODO: if successfull -> close
             LogEntryDialog.Close();
@@ -108,8 +96,6 @@ namespace TourPlannerApp.ViewModels
 
         private void UpdateLogEntryDialogViewModelOnSave(object sender, EventArgs e)
         {
-            Debug.WriteLine("Update LogEntry: " + LogEntryDialogViewModel.LogEntry);
-
             var editedLogEntry = LogEntryDialogViewModel.LogEntry;
 
             // TODO: Validate it
@@ -127,7 +113,6 @@ namespace TourPlannerApp.ViewModels
         private void DeleteLogEntry(object parameter)
         {
             var selectedLogEntry = (LogEntry)parameter;
-            Debug.WriteLine("Delete LogEntry with ID: " + selectedLogEntry.Id);
 
             // Delete Entry from log
             if (_tourService.DeleteLogEntry(SelectedTour, selectedLogEntry))

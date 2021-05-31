@@ -103,11 +103,6 @@ namespace TourPlannerApp.DAL
             var sql = "UPDATE swe2_tourplanner.tour SET img_path=@imgPath WHERE id = @id";
 
             using var cmd = new NpgsqlCommand(sql, conn);
-            Debug.WriteLine("TERFSDFDA ");
-
-            Debug.WriteLine("path: "+ pathToImg);
-            Debug.WriteLine("id: " + tourId);
-
             cmd.Parameters.Add(new NpgsqlParameter("@imgPath", pathToImg));
             cmd.Parameters.Add(new NpgsqlParameter("@id", tourId));
             cmd.Prepare();

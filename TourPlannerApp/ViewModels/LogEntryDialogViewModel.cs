@@ -188,7 +188,6 @@ namespace TourPlannerApp.ViewModels
             _distanceInput = logEntry.Distance;
             _overallTimeInput = logEntry.OverallTime.ToString();
             _altitudeInput = logEntry.Altitude;
-
         }
 
         private List<SelectableItem> CreateRatings()

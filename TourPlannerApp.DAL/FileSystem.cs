@@ -24,9 +24,6 @@ namespace TourPlannerApp.DAL
             Guid guid = Guid.NewGuid();
             string fileName = guid.ToString() + ".png";
 
-            Debug.WriteLine("Current Path: " + Directory.GetCurrentDirectory());
-            Debug.WriteLine("Path from class: " + _imgPath);
-
             if (!Directory.Exists(_imgPath))
             {
                 Directory.CreateDirectory(_imgPath);
@@ -34,7 +31,6 @@ namespace TourPlannerApp.DAL
             }
 
             var fullPath = _imgPath + "\\" + fileName;
-            Debug.WriteLine("dateiname: " + fullPath);
 
             File.WriteAllBytes(fullPath, image); // exception abfangen
 
