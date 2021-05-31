@@ -115,6 +115,26 @@ namespace TourPlannerApp.ViewModels
             }
         }
 
+        private string _tourDescriptionInput;
+        public string TourDescriptionInput
+        {
+            get
+            {
+                return _tourDescriptionInput;
+            }
+
+            set
+            {
+                if (_tourDescriptionInput != value)
+                {
+                    _tourDescriptionInput = value;
+                    RaisePropertyChangedEvent(nameof(TourDescriptionInput));
+                }
+            }
+        }
+
+
+
         private TourItem _currentTourLookup;
         public TourItem CurrentTourLookup
         {
@@ -143,7 +163,8 @@ namespace TourPlannerApp.ViewModels
         {
             _log.Info("Add Tour...");
             var repository = new TourDataAccess();
-            _tourService = new TourService(repository);
+            var imgFolder = new FileSystem();
+            _tourService = new TourService(repository, imgFolder);
             var api = new TourLookupDataAccess();
             _tourLookupService = new TourLookupService(api);
             Status = "Noch keine Suche gestartet.";
@@ -153,9 +174,12 @@ namespace TourPlannerApp.ViewModels
 
         private void SetFormattedProperties()
         {
-            StartLocationResult = FormatLocationData(CurrentTourLookup.StartLocation);
-            TargetLocationResult = FormatLocationData(CurrentTourLookup.TargetLocation);
+            //StartLocationResult = FormatLocationData(CurrentTourLookup.StartLocation);
+            //TargetLocationResult = FormatLocationData(CurrentTourLookup.TargetLocation);
+            StartLocationResult = CurrentTourLookup.GetStartLocationAsString();
+            TargetLocationResult = CurrentTourLookup.GetTargetLocationAsString();
             TourNameInput = "Meine Tour 1";
+            TourDescriptionInput = "Gib eine Beschreibung ein...";
         }
 
 
@@ -170,6 +194,10 @@ namespace TourPlannerApp.ViewModels
             }
             ShowResult = true;
             CurrentTourLookup = tourResult;
+            Debug.WriteLine(CurrentTourLookup.TargetLocation.Street);
+            Debug.WriteLine(CurrentTourLookup.TargetLocation.PostalCode);
+            Debug.WriteLine(CurrentTourLookup.TargetLocation.County);
+            Debug.WriteLine(CurrentTourLookup.TargetLocation.Country);
         }
 
 
@@ -177,13 +205,18 @@ namespace TourPlannerApp.ViewModels
         {
             Debug.WriteLine("Add Tour...");
             CurrentTourLookup.Name = TourNameInput;
+            CurrentTourLookup.Description = TourDescriptionInput;
             _tourService.AddTour(CurrentTourLookup);
             TourEvents.AnnounceNewTour();
 
         }
 
-        #region Helpers
 
+
+
+        /* --> moved to TourItem Model!!!
+        #region Helpers
+  
         private string FormatLocationData(TourItem.Address address)
         {
             var fullLocation = "";
@@ -198,10 +231,21 @@ namespace TourPlannerApp.ViewModels
                 fullLocation = AddToLocationString(fullLocation, address.PostalCode);
             }
 
-            if (address.County != null)
+            if (address.City != null)
             {
-                fullLocation = AddToLocationString(fullLocation, address.County);
+                fullLocation = AddToLocationString(fullLocation, address.City);
             }
+
+            
+            //if (address.County != null)
+            //{
+            //    fullLocation = AddToLocationString(fullLocation, address.County);
+            //}
+            
+            if (address.State != null)
+            {
+                fullLocation = AddToLocationString(fullLocation, address.State);
+            }      
 
             if (address.Country != null)
             {
@@ -225,8 +269,12 @@ namespace TourPlannerApp.ViewModels
             return locationString;
         }
 
+        
+
 
         #endregion
+
+        */
 
 
 

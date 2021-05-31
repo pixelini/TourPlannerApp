@@ -15,6 +15,7 @@ namespace TourPlannerApp.ViewModels.Base
             {
                 PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
             }
+
         }
 
         protected void ValidatePropertyname(string propertyName)

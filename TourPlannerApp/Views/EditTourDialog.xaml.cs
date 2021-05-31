@@ -11,17 +11,21 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using TourPlannerApp.Models;
+using TourPlannerApp.ViewModels;
 
 namespace TourPlannerApp.Views
 {
     /// <summary>
     /// Interaktionslogik für AddLogEntryDialog.xaml
     /// </summary>
-    public partial class AddLogEntryDialog : Window
+    public partial class EditTourDialog : Window
     {
-        public AddLogEntryDialog()
+        public EditTourDialog(EditTourDialogViewModel dataContext)
         {
             InitializeComponent();
+            DataContext = dataContext;
         }
+
     }
 }

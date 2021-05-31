@@ -13,6 +13,7 @@ using TourPlannerApp.ViewModels.Base;
 using System.Diagnostics; //for debug-mode
 using TourPlannerApp.Navigator;
 using TourPlannerApp.Store;
+using TourPlannerApp.Views;
 
 namespace TourPlannerApp.ViewModels
 {
@@ -20,12 +21,13 @@ namespace TourPlannerApp.ViewModels
     {
         private readonly log4net.ILog _log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
+        public EditTourDialog EditTourDialog { get; set; }
+        public EditTourDialogViewModel EditTourDialogViewModel { get; set; }
         public INavigator Navigator { get; set; }
 
         private ITourService _tourService { get; set; }
 
         public ObservableCollection<TourItem> Items { get; set; }
-
         public ObservableCollection<TourItem> SearchResultItems { get; set; }
 
         private string _searchInput;
@@ -68,22 +70,29 @@ namespace TourPlannerApp.ViewModels
 
         }
 
+        #region Commands
+
         private ICommand _searchCommand;
         public ICommand SearchCommand => _searchCommand ??= new RelayCommand(Search);
-        
-        private ICommand _deleteCommand;
-        public ICommand DeleteCommand => _deleteCommand ??= new RelayCommand(Delete);
 
         private ICommand _showSelectedTourCommand;
         public ICommand ShowSelectedTourCommand => _showSelectedTourCommand ??= new RelayCommand(ShowTour);
 
+        private ICommand _editSelectedTourCommand;
+        public ICommand EditSelectedTourCommand => _editSelectedTourCommand ??= new RelayCommand(EditTour);
+
+        private ICommand _deleteSelectedTourCommand;
+        public ICommand DeleteSelectedTourCommand => _deleteSelectedTourCommand ??= new RelayCommand(DeleteTour);
+
+        #endregion
 
         public SidebarViewModel()
         {
             // sets navigator to the static navigator of the MainViewModel
             Navigator = MainViewModel.Navigator;
             var repository = new TourDataAccess();
-            _tourService = new TourService(repository);
+            var imgFolder = new FileSystem();
+            _tourService = new TourService(repository, imgFolder);
             Items = new ObservableCollection<TourItem>(_tourService.GetAllTours());
             SearchResultItems = new ObservableCollection<TourItem>(Items);
             SearchInput = "";
@@ -119,12 +128,41 @@ namespace TourPlannerApp.ViewModels
 
         private void ShowTour(object commandParameter)
         {
+            //Debug.WriteLine("TESTSTETS: " + commandParameter);
             Debug.WriteLine("Show Tour: " + CurrentItem.Name + "(ID: " + CurrentItem.Id + ")");
-            Navigator.CurrentViewModel = new TourDetailsViewModel(CurrentItem);
+            Navigator.CurrentViewModel = new TourDetailsViewModel(CurrentItem, _tourService);
         }
 
+        private void EditTour()
+        {
+            Debug.WriteLine("Edit Tour: " + CurrentItem.Name + "(ID: " + CurrentItem.Id + ")");
+            Navigator.CurrentViewModel = new HomeViewModel();             
 
-        private void Delete(object commandParameter)
+            EditTourDialogViewModel = new EditTourDialogViewModel(CurrentItem);
+            EditTourDialogViewModel.Save += EditTourDialogViewModelOnSave;
+            EditTourDialog = new EditTourDialog(EditTourDialogViewModel);
+            bool? isClosed = EditTourDialog.ShowDialog();
+            Debug.WriteLine("Is Open: " + isClosed);
+            Navigator.CurrentViewModel = new TourDetailsViewModel(CurrentItem, _tourService);
+
+        }
+
+        public void EditTourDialogViewModelOnSave(object sender, EventArgs eventArgs)
+        {
+            // get new Data
+            CurrentItem.Name = EditTourDialogViewModel.TournameInput;
+            CurrentItem.Description = EditTourDialogViewModel.DescriptionInput;
+            Debug.WriteLine("Edited Tourname: " + CurrentItem.Name);
+
+            // TODO: Validate it
+            _tourService.UpdateTour(CurrentItem);
+            RefreshTourList();
+
+            // TODO: if successfull -> close
+            EditTourDialog.Close();
+        }
+
+        private void DeleteTour(object commandParameter)
         {
             Debug.WriteLine("Delete Tour: " + CurrentItem.Name + "(ID: " + CurrentItem.Id + ")");
             _tourService.DeleteTour(CurrentItem);

@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TourPlannerApp.Models;
+using System.Drawing;
 
 namespace TourPlannerApp.DAL
 {
@@ -14,22 +16,39 @@ namespace TourPlannerApp.DAL
 
         public FileSystem()
         {
-            _imgPath = Environment.CurrentDirectory + @"\img";
+            _imgPath = SettingsManager.GetSettings().BasePath + @"\SavedImages";
         }
 
-        public byte[] GetImg(TourItem tourItem)
+        public string SaveImg(byte[] image)
         {
-            throw new NotImplementedException();
-        }
+            Guid guid = Guid.NewGuid();
+            string fileName = guid.ToString() + ".png";
 
-        public string SaveImg(TourItem tourItem, string fileName)
-        {
             if (!Directory.Exists(_imgPath))
             {
                 Directory.CreateDirectory(_imgPath);
+
             }
 
-            throw new NotImplementedException();
+            var fullPath = _imgPath + "\\" + fileName;
+
+            File.WriteAllBytes(fullPath, image); // exception abfangen
+
+            return fullPath;
+
+        }
+
+        public bool DeleteImg(string path)
+        {
+            bool success = false;
+
+            if (File.Exists(path))
+            {
+                File.Delete(path);
+                success = true;
+            }
+
+            return success;
         }
     }
 }

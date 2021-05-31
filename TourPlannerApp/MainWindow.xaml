@@ -10,69 +10,71 @@
         mc:Ignorable="d"
         Title="Tourboo" Height="900" Width="1200"
         Icon="Images/logo_tourbo_icon.ico"
+        WindowStartupLocation="CenterScreen"
         >
+    <ScrollViewer>
 
-    <Border>
+        <Border>
 
-        <StackPanel Orientation="Vertical">
+            <StackPanel Orientation="Vertical">
 
-            <!-- Top Nav + Buttons -->
-            <Border Background="{StaticResource BrushPrimary1}" >
-                <Grid Margin="10 10">
+                <!-- Top Nav + Buttons -->
+                <Border Background="{StaticResource BrushPrimary1}" >
+                    <Grid Margin="10 10">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="2*" />
+                            <ColumnDefinition Width="10*" />
+                        </Grid.ColumnDefinitions>
+
+                        <Button Padding="5" Margin="0 0 10 0" Grid.Column="0" Content="Home"
+                                Command="{Binding Navigator.UpdateCurrentViewModelCommand}"
+                                CommandParameter="{x:Static nav:ViewType.Home}" />
+                        <Button Padding="5" Grid.Column="1" Content="+ Neue Tour erstellen" 
+                                Command="{Binding Navigator.UpdateCurrentViewModelCommand}" 
+                                CommandParameter="{x:Static nav:ViewType.AddTour}" />
+
+                    </Grid>
+                </Border>
+
+
+                <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="2*" />
-                        <ColumnDefinition Width="10*" />
+                        <ColumnDefinition Width="2.35*" />
                     </Grid.ColumnDefinitions>
 
-                    <Button Padding="5" Margin="0 0 10 0" Grid.Column="0" Content="Home"
-                            Command="{Binding Navigator.UpdateCurrentViewModelCommand}"
-                            CommandParameter="{x:Static nav:ViewType.Home}" />
-                    <Button Padding="5" Grid.Column="1" Content="+ Neue Tour erstellen" 
-                            Command="{Binding Navigator.UpdateCurrentViewModelCommand}" 
-                            CommandParameter="{x:Static nav:ViewType.AddTour}" />
+                    <!-- Left Side -->
+                    <Border Grid.Row="0" Height="900" Padding="10 0 10 0" Background="{StaticResource BrushPrimary2}">
+                        <views:SidebarView />
+                    </Border>
 
+
+                    <!-- Right Side -->
+                    <Border Grid.Row="0" Padding="50" Background="{StaticResource BrushPrimary3}" Grid.Column="1" >
+                        <ContentControl Grid.Row="0" Content="{Binding Navigator.CurrentViewModel}">
+                            <ContentControl.Resources>
+                                <DataTemplate DataType="{x:Type viewModels:TourDetailsViewModel}">
+                                    <views:TourDetailsView />
+                                </DataTemplate>
+
+                                <DataTemplate DataType="{x:Type viewModels:HomeViewModel}">
+                                    <views:HomeView />
+                                </DataTemplate>
+
+                                <DataTemplate DataType="{x:Type viewModels:AddTourViewModel}">
+                                    <views:AddTourView />
+                                </DataTemplate>
+                            </ContentControl.Resources>
+                        </ContentControl>
+
+                    </Border>
                 </Grid>
-            </Border>
 
+            </StackPanel>
 
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="2.35*" />
-                </Grid.ColumnDefinitions>
+        </Border>
 
-                <!-- Left Side -->
-                <Border Grid.Row="0" Padding="10 0 10 300" Background="{StaticResource BrushPrimary2}">
-                    <views:SidebarView />
-                </Border>
-
-
-                <!-- Right Side -->
-                <Border Grid.Row="0" Padding="50" Background="{StaticResource BrushPrimary3}" Grid.Column="1" >
-                    <ContentControl Grid.Row="0" Content="{Binding Navigator.CurrentViewModel}">
-                        <ContentControl.Resources>
-                            <DataTemplate DataType="{x:Type viewModels:TourDetailsViewModel}">
-                                <views:TourDetailsView />
-                            </DataTemplate>
-
-                            <DataTemplate DataType="{x:Type viewModels:HomeViewModel}">
-                                <views:HomeView />
-                            </DataTemplate>
-
-                            <DataTemplate DataType="{x:Type viewModels:AddTourViewModel}">
-                                <views:AddTourView />
-                            </DataTemplate>
-                        </ContentControl.Resources>
-                    </ContentControl>
-
-                </Border>
-            </Grid>
-
-        </StackPanel>
-
-
-
-    </Border>
+    </ScrollViewer>
 
 </Window>
