@@ -10,27 +10,27 @@ using System.Drawing;
 
 namespace TourPlannerApp.DAL
 {
-    public class FileSystem : IFileSystem
+    public class PictureAccess : IPictureAccess
     {
-        private string _imgPath;
+        private string _pictureFolder;
 
-        public FileSystem()
+        public PictureAccess()
         {
-            _imgPath = SettingsManager.GetSettings().BasePath + @"\SavedImages";
+            _pictureFolder = SettingsManager.GetSettings().BasePath + @"\SavedImages";
         }
 
-        public string SaveImg(byte[] image)
+        public string SavePicture(byte[] image)
         {
             Guid guid = Guid.NewGuid();
             string fileName = guid.ToString() + ".png";
 
-            if (!Directory.Exists(_imgPath))
+            if (!Directory.Exists(_pictureFolder))
             {
-                Directory.CreateDirectory(_imgPath);
+                Directory.CreateDirectory(_pictureFolder);
 
             }
 
-            var fullPath = _imgPath + "\\" + fileName;
+            var fullPath = _pictureFolder + "\\" + fileName;
 
             File.WriteAllBytes(fullPath, image); // exception abfangen
 
@@ -38,7 +38,7 @@ namespace TourPlannerApp.DAL
 
         }
 
-        public bool DeleteImg(string path)
+        public bool DeletePicture(string path)
         {
             bool success = false;
 

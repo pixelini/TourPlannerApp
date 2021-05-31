@@ -91,7 +91,7 @@ namespace TourPlannerApp.ViewModels
             // sets navigator to the static navigator of the MainViewModel
             Navigator = MainViewModel.Navigator;
             var repository = new TourDataAccess();
-            var imgFolder = new FileSystem();
+            var imgFolder = new PictureAccess();
             _tourService = new TourService(repository, imgFolder);
             Items = new ObservableCollection<TourItem>(_tourService.GetAllTours());
             SearchResultItems = new ObservableCollection<TourItem>(Items);

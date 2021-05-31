@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using QuestPDF.Fluent;
+using System.Collections.Generic;
 using System.Diagnostics;
+using TourPlannerApp.BL.Reports;
 using TourPlannerApp.DAL;
 using TourPlannerApp.Models;
 using static TourPlannerApp.Models.Models.TourLookup;
@@ -10,12 +12,17 @@ namespace TourPlannerApp.BL.Services
     {
         private ITourDataAccess _tourDataAccess;
 
-        private IFileSystem _tourImgAccess;
+        private IPictureAccess _tourPictureAccess;
 
-        public TourService(ITourDataAccess tourDataAccess, IFileSystem tourImgAccess)
+        public TourService(ITourDataAccess tourDataAccess)
         {
             _tourDataAccess = tourDataAccess;
-            _tourImgAccess = tourImgAccess;
+        }
+
+        public TourService(ITourDataAccess tourDataAccess, IPictureAccess tourImgAccess)
+        {
+            _tourDataAccess = tourDataAccess;
+            _tourPictureAccess = tourImgAccess;
         }
 
         public List<TourItem> GetAllTours()
@@ -25,15 +32,17 @@ namespace TourPlannerApp.BL.Services
 
         public int AddTour(TourItem newTourItem)
         {
+            int tourId = -1;
+
             if (!Exists(newTourItem))
             {
-                int tourId = _tourDataAccess.AddTour(newTourItem);
+                tourId = _tourDataAccess.AddTour(newTourItem);
                 if (tourId >= 0)
                 {
                     Debug.WriteLine("Tour was successfully added.");
 
                     // Save tour img in file system
-                    var pathToImg = _tourImgAccess.SaveImg(newTourItem.Image);
+                    var pathToImg = _tourPictureAccess.SavePicture(newTourItem.Image);
                     _tourDataAccess.SaveImgPathToTourData(tourId, pathToImg);
                     return tourId;
                 }
@@ -44,7 +53,7 @@ namespace TourPlannerApp.BL.Services
 
             Debug.WriteLine("Tour already exits.");
             
-            return -1;
+            return tourId;
         }
 
         public bool UpdateTour(TourItem tourItem)
@@ -80,7 +89,7 @@ namespace TourPlannerApp.BL.Services
                     Debug.WriteLine("Tour was successfully deleted.");
 
                     // Delete Image
-                    _tourImgAccess.DeleteImg(tourItem.PathToImg);
+                    _tourPictureAccess.DeletePicture(tourItem.PathToImg);
                     return true;
                 }
 
@@ -142,5 +151,23 @@ namespace TourPlannerApp.BL.Services
             Debug.WriteLine("Log does not exist.");
             return false;
         }
+
+        public void ShowSummaryReport()
+        {
+            var allToursWithLogs = _tourDataAccess.GetAllTours();
+
+            foreach (var tour in allToursWithLogs)
+            {
+                tour.Log = _tourDataAccess.GetAllLogsForTour(tour);
+            }
+
+            var filePath = "SummaryReport.pdf";
+            var model = allToursWithLogs;
+            var document = new SummaryReport(model);
+            document.GeneratePdf(filePath);
+            Process.Start("explorer.exe", filePath);
+
+        }
+
     }
 }
