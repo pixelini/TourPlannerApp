@@ -80,6 +80,7 @@
             <TextBlock Text="Bisherige Aktivitäten" FontWeight="Bold" Margin="0 30 0 0" />
 
             <DataGrid Margin="0 10 0 0" Name="dgLogs" ItemsSource="{Binding LogEntryInfos}" AutoGenerateColumns="False" IsReadOnly="true">
+
                 <DataGrid.Columns>
                     <DataGridTemplateColumn Header="Optionen">
                         <DataGridTemplateColumn.CellTemplate>

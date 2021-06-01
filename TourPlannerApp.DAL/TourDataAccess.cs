@@ -49,7 +49,6 @@ namespace TourPlannerApp.DAL
                     imgPath.Replace("/", "\\");
                     var tourType = GetTourType(reader.GetString(12));
                     var description = reader.GetString(13);
-
                     var tour = new TourItem { Id = id, Name = name, StartLocation = startAddress, TargetLocation = targetAddress, Distance = distance, PathToImg = imgPath, Description = description };
                     allTours.Add(tour);
                 }
@@ -78,8 +77,7 @@ namespace TourPlannerApp.DAL
             cmd.Parameters.Add(new NpgsqlParameter("@tl_country", tourItem.TargetLocation.Country));
             cmd.Parameters.Add(new NpgsqlParameter("@tl_county", tourItem.TargetLocation.County));
             cmd.Parameters.Add(new NpgsqlParameter("@distance", tourItem.Distance));
-            cmd.Parameters.Add(new NpgsqlParameter("@img_path", "/Images/default.png"));
-
+            cmd.Parameters.Add(new NpgsqlParameter("@img_path", tourItem.PathToImg));
             cmd.Parameters.Add(new NpgsqlParameter("@type", "Fussweg"));
             cmd.Parameters.Add(new NpgsqlParameter("@description", tourItem.Description));
             cmd.Prepare();
@@ -95,6 +93,7 @@ namespace TourPlannerApp.DAL
             return id;
         }
 
+        
         public bool SaveImgPathToTourData(int tourId, string pathToImg)
         {
             bool success = false;
@@ -115,6 +114,8 @@ namespace TourPlannerApp.DAL
             conn.Close();
             return success;
         }
+
+        
 
         public bool UpdateTour(TourItem tourItem)
         {

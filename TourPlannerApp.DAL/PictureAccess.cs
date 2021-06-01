@@ -32,7 +32,7 @@ namespace TourPlannerApp.DAL
 
             var fullPath = _pictureFolder + "\\" + fileName;
 
-            File.WriteAllBytes(fullPath, image); // exception abfangen
+            File.WriteAllBytes(fullPath, image); // exception abfangen --> if not successfull --> return ""?
 
             return fullPath;
 
@@ -45,6 +45,18 @@ namespace TourPlannerApp.DAL
             if (File.Exists(path))
             {
                 File.Delete(path);
+                success = true;
+            }
+
+            return success;
+        }
+
+        public bool Exists(string path)
+        {
+            bool success = false;
+
+            if (File.Exists(path))
+            {
                 success = true;
             }
 

@@ -51,7 +51,6 @@ namespace TourPlannerApp.ViewModels
             _tourService = tourService;
             SelectedTour.Log = _tourService.GetAllLogsForTour(SelectedTour);
             LogEntryInfos = new ObservableCollection<LogEntry>(_tourService.GetAllLogsForTour(SelectedTour));
-
         }
         private void AddLogEntry()
         {

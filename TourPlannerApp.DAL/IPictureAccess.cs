@@ -12,5 +12,7 @@ namespace TourPlannerApp.DAL
         public string SavePicture(byte[] image);
 
         public bool DeletePicture(string path);
+
+        public bool Exists(string path);
     }
 }

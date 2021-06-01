@@ -28,8 +28,6 @@ namespace TourPlannerApp.BL.Reports
 
                 stack.Item().BorderBottom(1).PaddingBottom(5).Text(Title);
                 stack.Item().Text(LogEntry.Rating);
-                stack.Item().Text(LogEntry.Rating);
-                stack.Item().Text(LogEntry.Rating);
                 stack.Item().Text(LogEntry.Distance);
             });
         }

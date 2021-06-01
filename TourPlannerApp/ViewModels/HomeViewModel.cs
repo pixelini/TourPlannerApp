@@ -26,7 +26,8 @@ namespace TourPlannerApp.ViewModels
         public HomeViewModel()
         {
             var repository = new TourDataAccess();
-            _tourService = new TourService(repository);
+            var imgFolder = new PictureAccess();
+            _tourService = new TourService(repository, imgFolder);
         }
 
 

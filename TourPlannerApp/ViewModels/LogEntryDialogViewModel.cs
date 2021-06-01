@@ -163,17 +163,15 @@ namespace TourPlannerApp.ViewModels
 
         public LogEntryDialogViewModel() 
         {
-
             Ratings = CreateRatings();
             Ratings[0].IsSelected = true; // first element is default option
             _logEntry = new LogEntry();
             _startTimeInput = DateTime.Today.ToString();
-            _endTimeInput = DateTime.Today.ToString();
+            _endTimeInput = DateTime.Today.AddDays(1).ToString();
             _descriptionInput = "";
             _distanceInput = 0;
             _overallTimeInput = new TimeSpan(2, 14, 18).ToString();
             _altitudeInput = 0;
-
         }
 
         public LogEntryDialogViewModel(LogEntry logEntry)

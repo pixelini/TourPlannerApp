@@ -4,6 +4,7 @@ using QuestPDF.Infrastructure;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,13 +12,23 @@ using TourPlannerApp.Models;
 
 namespace TourPlannerApp.BL.Reports
 {
-    class SummaryReport : IDocument
+    public class SummaryReport : IDocument
     {
+        public string Title { get; set; }
+
         public List<TourItem> Model { get; }
 
-        public SummaryReport(List<TourItem> model)
+        public string PathToLogo { get; set; }
+
+        public SummaryReport(string title, List<TourItem> model)
         {
+            Title = title;
             Model = model;
+            PathToLogo = @"C:\Users\Lisi\source\repos\SS2021\SWE\TourPlannerApp\TourPlannerApp\Images\logo_tourbo_white.png";
+        }
+        private byte[] GetLogo()
+        {
+            return ReadImageFile(PathToLogo);
         }
 
         public DocumentMetadata GetMetadata() => DocumentMetadata.Default;
@@ -35,35 +46,10 @@ namespace TourPlannerApp.BL.Reports
                 });
         }
 
-        /*
-
-        public void Compose(IContainer container, List<TourItem> model)
-        {
-            container
-                .PaddingHorizontal(0)
-                .PaddingVertical(0)
-                .Page(page =>
-                {
-                    ComposeHeader(page.Header().Height(100).Background("4DB5FF").PaddingHorizontal(50).PaddingTop(40));
-                    page.Content().Background("F1F1F1").ComposeContentSpecific(model);
-                    page.Footer().Height(50).Background("4DB5FF");
-                });
-
-        }
-        */
-
         void ComposeHeader(IContainer container)
         {
-            container.Row(row =>
-            {
-                row.RelativeColumn().Stack(stack =>
-                {
-                    stack.Item().Text($"Statistik: Meine Touren", TextStyle.Default.Size(20).Color("FFF"));
-                    stack.Item().Text($"Erstellt am: {DateTime.Now:d}", TextStyle.Default.Color("FFF"));
-                });
-
-                row.ConstantColumn(100).Height(50).Placeholder();
-            });
+            var header = new HeaderComponent(Title, GetLogo());
+            header.Compose(container);
         }
 
         void ComposeContent(IContainer container)
@@ -149,8 +135,23 @@ namespace TourPlannerApp.BL.Reports
             });
         }
 
+        private byte[] ReadImageFile(string imageLocation)
+        {
+            byte[] imageData = null;
+            if (File.Exists(imageLocation))
+            {
+                FileInfo fileInfo = new FileInfo(imageLocation);
+                long imageFileLength = fileInfo.Length;
+                FileStream fs = new FileStream(imageLocation, FileMode.Open, FileAccess.Read);
+                BinaryReader br = new BinaryReader(fs);
+                imageData = br.ReadBytes((int)imageFileLength);
+            }
+            return imageData;
+        }
+
     }
 
+    /*
     public static class ReportExtensions
     {
         public static void ComposeContentSpecific(this IContainer container, List<TourItem> model)
@@ -170,4 +171,6 @@ namespace TourPlannerApp.BL.Reports
             });
         }
     }
+
+    */
 }

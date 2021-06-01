@@ -1,6 +1,7 @@
 ﻿using QuestPDF.Fluent;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using TourPlannerApp.BL.Reports;
 using TourPlannerApp.DAL;
 using TourPlannerApp.Models;
@@ -14,10 +15,10 @@ namespace TourPlannerApp.BL.Services
 
         private IPictureAccess _tourPictureAccess;
 
-        public TourService(ITourDataAccess tourDataAccess)
-        {
-            _tourDataAccess = tourDataAccess;
-        }
+        //public TourService(ITourDataAccess tourDataAccess)
+        //{
+        //    _tourDataAccess = tourDataAccess;
+        //}
 
         public TourService(ITourDataAccess tourDataAccess, IPictureAccess tourImgAccess)
         {
@@ -27,7 +28,22 @@ namespace TourPlannerApp.BL.Services
 
         public List<TourItem> GetAllTours()
         {
-            return _tourDataAccess.GetAllTours();
+            var allTours = _tourDataAccess.GetAllTours();
+            allTours = ValidateImgPaths(allTours);
+            return allTours;
+        }
+
+        private List<TourItem> ValidateImgPaths(List<TourItem> tourList)
+        {
+            foreach (var tour in tourList)
+            {
+                if (!_tourPictureAccess.Exists(tour.PathToImg))
+                {
+                    tour.PathToImg = "/Images/default.png";
+                }
+            }
+
+            return tourList;
         }
 
         public int AddTour(TourItem newTourItem)
@@ -36,14 +52,22 @@ namespace TourPlannerApp.BL.Services
 
             if (!Exists(newTourItem))
             {
+                // Save tour img in file system
+                var pathToImg = _tourPictureAccess.SavePicture(newTourItem.Image);
+
+                if (pathToImg != "") // if no error
+                {
+                    newTourItem.PathToImg = pathToImg;
+                } else
+                {
+                    newTourItem.PathToImg = "-";
+                }
+
                 tourId = _tourDataAccess.AddTour(newTourItem);
                 if (tourId >= 0)
                 {
                     Debug.WriteLine("Tour was successfully added.");
-
-                    // Save tour img in file system
-                    var pathToImg = _tourPictureAccess.SavePicture(newTourItem.Image);
-                    _tourDataAccess.SaveImgPathToTourData(tourId, pathToImg);
+                    _tourDataAccess.SaveImgPathToTourData(tourId, "");
                     return tourId;
                 }
 
@@ -154,17 +178,34 @@ namespace TourPlannerApp.BL.Services
 
         public void ShowSummaryReport()
         {
-            var allToursWithLogs = _tourDataAccess.GetAllTours();
+            // TourReport or SummaryReport
+            string type = "TourReport";
+
+            var allToursWithLogs = GetAllTours();
 
             foreach (var tour in allToursWithLogs)
             {
-                tour.Log = _tourDataAccess.GetAllLogsForTour(tour);
+                tour.Log = GetAllLogsForTour(tour);
             }
 
-            var filePath = "SummaryReport.pdf";
-            var model = allToursWithLogs;
-            var document = new SummaryReport(model);
-            document.GeneratePdf(filePath);
+            var filePath = "";
+
+            if (type == "SummaryReport")
+            {
+                filePath = "SummaryReport.pdf";
+                var model = allToursWithLogs;
+                var document = new SummaryReport("Statistik: Meine Touren", model);
+                document.GeneratePdf(filePath);
+            }
+
+            if (type == "TourReport")
+            {
+                filePath = "TourReport.pdf";
+                var model = allToursWithLogs[5];
+                var document = new TourReport($"Report von Tour: {model.Name}", model);
+                document.GeneratePdf(filePath);
+            }
+          
             Process.Start("explorer.exe", filePath);
 
         }
