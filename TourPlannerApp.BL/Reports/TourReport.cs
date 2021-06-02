@@ -17,9 +17,7 @@ namespace TourPlannerApp.BL.Reports
     public class TourReport : IDocument
     {
         public string Title { get; set; }
-
         public TourItem Model { get; }
-
         public string PathToLogo { get; set; }
 
         public TourReport(string title, TourItem model)
@@ -59,24 +57,8 @@ namespace TourPlannerApp.BL.Reports
         {
             container.PaddingVertical(40).Stack(stack =>
             {
-
-                //stack.Spacing(5);
-
-                //stack.Item().Row(row =>
-                //{
-                //    var logEntry = new LogEntryComponent("Gesamtzeit: ", Model.Log[0]);
-                //    logEntry.Compose(row.RelativeColumn());
-                //});
-
-                //stack.Spacing(20);
-                stack.Item().Element(ComposeImage);
+                stack.Item().Element(ComposeTourInfo);
                 stack.Item().Element(ComposeList);
-                //stack.Item().Element(ComposeTable);
-
-                //var sumOfDistanceOfFirstTour = Model.AllTours[0].Log.Sum(x => x.Distance); // alle distanzen zusammen
-                var sumOfDistanceOfFirstTour = Model.Log.Sum(x => x.Distance); // alle distanzen zusammen
-                
-                
             });
         }
 
@@ -84,162 +66,57 @@ namespace TourPlannerApp.BL.Reports
         {
             var textSizeHeadings = TextStyle.Default.Size(12).SemiBold();
             var textSizeValues = TextStyle.Default.Size(10);
-
-            int counter = 0;
+            var counter = 0;
 
             container.Stack(stack =>
             {
                 stack.Item().PaddingTop(30).PaddingBottom(30).Text($"Meine Aktivitäten", TextStyle.Default.Size(14).Color("4DB5FF").Bold());
 
-                foreach (var item in Model.Log)
+                foreach (var entry in Model.Log)
                 {
                     counter++;
 
                     stack.Item().BorderTop(1).PaddingTop(20).PaddingBottom(20).Text($"#Nr. {counter}", TextStyle.Default.Size(14).Bold());
-
-                    //stack.Spacing(1);
-
+                    
                     stack.Item().PaddingBottom(5).Text("Tourstart", textSizeHeadings);
-                    stack.Item().PaddingBottom(20).Text(item.StartTime, textSizeValues);
+                    stack.Item().PaddingBottom(20).Text(entry.StartTime, textSizeValues);
 
                     stack.Item().PaddingBottom(5).Text("Tourende", textSizeHeadings);
-                    stack.Item().PaddingBottom(20).Text(item.EndTime, textSizeValues);
+                    stack.Item().PaddingBottom(20).Text(entry.EndTime, textSizeValues);
 
                     stack.Item().PaddingBottom(5).Text("Dauer", textSizeHeadings);
-                    stack.Item().PaddingBottom(20).Text(item.OverallTime, textSizeValues);
+                    stack.Item().PaddingBottom(20).Text(entry.OverallTime, textSizeValues);
 
                     stack.Item().PaddingBottom(5).Text("Distanz", textSizeHeadings);
-                    stack.Item().PaddingBottom(20).Text(item.Distance, textSizeValues);
+                    stack.Item().PaddingBottom(20).Text(entry.Distance, textSizeValues);
 
                     stack.Item().PaddingBottom(5).Text("Höhenmeter", textSizeHeadings);
-                    stack.Item().PaddingBottom(20).Text(item.Altitude, textSizeValues);
+                    stack.Item().PaddingBottom(20).Text(entry.Altitude, textSizeValues);
 
                     stack.Item().PaddingBottom(5).Text("Bewertung", textSizeHeadings);
-                    stack.Item().PaddingBottom(20).Text(item.Rating, textSizeValues);
+                    stack.Item().PaddingBottom(20).Text(entry.Rating, textSizeValues);
 
                     stack.Item().PaddingBottom(5).Text("Beschreibung", textSizeHeadings);
-                    stack.Item().PaddingBottom(20).Text(item.Description, textSizeValues);
+                    stack.Item().PaddingBottom(20).Text(entry.Description, textSizeValues);
                     
                     stack.Item().BorderBottom(1).PaddingBottom(20);
                 }
-
-
-
-
-            });
-
-
-
-
-
-
-            //var textSizeTable = TextStyle.Default.Size(8);
-
-            //container.PaddingTop(10).Decoration(decoration =>
-            //{
-            //    // header
-            //    decoration.Header().BorderBottom(1).Padding(5).Row(row =>
-            //    {
-            //        row.ConstantColumn(25).Text("#", textSizeTable);
-            //        row.RelativeColumn().Text("Tourstart", textSizeTable);
-            //        row.RelativeColumn().Text("Tourende", textSizeTable);
-            //        row.RelativeColumn().AlignRight().Text("Dauer", textSizeTable);
-            //        row.RelativeColumn().AlignRight().Text("Distanz", textSizeTable);
-            //        row.RelativeColumn().AlignRight().Text("Höhenmeter", textSizeTable);
-            //        row.RelativeColumn().AlignRight().Text("Bewertung", textSizeTable);
-            //        row.RelativeColumn().AlignRight().Text("Beschreibung", textSizeTable);
-            //    });
-
-            //    // content
-            //    decoration
-            //        .Content()
-            //        .Stack(stack =>
-            //        {
-            //            foreach (var item in Model.Log)
-            //            {
-
-            //                stack.Item().BorderBottom(1).BorderColor("CCC").Padding(5).Row(row =>
-            //                {
-            //                    //row.ConstantColumn(25).Text(item.Log.IndexOf(item) + 1, textSizeTable);
-            //                    row.RelativeColumn().Text(item.StartTime, textSizeTable);
-            //                    row.RelativeColumn().Text(item.EndTime, textSizeTable);
-            //                    row.RelativeColumn().AlignRight().Text(item.OverallTime, textSizeTable);
-            //                    row.RelativeColumn().AlignRight().Text(item.Distance, textSizeTable);
-            //                    row.RelativeColumn().AlignRight().Text($"{item.Distance}m", textSizeTable);
-            //                    row.RelativeColumn().AlignRight().Text(item.Rating, textSizeTable);
-            //                    row.RelativeColumn().AlignRight().Text(item.Description, textSizeTable);
-            //                    //row.RelativeColumn().AlignRight().Text($"{item.Price * item.Quantity}$");
-            //                });
-
-            //            }
-
-
-            //        });
-            //});
-        }
-
-        void ComposeTable2(IContainer container)
-        {
-            var textSizeTable = TextStyle.Default.Size(8);
-
-            container.PaddingTop(10).Decoration(decoration =>
-            {
-                // header
-                decoration.Header().BorderBottom(1).Padding(5).Row(row =>
-                {
-                    row.ConstantColumn(25).Text("#", textSizeTable);
-                    row.RelativeColumn().Text("Tourstart", textSizeTable);
-                    row.RelativeColumn().Text("Tourende", textSizeTable);
-                    row.RelativeColumn().AlignRight().Text("Dauer", textSizeTable);
-                    row.RelativeColumn().AlignRight().Text("Distanz", textSizeTable);
-                    row.RelativeColumn().AlignRight().Text("Höhenmeter", textSizeTable);
-                    row.RelativeColumn().AlignRight().Text("Bewertung", textSizeTable);
-                    row.RelativeColumn().AlignRight().Text("Beschreibung", textSizeTable);
-                });
-
-                // content
-                decoration
-                    .Content()
-                    .Stack(stack =>
-                    {
-                        foreach (var item in Model.Log)
-                        {
-                   
-                            stack.Item().BorderBottom(1).BorderColor("CCC").Padding(5).Row(row =>
-                            {
-                                //row.ConstantColumn(25).Text(item.Log.IndexOf(item) + 1, textSizeTable);
-                                row.RelativeColumn().Text(item.StartTime, textSizeTable);
-                                row.RelativeColumn().Text(item.EndTime, textSizeTable);
-                                row.RelativeColumn().AlignRight().Text(item.OverallTime, textSizeTable);
-                                row.RelativeColumn().AlignRight().Text(item.Distance, textSizeTable);
-                                row.RelativeColumn().AlignRight().Text($"{item.Distance}m", textSizeTable);
-                                row.RelativeColumn().AlignRight().Text(item.Rating, textSizeTable);
-                                row.RelativeColumn().AlignRight().Text(item.Description, textSizeTable);
-                                //row.RelativeColumn().AlignRight().Text($"{item.Price * item.Quantity}$");
-                            });
-                            
-                        }
-
-
-                    });
             });
         }
-
-        void ComposeImage(IContainer container)
+        
+        void ComposeTourInfo(IContainer container)
         {
             byte[] imageData = ReadImageFile(Model.PathToImg);
 
             container.PaddingTop(10).Decoration(decoration =>
             {
-                // content
                 decoration
                     .Content()
                     .Grid(grid =>
                     {
                         grid.VerticalSpacing(0);
                         grid.HorizontalSpacing(20);
-                        //grid.AlignCenter();
-                        grid.Columns(10); // 12 by default
+                        grid.Columns(10);
                         
                         if (imageData != null)
                         {
@@ -258,91 +135,22 @@ namespace TourPlannerApp.BL.Reports
                         grid.VerticalSpacing(30);
                         grid.Item(10).PaddingBottom(20).Text($"Beschreibung: { Model.Description}\n");
                     });
-
             });
         }
-
-
-        void ComposeTable(IContainer container)
-        {
-            var textSizeTable = TextStyle.Default.Size(8);
-
-            container.PaddingTop(10).Decoration(decoration =>
-            {
-                // header
-                decoration.Header().BorderBottom(1).Padding(5).Row(row =>
-                {
-                    row.ConstantColumn(25).Text("#", textSizeTable);
-                });
-
-                // content
-                decoration
-                    .Content()
-                    .Stack(stack =>
-                    {
-                        /*
-                        stack.Item().BorderBottom(1).BorderColor("CCC").Padding(5).Row(row =>
-                        {
-                            //row.ConstantColumn(25).Text(item.Log.IndexOf(item) + 1, textSizeTable);
-                            row.RelativeColumn().Text(item.StartTime, textSizeTable);
-                            row.RelativeColumn().Text(item.EndTime, textSizeTable);
-                            row.RelativeColumn().AlignRight().Text(item.OverallTime, textSizeTable);
-                            row.RelativeColumn().AlignRight().Text(item.Distance, textSizeTable);
-                            row.RelativeColumn().AlignRight().Text($"{item.Distance}m", textSizeTable);
-                            row.RelativeColumn().AlignRight().Text(item.Rating, textSizeTable);
-                            row.RelativeColumn().AlignRight().Text(item.Description, textSizeTable);
-                            //row.RelativeColumn().AlignRight().Text($"{item.Price * item.Quantity}$");
-                        });
-
-                        */
-                        foreach (var item in Model.Log)
-                        {
-
-                            stack.Item().BorderBottom(1).BorderColor("CCC").Padding(5).Row(row =>
-                            {
-                                row.ConstantColumn(25).Text("FIRST");
-                                row.RelativeColumn().Text("Tourstart", textSizeTable);
-                                row.RelativeColumn().Text(item.StartTime, textSizeTable);
-                                row.RelativeColumn().Text("Tourende", textSizeTable);
-                                row.RelativeColumn().Text(item.EndTime, textSizeTable);
-                                row.RelativeColumn().Text("Dauer", textSizeTable);
-                                row.RelativeColumn().Text(item.OverallTime, textSizeTable);
-                                row.RelativeColumn().Text("Distanz", textSizeTable);
-                                row.RelativeColumn().Text(item.Distance, textSizeTable);
-                                row.RelativeColumn().Text("Höhenmeter", textSizeTable);
-                                row.RelativeColumn().Text(item.Altitude, textSizeTable);
-                                row.RelativeColumn().Text("Bewertung", textSizeTable);
-                                row.RelativeColumn().Text(item.Rating, textSizeTable);
-                                row.RelativeColumn().Text("Beschreibung", textSizeTable);
-                                row.RelativeColumn().Text(item.Description, textSizeTable);
-                            });
-
-                        }
-
-
-                    });
-            });
-            
-
-                
-        }
-
+        
         private byte[] ReadImageFile(string imageLocation)
         {
             byte[] imageData = null;
             if (File.Exists(imageLocation))
             {
-                FileInfo fileInfo = new FileInfo(imageLocation);
-                long imageFileLength = fileInfo.Length;
-                FileStream fs = new FileStream(imageLocation, FileMode.Open, FileAccess.Read);
-                BinaryReader br = new BinaryReader(fs);
+                var fileInfo = new FileInfo(imageLocation);
+                var imageFileLength = fileInfo.Length;
+                var fs = new FileStream(imageLocation, FileMode.Open, FileAccess.Read);
+                var br = new BinaryReader(fs);
                 imageData = br.ReadBytes((int)imageFileLength);
             }
             return imageData;
         }
     }
 
-
-
-    
 }

@@ -179,7 +179,7 @@ namespace TourPlannerApp.BL.Services
         public void ShowSummaryReport()
         {
             // TourReport or SummaryReport
-            string type = "TourReport";
+            string type = "SummaryReport";
 
             var allToursWithLogs = GetAllTours();
 
@@ -194,6 +194,7 @@ namespace TourPlannerApp.BL.Services
             {
                 filePath = "SummaryReport.pdf";
                 var model = allToursWithLogs;
+                Debug.WriteLine(model[0].Log[0].EndTime);
                 var document = new SummaryReport("Statistik: Meine Touren", model);
                 document.GeneratePdf(filePath);
             }
@@ -209,6 +210,7 @@ namespace TourPlannerApp.BL.Services
             Process.Start("explorer.exe", filePath);
 
         }
+        
 
     }
 }

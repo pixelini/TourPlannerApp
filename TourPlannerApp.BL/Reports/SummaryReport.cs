@@ -2,12 +2,9 @@
 using QuestPDF.Fluent;
 using QuestPDF.Infrastructure;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TourPlannerApp.Models;
 
 namespace TourPlannerApp.BL.Reports
@@ -41,6 +38,7 @@ namespace TourPlannerApp.BL.Reports
                 .Page(page =>
                 {
                     ComposeHeader(page.Header().Height(100).Background("4DB5FF").PaddingHorizontal(50).PaddingTop(40));
+                    //ComposeStatisticsList(page.Content().Background("F1F1F1").PaddingHorizontal(50));
                     ComposeContent(page.Content().Background("F1F1F1").PaddingHorizontal(50));
                     page.Footer().Height(50).Background("4DB5FF");
                 });
@@ -54,85 +52,142 @@ namespace TourPlannerApp.BL.Reports
 
         void ComposeContent(IContainer container)
         {
-
             container.PaddingVertical(40).Stack(stack =>
             {
-
                 stack.Spacing(5);
-
-                stack.Item().Row(row =>
-                {
-                    //var logEntry = new LogEntryComponent("Gesamtzeit: ", Model.AllTours[0].Log[0]);
-                    var logEntry = new LogEntryComponent("Gesamtzeit: ", Model[0].Log[0]);
-                    logEntry.Compose(row.RelativeColumn());
-                });
-
                 stack.Spacing(20);
-
-                var amountOfLogs = 0;
-
-                foreach (var tour in Model)
-                {
-                    amountOfLogs += tour.Log.Count();
-                }
-
-                stack.Item().AlignLeft().Text($"Anzahl Aktivitäten: {amountOfLogs}", TextStyle.Default.Size(14));
-
-                stack.Item().Element(ComposeTable);
-
-                //var sumOfDistanceOfFirstTour = Model.AllTours[0].Log.Sum(x => x.Distance); // alle distanzen zusammen
-                var sumOfDistanceOfFirstTour = Model[0].Log.Sum(x => x.Distance); // alle distanzen zusammen
-                
-                
+                stack.Item().Element(ComposeStatisticsList);
             });
         }
 
-        void ComposeTable(IContainer container)
+        void ComposeStatisticsList(IContainer container)
         {
-            var textSizeTable = TextStyle.Default.Size(8);
+            // Calculate statistical values
+            
+            // Anzahl aller Aktivitäten
+            var countActivities = GetCountActivities();
+            
+            // Aktivitätszeit Gesamt
+            var sumActivityTimeRounded = (int)GetSumActivityTimeInHours();
+            
+            // Distanz Gesamt
+            var sumActivityDistance = GetSumActivityDistance();
+            
+            // Höhenmeter Gesamt
+            var sumActivityAltitude = GetSumActivityAltitude();
+            
+            // Längste Tour
+            var longestActivityData = GetActivityWithLongestDistance();
 
-            container.PaddingTop(10).Decoration(decoration =>
+            // Durschnittliche Bewertung aller Aktivitäten
+            var avgRating = GetAvgRatingOfActivity();
+            
+            // Wie viele Touren mit Rating 5 bewertet?
+            var countActivitiesWithHighestRating = GetCountActivitiesWithHighestRating();
+            
+            // Wie war das Wetter? Regen/Sonne: ( Regenrate? )
+            float rainRate;
+            float sunRate;
+
+            container.Stack(stack =>
             {
-                // header
-                decoration.Header().BorderBottom(1).Padding(5).Row(row =>
-                {
-                    row.ConstantColumn(25).Text("#", textSizeTable);
-                    row.RelativeColumn().Text("Tourstart", textSizeTable);
-                    row.RelativeColumn().Text("Tourende", textSizeTable);
-                    row.RelativeColumn().AlignRight().Text("Dauer", textSizeTable);
-                    row.RelativeColumn().AlignRight().Text("Distanz", textSizeTable);
-                    row.RelativeColumn().AlignRight().Text("Höhenmeter", textSizeTable);
-                    row.RelativeColumn().AlignRight().Text("Bewertung", textSizeTable);
-                    row.RelativeColumn().AlignRight().Text("Beschreibung", textSizeTable);
-                });
+                var textSizeHeadings = TextStyle.Default.Size(12).SemiBold();
+                var textSizeValues = TextStyle.Default.Size(10);
+                
+                stack.Item().PaddingBottom(5).Text("Anzahl aller Aktivitäten:", textSizeHeadings);
+                stack.Item().PaddingBottom(20).Text($"{countActivities}", textSizeValues);
 
-                // content
-                decoration
-                    .Content()
-                    .Stack(stack =>
-                    {
-                        foreach (var tour in Model)
-                        {
-                            foreach (var item in tour.Log)
-                            {
-                                stack.Item().BorderBottom(1).BorderColor("CCC").Padding(5).Row(row =>
-                                {
-                                    row.ConstantColumn(25).Text(Model[0].Log.IndexOf(item) + 1, textSizeTable);
-                                    row.RelativeColumn().Text(item.StartTime, textSizeTable);
-                                    row.RelativeColumn().Text(item.EndTime, textSizeTable);
-                                    row.RelativeColumn().AlignRight().Text(item.OverallTime, textSizeTable);
-                                    row.RelativeColumn().AlignRight().Text(item.Distance, textSizeTable);
-                                    row.RelativeColumn().AlignRight().Text($"{item.Distance}m", textSizeTable);
-                                    row.RelativeColumn().AlignRight().Text(item.Rating, textSizeTable);
-                                    row.RelativeColumn().AlignRight().Text(item.Description, textSizeTable);
-                                    //row.RelativeColumn().AlignRight().Text($"{item.Price * item.Quantity}$");
-                                });
-                            }
-                        }
+                stack.Item().PaddingBottom(5).Text("Aktivitätszeit insgesamt:", textSizeHeadings);
+                stack.Item().PaddingBottom(20).Text($"{sumActivityTimeRounded} h", textSizeValues);
 
+                stack.Item().PaddingBottom(5).Text("Distanz insgesamt:", textSizeHeadings);
+                stack.Item().PaddingBottom(20).Text($"{sumActivityDistance} km", textSizeValues);
 
-                    });
+                stack.Item().PaddingBottom(5).Text("Höhenmeter insgesamt:", textSizeHeadings);
+                stack.Item().PaddingBottom(20).Text($"{sumActivityAltitude}", textSizeValues);
+                
+                stack.Item().PaddingBottom(5).Text("Durschnittliche Bewertung deiner Aktivitäten:", textSizeHeadings);
+                stack.Item().PaddingBottom(20).Text($"{avgRating}", textSizeValues);
+                
+                stack.Item().PaddingBottom(20).Text($"Du hast {countActivitiesWithHighestRating} von insgesamt {GetCountActivities()} Touren mit der Bestnote bewertet.", textSizeHeadings);
+
+                stack.Item().PaddingBottom(20).Text($"Deine längste Tourdistanz war: {longestActivityData.Distance} km. " + 
+                                                   $"(Tour \"{longestActivityData.TourName}\" am {longestActivityData.Date.ToString("dd.MM.yyyy")})", textSizeHeadings);
+
+                stack.Item().BorderBottom(1).PaddingBottom(20);
+
             });
+            
+        }
+
+        private int GetCountActivitiesWithHighestRating()
+        {
+            var countActivities = 0;
+            foreach (var tour in Model)
+            {
+                var result = tour.Log.Where(x => x.Rating == 5);
+                countActivities += result.Count();
+            }
+            return countActivities;
+        }
+
+        private float GetAvgRatingOfActivity()
+        {
+            var sumAllRatings = Model.Sum(tour => tour.Log.Sum(x => x.Rating));
+            return sumAllRatings / (float)GetCountActivities();
+        }
+
+        private float GetSumActivityAltitude()
+        {
+            float sumAltitude = 0;
+            Model.ForEach(x => x.Log.ForEach(y => sumAltitude += y.Altitude));
+            return sumAltitude;
+        }
+
+        private ActivityData GetActivityWithLongestDistance()
+        {
+            var longestActivity = new ActivityData() { Distance = 0 };
+            
+            foreach (var tour in Model)
+            {
+                if (tour.Log.Count > 0)
+                {
+                    var result = tour.Log.OrderByDescending(x => x.Distance).First();
+                    if (result.Distance > longestActivity.Distance)
+                    {
+                        longestActivity.Distance = result.Distance;
+                        longestActivity.Date = result.EndTime;
+                        longestActivity.TourName = tour.Name;
+                    }
+                }
+            }
+            return longestActivity;
+        }
+
+        private float GetSumActivityDistance()
+        {
+            float sumActivityDistance = 0;
+            Model.ForEach(x => x.Log.ForEach(y => sumActivityDistance += y.Distance));
+            return sumActivityDistance;
+        }
+
+        private double GetSumActivityTimeInHours()
+        {
+            var sumActivityTime = new TimeSpan(0, 0, 0);
+            Model.ForEach(x => x.Log.ForEach(y => sumActivityTime = sumActivityTime.Add(y.OverallTime)));
+            return sumActivityTime.TotalHours;
+        }
+
+        private int GetCountActivities()
+        {
+            return Model.Sum(x => x.Log.Count);
+        }
+
+        private struct ActivityData  
+        {  
+            public float Distance;  
+            public string TourName;
+            public DateTime Date;
         }
 
         private byte[] ReadImageFile(string imageLocation)
@@ -140,37 +195,14 @@ namespace TourPlannerApp.BL.Reports
             byte[] imageData = null;
             if (File.Exists(imageLocation))
             {
-                FileInfo fileInfo = new FileInfo(imageLocation);
-                long imageFileLength = fileInfo.Length;
-                FileStream fs = new FileStream(imageLocation, FileMode.Open, FileAccess.Read);
-                BinaryReader br = new BinaryReader(fs);
+                var fileInfo = new FileInfo(imageLocation);
+                var imageFileLength = fileInfo.Length;
+                var fs = new FileStream(imageLocation, FileMode.Open, FileAccess.Read);
+                var br = new BinaryReader(fs);
                 imageData = br.ReadBytes((int)imageFileLength);
             }
             return imageData;
         }
 
     }
-
-    /*
-    public static class ReportExtensions
-    {
-        public static void ComposeContentSpecific(this IContainer container, List<TourItem> model)
-        {
-            container.PaddingVertical(40).Stack(stack =>
-            {
-                stack.Spacing(5);
-
-                stack.Item().Row(row =>
-                {
-                    var logEntry = new LogEntryComponent("LogEntryComponent: ", model[0].Log[0]);
-                    logEntry.Compose(row.RelativeColumn());
-                });
-
-                var sumOfDistanceOfFirstTour = model[0].Log.Sum(x => x.Distance); // alle distanzen zusammen
-                stack.Item().AlignRight().Text($"SumOfDistanceOfFirstTour: {sumOfDistanceOfFirstTour}$", TextStyle.Default.Size(14));
-            });
-        }
-    }
-
-    */
 }

@@ -33,9 +33,16 @@ namespace TourPlannerApp.BL.Reports
                     stack.Item().Text($"Erstellt am: {CreationTime:d}", TextStyle.Default.Color("FFF"));
                 });
 
-                row.ConstantColumn(100).Height(50).Image(Logo, ImageScaling.FitArea);
+                if (Logo != null)
+                {
+                    row.ConstantColumn(100).Height(50).Image(Logo, ImageScaling.FitArea);
+                } else
+                {
+                    row.ConstantColumn(100).Height(50).Placeholder();
+                }             
 
             });
         }
     }
+
 }

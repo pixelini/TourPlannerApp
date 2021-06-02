@@ -18,10 +18,9 @@
                     <ColumnDefinition Width="2*" />
                 </Grid.ColumnDefinitions>
 
-                <Button Padding="5" Margin="0 0 10 0" Grid.Column="0" Content="Als PDF exportieren"/>
-                <Button Padding="5" Grid.Column="1" Content="Report drucken"/>
+                <Button Padding="5" Margin="0 0 10 0" Grid.Column="0" Content="Tour als XY exportieren"/>
+                <Button Padding="5" Grid.Column="1" Content="Report anzeigen/speichern"/>
             </Grid>
-
 
             <Grid Margin="0 10 0 10">
                 <Grid.ColumnDefinitions>
