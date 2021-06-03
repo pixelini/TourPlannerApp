@@ -163,7 +163,7 @@ namespace TourPlannerApp.ViewModels
         {
             _log.Info("Add Tour...");
             var repository = new TourDataAccess();
-            var imgFolder = new FileSystem();
+            var imgFolder = new PictureAccess();
             _tourService = new TourService(repository, imgFolder);
             var api = new TourLookupDataAccess();
             _tourLookupService = new TourLookupService(api);

@@ -49,7 +49,6 @@ namespace TourPlannerApp.DAL
                     imgPath.Replace("/", "\\");
                     var tourType = GetTourType(reader.GetString(12));
                     var description = reader.GetString(13);
-
                     var tour = new TourItem { Id = id, Name = name, StartLocation = startAddress, TargetLocation = targetAddress, Distance = distance, PathToImg = imgPath, Description = description };
                     allTours.Add(tour);
                 }
@@ -78,8 +77,7 @@ namespace TourPlannerApp.DAL
             cmd.Parameters.Add(new NpgsqlParameter("@tl_country", tourItem.TargetLocation.Country));
             cmd.Parameters.Add(new NpgsqlParameter("@tl_county", tourItem.TargetLocation.County));
             cmd.Parameters.Add(new NpgsqlParameter("@distance", tourItem.Distance));
-            cmd.Parameters.Add(new NpgsqlParameter("@img_path", "/Images/default.png"));
-
+            cmd.Parameters.Add(new NpgsqlParameter("@img_path", tourItem.PathToImg));
             cmd.Parameters.Add(new NpgsqlParameter("@type", "Fussweg"));
             cmd.Parameters.Add(new NpgsqlParameter("@description", tourItem.Description));
             cmd.Prepare();
@@ -95,6 +93,7 @@ namespace TourPlannerApp.DAL
             return id;
         }
 
+        
         public bool SaveImgPathToTourData(int tourId, string pathToImg)
         {
             bool success = false;
@@ -115,6 +114,8 @@ namespace TourPlannerApp.DAL
             conn.Close();
             return success;
         }
+
+        
 
         public bool UpdateTour(TourItem tourItem)
         {
@@ -298,6 +299,42 @@ namespace TourPlannerApp.DAL
             using var cmd = new NpgsqlCommand(sql, conn);
             cmd.Parameters.Add(new NpgsqlParameter("@id", selectedLogEntry.Id));
             cmd.Parameters.Add(new NpgsqlParameter("@tourId", selectedTour.Id));
+            cmd.Prepare();
+
+            if (cmd.ExecuteNonQuery() == 1)
+            {
+                success = true;
+            }
+
+            conn.Close();
+            return success;
+        }
+
+
+        public bool DoesTourHaveLogs(int tourId)
+        {
+            bool success = false;
+            var conn = Connect();
+            var sql = "SELECT * FROM swe2_tourplanner.log WHERE tour_id = @tourId";
+            using var cmd = new NpgsqlCommand(sql, conn);
+            cmd.Parameters.Add(new NpgsqlParameter("@tourId", tourId));
+            cmd.Prepare();
+
+            var reader = cmd.ExecuteReader();
+            success = reader.HasRows;
+            conn.Close();
+            return success;
+        }
+
+        public bool DeleteAllLogEntries(int tourId)
+        {
+            bool success = false;
+
+            var conn = Connect();
+            var sql = "DELETE FROM swe2_tourplanner.log WHERE tour_id=@tourId";
+
+            using var cmd = new NpgsqlCommand(sql, conn);
+            cmd.Parameters.Add(new NpgsqlParameter("@tourId", tourId));
             cmd.Prepare();
 
             if (cmd.ExecuteNonQuery() == 1)

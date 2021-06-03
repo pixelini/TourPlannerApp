@@ -7,10 +7,12 @@ using TourPlannerApp.Models;
 
 namespace TourPlannerApp.DAL
 {
-    public interface IFileSystem
+    public interface IPictureAccess
     {
-        public string SaveImg(byte[] image);
+        public string SavePicture(byte[] image);
 
-        public bool DeleteImg(string path);
+        public bool DeletePicture(string path);
+
+        public bool Exists(string path);
     }
 }
