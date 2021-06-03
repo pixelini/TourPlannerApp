@@ -145,7 +145,6 @@ namespace TourPlannerApp.ViewModels
             bool? isClosed = EditTourDialog.ShowDialog();
             Debug.WriteLine("Is Open: " + isClosed);
             Navigator.CurrentViewModel = new TourDetailsViewModel(CurrentItem, _tourService);
-
         }
 
         public void EditTourDialogViewModelOnSave(object sender, EventArgs eventArgs)
@@ -153,7 +152,6 @@ namespace TourPlannerApp.ViewModels
             // get new Data
             CurrentItem.Name = EditTourDialogViewModel.TournameInput;
             CurrentItem.Description = EditTourDialogViewModel.DescriptionInput;
-            Debug.WriteLine("Edited Tourname: " + CurrentItem.Name);
 
             // TODO: Validate it
             _tourService.UpdateTour(CurrentItem);

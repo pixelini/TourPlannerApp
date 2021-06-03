@@ -1,22 +1,32 @@
+using System;
 using NUnit.Framework;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
+using System.Linq;
+using System.Runtime.CompilerServices;
+using Moq;
+using TourPlannerApp.BL.Services;
+using TourPlannerApp.DAL;
 using TourPlannerApp.Models;
 using TourPlannerApp.Models.Models;
 using static TourPlannerApp.Models.Models.TourLookup;
 
 namespace TourPlannerAppTests
 {
-    public class Tests
+    public class ModelTests
     {
+        
         [SetUp]
         public void Setup()
         {
+          
         }
 
         #region TourItem
 
         [Test]
-        public void TestLocationStringWithAllProperties()
+        public void LocationStringWithAllProperties_Returns_True()
         {
             // Arrange
             var tour = new TourItem
@@ -40,7 +50,7 @@ namespace TourPlannerAppTests
         }
         
         [Test]
-        public void TestLocationStringWithoutStreet()
+        public void LocationStringWithoutStreet_Returns_True()
         {
             // Arrange
             var tour = new TourItem
@@ -63,7 +73,7 @@ namespace TourPlannerAppTests
         
         
         [Test]
-        public void TestLocationStringWithoutPostalCode()
+        public void LocationStringWithoutPostalCode_Returns_True()
         {
             // Arrange
             var tour = new TourItem
@@ -86,10 +96,12 @@ namespace TourPlannerAppTests
 
         #endregion
 
+        
+        
         #region TourLookup
 
         [Test]
-        public void TestConvertTourLookupToTourItem()
+        public void ConvertTourLookupToTourItem_Returns_True()
         {
             // Arrange
             var locations = new List<Location>()
@@ -125,28 +137,7 @@ namespace TourPlannerAppTests
             Assert.AreEqual(tourItem.TargetLocation.County, tourLookup.Route.Locations[1].AdminArea4);
         }
 
-    #endregion
-
-        [Test]
-        public void TestDraft()
-        {
-            // Arrange
-            var tour = new TourItem
-            {
-                StartLocation = new TourItem.Address()
-                {
-                    Street = "Street 1",
-                    City = "Graz", 
-                    County = "Steiermark", 
-                    Country = "AT"
-                }
-            };
-
-            // Act
-            
-            // Assert
-        }
-        
+        #endregion
         
         
     }
