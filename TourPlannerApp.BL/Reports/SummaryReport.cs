@@ -112,7 +112,7 @@ namespace TourPlannerApp.BL.Reports
                     stack.Item().PaddingBottom(5).Text("Höhenmeter insgesamt:", textSizeHeadings);
                     stack.Item().PaddingBottom(20).Text($"{sumActivityAltitude}", textSizeValues);
                 
-                    stack.Item().PaddingBottom(5).Text("Durschnittliche Bewertung deiner Aktivitäten:", textSizeHeadings);
+                    stack.Item().PaddingBottom(5).Text("Durchschnittliche Bewertung deiner Aktivitäten:", textSizeHeadings);
                     stack.Item().PaddingBottom(20).Text($"{avgRating}", textSizeValues);
                 
                     stack.Item().PaddingBottom(20).Text($"Du hast {countActivitiesWithHighestRating} von insgesamt {GetCountActivities()} Touren mit der Bestnote bewertet.", textSizeHeadings);

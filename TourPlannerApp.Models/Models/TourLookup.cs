@@ -98,13 +98,17 @@ namespace TourPlannerApp.Models.Models
             }
 
             tour.Distance = tourLookupItem.Route.Distance;
-            tour.NavigationDetails = new List<string>();
 
-            foreach (var maneuver in tourLookupItem.Route.Legs[0].Maneuvers)
+            if (tourLookupItem.Route.Legs != null)
             {
-                tour.NavigationDetails.Add(maneuver.Narrative);
-            }
+                tour.NavigationDetails = new List<string>();
 
+                foreach (var maneuver in tourLookupItem.Route.Legs[0].Maneuvers)
+                {
+                    tour.NavigationDetails.Add(maneuver.Narrative);
+                }
+            }
+            
             return tour;
         }
 
