@@ -30,10 +30,13 @@ namespace TourPlannerApp.ViewModels
             _tourService = new TourService(repository, imgFolder);
         }
 
+        private void ShowSummaryReport()
+        {
+            _tourService.ShowSummaryReport();
+        }
 
         private void SaveSummaryReport()
         {
-            //_tourService.GetSummaryReport();
             var saveFileDialog = new SaveFileDialog();
             saveFileDialog.Filter = "Pdf|*.pdf";
             saveFileDialog.Title = "Speicherort auswählen ...";
@@ -42,15 +45,9 @@ namespace TourPlannerApp.ViewModels
             if (result == true)
             {
                 var filePath = saveFileDialog.FileName;
-                //_tourService = SaveFileAtPath(filePath);
+                _tourService.SaveSummaryReport(filePath);
             }
             Debug.WriteLine(saveFileDialog.FileName);
-        }
-
-        private void ShowSummaryReport()
-        {
-            // TODO
-            _tourService.ShowSummaryReport();
         }
     }
 }

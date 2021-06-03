@@ -72,35 +72,43 @@ namespace TourPlannerApp.BL.Reports
             {
                 stack.Item().PaddingTop(30).PaddingBottom(30).Text($"Meine Aktivitäten", TextStyle.Default.Size(14).Color("4DB5FF").Bold());
 
-                foreach (var entry in Model.Log)
+                if (Model.Log.Count == 0)
                 {
-                    counter++;
-
-                    stack.Item().BorderTop(1).PaddingTop(20).PaddingBottom(20).Text($"#Nr. {counter}", TextStyle.Default.Size(14).Bold());
-                    
-                    stack.Item().PaddingBottom(5).Text("Tourstart", textSizeHeadings);
-                    stack.Item().PaddingBottom(20).Text(entry.StartTime, textSizeValues);
-
-                    stack.Item().PaddingBottom(5).Text("Tourende", textSizeHeadings);
-                    stack.Item().PaddingBottom(20).Text(entry.EndTime, textSizeValues);
-
-                    stack.Item().PaddingBottom(5).Text("Dauer", textSizeHeadings);
-                    stack.Item().PaddingBottom(20).Text(entry.OverallTime, textSizeValues);
-
-                    stack.Item().PaddingBottom(5).Text("Distanz", textSizeHeadings);
-                    stack.Item().PaddingBottom(20).Text(entry.Distance, textSizeValues);
-
-                    stack.Item().PaddingBottom(5).Text("Höhenmeter", textSizeHeadings);
-                    stack.Item().PaddingBottom(20).Text(entry.Altitude, textSizeValues);
-
-                    stack.Item().PaddingBottom(5).Text("Bewertung", textSizeHeadings);
-                    stack.Item().PaddingBottom(20).Text(entry.Rating, textSizeValues);
-
-                    stack.Item().PaddingBottom(5).Text("Beschreibung", textSizeHeadings);
-                    stack.Item().PaddingBottom(20).Text(entry.Description, textSizeValues);
-                    
-                    stack.Item().BorderBottom(1).PaddingBottom(20);
+                    stack.Item().PaddingBottom(5).Text("Du hast noch keine Aktivitäten für diese Tour aufgezeichnet.", textSizeHeadings);
                 }
+                else
+                {
+                    foreach (var entry in Model.Log)
+                    {
+                        counter++;
+
+                        stack.Item().BorderTop(1).PaddingTop(20).PaddingBottom(20).Text($"#Nr. {counter}", TextStyle.Default.Size(14).Bold());
+                    
+                        stack.Item().PaddingBottom(5).Text("Tourstart", textSizeHeadings);
+                        stack.Item().PaddingBottom(20).Text(entry.StartTime, textSizeValues);
+
+                        stack.Item().PaddingBottom(5).Text("Tourende", textSizeHeadings);
+                        stack.Item().PaddingBottom(20).Text(entry.EndTime, textSizeValues);
+
+                        stack.Item().PaddingBottom(5).Text("Dauer", textSizeHeadings);
+                        stack.Item().PaddingBottom(20).Text(entry.OverallTime, textSizeValues);
+
+                        stack.Item().PaddingBottom(5).Text("Distanz", textSizeHeadings);
+                        stack.Item().PaddingBottom(20).Text(entry.Distance, textSizeValues);
+
+                        stack.Item().PaddingBottom(5).Text("Höhenmeter", textSizeHeadings);
+                        stack.Item().PaddingBottom(20).Text(entry.Altitude, textSizeValues);
+
+                        stack.Item().PaddingBottom(5).Text("Bewertung", textSizeHeadings);
+                        stack.Item().PaddingBottom(20).Text(entry.Rating, textSizeValues);
+
+                        stack.Item().PaddingBottom(5).Text("Beschreibung", textSizeHeadings);
+                        stack.Item().PaddingBottom(20).Text(entry.Description, textSizeValues);
+                    
+                        stack.Item().BorderBottom(1).PaddingBottom(20);
+                    }
+                }
+
             });
         }
         
@@ -123,7 +131,7 @@ namespace TourPlannerApp.BL.Reports
                             grid.Item(5).Image(imageData);
                         } else
                         {
-                            grid.Item().PaddingBottom(20).Text("Kein Bild verfügbar");
+                            grid.Item().PaddingBottom(0).AlignCenter().Text(" ----------- Kein Bild ----------- ");
                         }
                         grid.Item(5).PaddingBottom(20).Text(
                             $"Tourname: {Model.Name}\n" +

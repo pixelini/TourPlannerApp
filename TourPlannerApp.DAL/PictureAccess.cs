@@ -27,7 +27,6 @@ namespace TourPlannerApp.DAL
             if (!Directory.Exists(_pictureFolder))
             {
                 Directory.CreateDirectory(_pictureFolder);
-
             }
 
             var fullPath = _pictureFolder + "\\" + fileName;

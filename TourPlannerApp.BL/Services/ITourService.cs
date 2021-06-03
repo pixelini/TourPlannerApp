@@ -28,5 +28,12 @@ namespace TourPlannerApp.BL.Services
         public bool UpdateTourLog(int tourId, LogEntry editedLogEntry);
         
         public void ShowSummaryReport();
+
+        public void SaveSummaryReport(string filePath);
+
+        public void ShowTourReport(TourItem selectedTour);
+
+        public void SaveTourReport(TourItem selectedTour, string filePath);
+
     }
 }

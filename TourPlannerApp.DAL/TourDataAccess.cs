@@ -311,6 +311,42 @@ namespace TourPlannerApp.DAL
         }
 
 
+        public bool DoesTourHaveLogs(int tourId)
+        {
+            bool success = false;
+            var conn = Connect();
+            var sql = "SELECT * FROM swe2_tourplanner.log WHERE tour_id = @tourId";
+            using var cmd = new NpgsqlCommand(sql, conn);
+            cmd.Parameters.Add(new NpgsqlParameter("@tourId", tourId));
+            cmd.Prepare();
+
+            var reader = cmd.ExecuteReader();
+            success = reader.HasRows;
+            conn.Close();
+            return success;
+        }
+
+        public bool DeleteAllLogEntries(int tourId)
+        {
+            bool success = false;
+
+            var conn = Connect();
+            var sql = "DELETE FROM swe2_tourplanner.log WHERE tour_id=@tourId";
+
+            using var cmd = new NpgsqlCommand(sql, conn);
+            cmd.Parameters.Add(new NpgsqlParameter("@tourId", tourId));
+            cmd.Prepare();
+
+            if (cmd.ExecuteNonQuery() == 1)
+            {
+                success = true;
+            }
+
+            conn.Close();
+            return success;
+        }
+
+
         #region Helper Methods
 
         private NpgsqlConnection Connect()

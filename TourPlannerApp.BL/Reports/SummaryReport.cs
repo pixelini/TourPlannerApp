@@ -81,7 +81,7 @@ namespace TourPlannerApp.BL.Reports
 
             // Durschnittliche Bewertung aller Aktivitäten
             var avgRating = GetAvgRatingOfActivity();
-            
+
             // Wie viele Touren mit Rating 5 bewertet?
             var countActivitiesWithHighestRating = GetCountActivitiesWithHighestRating();
             
@@ -93,26 +93,33 @@ namespace TourPlannerApp.BL.Reports
             {
                 var textSizeHeadings = TextStyle.Default.Size(12).SemiBold();
                 var textSizeValues = TextStyle.Default.Size(10);
+
+                if (countActivities == 0)
+                {
+                    stack.Item().PaddingBottom(5).Text("Du hast noch keine Aktivitäten aufgezeichnet.", textSizeHeadings);
+                }
+                else
+                {
+                    stack.Item().PaddingBottom(5).Text("Anzahl aller Aktivitäten:", textSizeHeadings);
+                    stack.Item().PaddingBottom(20).Text($"{countActivities}", textSizeValues);
+
+                    stack.Item().PaddingBottom(5).Text("Aktivitätszeit insgesamt:", textSizeHeadings);
+                    stack.Item().PaddingBottom(20).Text($"{sumActivityTimeRounded} h", textSizeValues);
+
+                    stack.Item().PaddingBottom(5).Text("Distanz insgesamt:", textSizeHeadings);
+                    stack.Item().PaddingBottom(20).Text($"{sumActivityDistance} km", textSizeValues);
+
+                    stack.Item().PaddingBottom(5).Text("Höhenmeter insgesamt:", textSizeHeadings);
+                    stack.Item().PaddingBottom(20).Text($"{sumActivityAltitude}", textSizeValues);
                 
-                stack.Item().PaddingBottom(5).Text("Anzahl aller Aktivitäten:", textSizeHeadings);
-                stack.Item().PaddingBottom(20).Text($"{countActivities}", textSizeValues);
-
-                stack.Item().PaddingBottom(5).Text("Aktivitätszeit insgesamt:", textSizeHeadings);
-                stack.Item().PaddingBottom(20).Text($"{sumActivityTimeRounded} h", textSizeValues);
-
-                stack.Item().PaddingBottom(5).Text("Distanz insgesamt:", textSizeHeadings);
-                stack.Item().PaddingBottom(20).Text($"{sumActivityDistance} km", textSizeValues);
-
-                stack.Item().PaddingBottom(5).Text("Höhenmeter insgesamt:", textSizeHeadings);
-                stack.Item().PaddingBottom(20).Text($"{sumActivityAltitude}", textSizeValues);
+                    stack.Item().PaddingBottom(5).Text("Durschnittliche Bewertung deiner Aktivitäten:", textSizeHeadings);
+                    stack.Item().PaddingBottom(20).Text($"{avgRating}", textSizeValues);
                 
-                stack.Item().PaddingBottom(5).Text("Durschnittliche Bewertung deiner Aktivitäten:", textSizeHeadings);
-                stack.Item().PaddingBottom(20).Text($"{avgRating}", textSizeValues);
-                
-                stack.Item().PaddingBottom(20).Text($"Du hast {countActivitiesWithHighestRating} von insgesamt {GetCountActivities()} Touren mit der Bestnote bewertet.", textSizeHeadings);
+                    stack.Item().PaddingBottom(20).Text($"Du hast {countActivitiesWithHighestRating} von insgesamt {GetCountActivities()} Touren mit der Bestnote bewertet.", textSizeHeadings);
 
-                stack.Item().PaddingBottom(20).Text($"Deine längste Tourdistanz war: {longestActivityData.Distance} km. " + 
-                                                   $"(Tour \"{longestActivityData.TourName}\" am {longestActivityData.Date.ToString("dd.MM.yyyy")})", textSizeHeadings);
+                    stack.Item().PaddingBottom(20).Text($"Deine längste Tourdistanz war: {longestActivityData.Distance} km. " + 
+                                                        $"(Tour \"{longestActivityData.TourName}\" am {longestActivityData.Date.ToString("dd.MM.yyyy")})", textSizeHeadings);
+                }
 
                 stack.Item().BorderBottom(1).PaddingBottom(20);
 

@@ -36,7 +36,7 @@
                         <ComboBoxItem>Auto</ComboBoxItem>
                     </ComboBox>
 
-                <Button Padding="5" Margin="0 30 0 0" Content="Tour suchen" Command="{Binding LookupTourCommand}" />
+                <Button IsDefault="True" Padding="5" Margin="0 30 0 0" Content="Tour suchen" Command="{Binding LookupTourCommand}" />
 
                 
                     <!-- Show Results (temp) -->

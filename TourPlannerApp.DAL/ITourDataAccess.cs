@@ -29,5 +29,7 @@ namespace TourPlannerApp.DAL
 
         public bool SaveImgPathToTourData(int tourId, string pathToImg);
 
+        public bool DoesTourHaveLogs(int tourId);
+        public bool DeleteAllLogEntries(int tourId);
     }
 }

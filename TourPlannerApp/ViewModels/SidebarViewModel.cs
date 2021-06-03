@@ -14,6 +14,7 @@ using System.Diagnostics; //for debug-mode
 using TourPlannerApp.Navigator;
 using TourPlannerApp.Store;
 using TourPlannerApp.Views;
+using System.Threading;
 
 namespace TourPlannerApp.ViewModels
 {
@@ -164,6 +165,16 @@ namespace TourPlannerApp.ViewModels
 
         private void DeleteTour(object commandParameter)
         {
+            // if user want's to delete tour that he has currently open in details, nothing happens
+            if (Navigator.CurrentViewModel is TourDetailsViewModel)
+            {
+                if (((TourDetailsViewModel)Navigator.CurrentViewModel).SelectedTour.Id == CurrentItem.Id)
+                {
+                    Navigator.CurrentViewModel = new HomeViewModel();
+                    return;
+                }
+                
+            }
             Debug.WriteLine("Delete Tour: " + CurrentItem.Name + "(ID: " + CurrentItem.Id + ")");
             _tourService.DeleteTour(CurrentItem);
             RefreshTourList();

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Win32;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
@@ -45,6 +46,13 @@ namespace TourPlannerApp.ViewModels
         private ICommand _deleteLogEntryCommand;
         public ICommand DeleteLogEntryCommand => _deleteLogEntryCommand ??= new RelayCommand(DeleteLogEntry);
 
+        private ICommand _showTourReportCommand;
+        public ICommand ShowTourReportCommand => _showTourReportCommand ??= new RelayCommand(ShowTourReport);
+
+        private ICommand _saveTourReportCommand;
+        public ICommand SaveTourReportCommand => _saveTourReportCommand ??= new RelayCommand(SaveTourReport);
+
+
         public TourDetailsViewModel(TourItem selectedTour, ITourService tourService)
         {
             SelectedTour = selectedTour;
@@ -82,7 +90,6 @@ namespace TourPlannerApp.ViewModels
             // TODO: if successfull -> close
             LogEntryDialog.Close();
         }
-
 
         private void EditLogEntry(object parameter)
         {
@@ -123,6 +130,28 @@ namespace TourPlannerApp.ViewModels
             }
 
         }
+
+        private void ShowTourReport()
+        {
+            _tourService.ShowTourReport(SelectedTour);
+        }
+
+        private void SaveTourReport()
+        {
+            var saveFileDialog = new SaveFileDialog();
+            saveFileDialog.Filter = "Pdf|*.pdf";
+            saveFileDialog.Title = "Speicherort auswählen ...";
+            var result = saveFileDialog.ShowDialog();
+
+            if (result == true)
+            {
+                var filePath = saveFileDialog.FileName;
+                _tourService.SaveTourReport(SelectedTour, filePath);
+            }
+            Debug.WriteLine(saveFileDialog.FileName);
+        }
+        
+
     }
 
 

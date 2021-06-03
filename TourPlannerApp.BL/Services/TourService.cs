@@ -1,11 +1,10 @@
 ﻿using QuestPDF.Fluent;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
 using TourPlannerApp.BL.Reports;
 using TourPlannerApp.DAL;
 using TourPlannerApp.Models;
-using static TourPlannerApp.Models.Models.TourLookup;
 
 namespace TourPlannerApp.BL.Services
 {
@@ -52,8 +51,13 @@ namespace TourPlannerApp.BL.Services
 
             if (!Exists(newTourItem))
             {
+                var pathToImg = "";
+
                 // Save tour img in file system
-                var pathToImg = _tourPictureAccess.SavePicture(newTourItem.Image);
+                if (newTourItem.Image != null)
+                {
+                    pathToImg = _tourPictureAccess.SavePicture(newTourItem.Image);
+                }              
 
                 if (pathToImg != "") // if no error
                 {
@@ -67,7 +71,6 @@ namespace TourPlannerApp.BL.Services
                 if (tourId >= 0)
                 {
                     Debug.WriteLine("Tour was successfully added.");
-                    _tourDataAccess.SaveImgPathToTourData(tourId, "");
                     return tourId;
                 }
 
@@ -107,6 +110,14 @@ namespace TourPlannerApp.BL.Services
             if (Exists(tourItem))
             {
                 Debug.WriteLine("Tour exists.");
+                
+                // check if log entries exist
+                if (_tourDataAccess.DoesTourHaveLogs(tourItem.Id))
+                {
+                    // delete logs of tour
+                    _tourDataAccess.DeleteAllLogEntries(tourItem.Id);
+                }
+
                 // delete if tour exists
                 if (_tourDataAccess.DeleteTour(tourItem))
                 {
@@ -178,9 +189,7 @@ namespace TourPlannerApp.BL.Services
 
         public void ShowSummaryReport()
         {
-            // TourReport or SummaryReport
-            string type = "SummaryReport";
-
+            var guid = Guid.NewGuid().ToString().Substring(0, 6);
             var allToursWithLogs = GetAllTours();
 
             foreach (var tour in allToursWithLogs)
@@ -188,29 +197,50 @@ namespace TourPlannerApp.BL.Services
                 tour.Log = GetAllLogsForTour(tour);
             }
 
-            var filePath = "";
-
-            if (type == "SummaryReport")
-            {
-                filePath = "SummaryReport.pdf";
-                var model = allToursWithLogs;
-                Debug.WriteLine(model[0].Log[0].EndTime);
-                var document = new SummaryReport("Statistik: Meine Touren", model);
-                document.GeneratePdf(filePath);
-            }
-
-            if (type == "TourReport")
-            {
-                filePath = "TourReport.pdf";
-                var model = allToursWithLogs[5];
-                var document = new TourReport($"Report von Tour: {model.Name}", model);
-                document.GeneratePdf(filePath);
-            }
-          
+            var filePath = $"SummaryReport_{(DateTime.Now):dd_MM_yyyy}_{guid}.pdf";
+            var document = new SummaryReport("Statistik: Meine Touren", allToursWithLogs);
+            document.GeneratePdf(filePath);
             Process.Start("explorer.exe", filePath);
-
         }
+
+        public void ShowTourReport(TourItem selectedTour)
+        {
+            var guid = Guid.NewGuid().ToString().Substring(0, 6);
+            // get current tour logs
+            selectedTour.Log = GetAllLogsForTour(selectedTour);
+            
+            var filePath = $"TourReport_{selectedTour.Id}_{(DateTime.Now):dd_MM_yyyy}_{guid}.pdf";
+            var document = new TourReport($"Report von Tour: {selectedTour.Name}", selectedTour);
+            document.GeneratePdf(filePath);
+            Process.Start("explorer.exe", filePath);
+        }
+
+        public void SaveSummaryReport(string filePath)
+        {
+            var allToursWithLogs = GetAllTours();
+
+            foreach (var tour in allToursWithLogs)
+            {
+                tour.Log = GetAllLogsForTour(tour);
+            }
+
+            var document = new SummaryReport("Statistik: Meine Touren", allToursWithLogs);
+            document.GeneratePdf(filePath);
+        }
+
+        public void SaveTourReport(TourItem selectedTour, string filePath)
+        {
+            selectedTour.Log = GetAllLogsForTour(selectedTour);
+            var document = new TourReport($"Report von Tour: {selectedTour.Name}", selectedTour);
+            document.GeneratePdf(filePath);
+        }
+
+
+
         
+
+
+
 
     }
 }
