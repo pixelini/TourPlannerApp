@@ -1,15 +1,6 @@
-using System;
 using NUnit.Framework;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using Moq;
-using TourPlannerApp.BL.Services;
-using TourPlannerApp.DAL;
 using TourPlannerApp.Models;
-using TourPlannerApp.Models.Models;
 using static TourPlannerApp.Models.Models.TourLookup;
 
 namespace TourPlannerAppTests
@@ -96,8 +87,6 @@ namespace TourPlannerAppTests
 
         #endregion
 
-        
-        
         #region TourLookup
 
         [Test]

@@ -12,9 +12,7 @@ namespace TourPlannerApp.BL.Reports
     public class SummaryReport : IDocument
     {
         public string Title { get; set; }
-
         public List<TourItem> Model { get; }
-
         public string PathToLogo { get; set; }
 
         public SummaryReport(string title, List<TourItem> model)

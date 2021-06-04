@@ -31,7 +31,16 @@ namespace TourPlannerApp.DAL
 
             var fullPath = _pictureFolder + "\\" + fileName;
 
-            File.WriteAllBytes(fullPath, image); // exception abfangen --> if not successfull --> return ""?
+            try
+            {
+                File.WriteAllBytes(fullPath, image); // exception abfangen --> if not successfull --> return ""?
+            }
+            catch (Exception e)
+            {
+                //Console.WriteLine(e);
+                return "";
+            }
+            
 
             return fullPath;
 

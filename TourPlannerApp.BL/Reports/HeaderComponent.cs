@@ -13,7 +13,6 @@ namespace TourPlannerApp.BL.Reports
     {
         public string Title { get; set; }
         public DateTime CreationTime { get; set; }
-
         public byte[] Logo { get; set; }
 
         public HeaderComponent(string title, byte[] logo)
