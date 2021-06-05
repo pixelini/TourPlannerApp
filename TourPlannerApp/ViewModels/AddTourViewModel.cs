@@ -145,14 +145,11 @@ namespace TourPlannerApp.ViewModels
 
             set
             {
-
-                if (_currentTourLookup != value)
-                {
-                    _currentTourLookup = value;
-                    SetFormattedProperties();
-                    RaisePropertyChangedEvent(nameof(CurrentTourLookup));
-                    Status = "Tour gefunden!";
-                }
+                if (_currentTourLookup == value) return;
+                _currentTourLookup = value;
+                SetFormattedProperties();
+                RaisePropertyChangedEvent(nameof(CurrentTourLookup));
+                Status = "Tour gefunden!";
             }
         }
 
@@ -210,73 +207,6 @@ namespace TourPlannerApp.ViewModels
             TourEvents.AnnounceNewTour();
 
         }
-
-
-
-
-        /* --> moved to TourItem Model!!!
-        #region Helpers
-  
-        private string FormatLocationData(TourItem.Address address)
-        {
-            var fullLocation = "";
-
-            if (address.Street != null)
-            {
-                fullLocation = AddToLocationString(fullLocation, address.Street);
-            }
-
-            if (address.PostalCode != null)
-            {
-                fullLocation = AddToLocationString(fullLocation, address.PostalCode);
-            }
-
-            if (address.City != null)
-            {
-                fullLocation = AddToLocationString(fullLocation, address.City);
-            }
-
-            
-            //if (address.County != null)
-            //{
-            //    fullLocation = AddToLocationString(fullLocation, address.County);
-            //}
-            
-            if (address.State != null)
-            {
-                fullLocation = AddToLocationString(fullLocation, address.State);
-            }      
-
-            if (address.Country != null)
-            {
-                fullLocation = AddToLocationString(fullLocation, address.Country);
-            }
-
-            return fullLocation;
-        }
-
-        private string AddToLocationString(string locationString, string locationDetail)
-        {
-            if (locationString == "")
-            {
-                locationString += locationDetail;
-            }
-            else
-            {
-                locationString += ", " + locationDetail;
-            }
-
-            return locationString;
-        }
-
-        
-
-
-        #endregion
-
-        */
-
-
 
     }
 

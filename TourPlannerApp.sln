@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TourPlannerApp.DAL", "TourP
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TourPlannerApp.Models", "TourPlannerApp.Models\TourPlannerApp.Models.csproj", "{B74E8A39-68AC-46F6-8239-2B75934901C1}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TourPlannerAppTests", "TourPlannerAppTests\TourPlannerAppTests.csproj", "{C933F204-B21D-463C-B81F-9CA5C785F8C8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{B74E8A39-68AC-46F6-8239-2B75934901C1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B74E8A39-68AC-46F6-8239-2B75934901C1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B74E8A39-68AC-46F6-8239-2B75934901C1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C933F204-B21D-463C-B81F-9CA5C785F8C8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C933F204-B21D-463C-B81F-9CA5C785F8C8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C933F204-B21D-463C-B81F-9CA5C785F8C8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C933F204-B21D-463C-B81F-9CA5C785F8C8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

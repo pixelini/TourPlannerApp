@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using static TourPlannerApp.Models.Models.TourLookup;
 
 namespace TourPlannerApp.Models
@@ -38,101 +39,18 @@ namespace TourPlannerApp.Models
 
         // Optional
         public List<LogEntry> Log { get; set; }
+        
+        
+        public string GetStartLocationAsString() => GetLocationString(StartLocation);
 
+        public string GetTargetLocationAsString() => GetLocationString(TargetLocation);
 
-        public string GetStartLocationAsString()
+        private string GetLocationString(Address address)
         {
-            var fullLocation = "";
-
-            if (StartLocation.Street != null)
-            {
-                fullLocation = AddToLocationString(fullLocation, StartLocation.Street);
-            }
-
-            if (StartLocation.PostalCode != null)
-            {
-                fullLocation = AddToLocationString(fullLocation, StartLocation.PostalCode);
-            }
-
-            if (StartLocation.City != null)
-            {
-                fullLocation = AddToLocationString(fullLocation, StartLocation.City);
-            }
-
-            /*
-            if (address.County != null)
-            {
-                fullLocation = AddToLocationString(fullLocation, address.County);
-            }
-            */
-
-            if (StartLocation.State != null)
-            {
-                fullLocation = AddToLocationString(fullLocation, StartLocation.State);
-            }
-
-            if (StartLocation.Country != null)
-            {
-                fullLocation = AddToLocationString(fullLocation, StartLocation.Country);
-            }
-
-            return fullLocation;
+            var strArray = new List<string> { address.Street, address.PostalCode, address.City, address.County, address.Country };
+            return String.Join(", ", strArray.Where(m => !String.IsNullOrEmpty(m)).ToList());
         }
-
-        public string GetTargetLocationAsString()
-        {
-            var fullLocation = "";
-
-            if (TargetLocation.Street != null)
-            {
-                fullLocation = AddToLocationString(fullLocation, TargetLocation.Street);
-            }
-
-            if (TargetLocation.PostalCode != null)
-            {
-                fullLocation = AddToLocationString(fullLocation, TargetLocation.PostalCode);
-            }
-
-            if (TargetLocation.City != null)
-            {
-                fullLocation = AddToLocationString(fullLocation, TargetLocation.City);
-            }
-
-            /*
-            if (address.County != null)
-            {
-                fullLocation = AddToLocationString(fullLocation, address.County);
-            }
-            */
-
-            if (TargetLocation.State != null)
-            {
-                fullLocation = AddToLocationString(fullLocation, TargetLocation.State);
-            }
-
-            if (TargetLocation.Country != null)
-            {
-                fullLocation = AddToLocationString(fullLocation, TargetLocation.Country);
-            }
-
-            return fullLocation;
-        }
-
-        private string AddToLocationString(string locationString, string locationDetail)
-        {
-            if (locationString == "")
-            {
-                locationString += locationDetail;
-            }
-            else
-            {
-                locationString += ", " + locationDetail;
-            }
-
-            return locationString;
-        }
-
-
+        
 
     }
 }

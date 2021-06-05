@@ -236,11 +236,5 @@ namespace TourPlannerApp.BL.Services
         }
 
 
-
-        
-
-
-
-
     }
 }
