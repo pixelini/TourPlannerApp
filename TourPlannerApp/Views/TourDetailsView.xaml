@@ -16,10 +16,10 @@
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="2*" />
+                    <ColumnDefinition Width="1.5*" />
                 </Grid.ColumnDefinitions>
 
-                <Button Padding="5" Margin="0 0 10 0" Grid.Column="0" Content="Tour als XY exportieren"/>
+                <Button Padding="5" Margin="0 0 10 0" Grid.Column="0" Content="Tour exportieren (JSON)" Command="{Binding ExportTourCommand}"/>
                 <Button Padding="5" Margin="0 0 10 0" Grid.Column="1" Content="Report anzeigen" Command="{Binding ShowTourReportCommand}"/>
                 <Button Padding="5" Grid.Column="2" Content="Report speichern" Command="{Binding SaveTourReportCommand}"/>
             </Grid>

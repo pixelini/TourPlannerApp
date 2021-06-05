@@ -47,7 +47,7 @@
                     CommandParameter="{x:Static nav:ViewType.TourDetails}" />
             <Button Padding="5" Margin="0 5 0 0" Content="Gewählte Tour bearbeiten" Command="{Binding EditSelectedTourCommand}" />
             <Button Padding="5" Margin="0 5 0 0" Content="Gewählte Tour entfernen" Command="{Binding DeleteSelectedTourCommand}" />
-            
+
 
         </StackPanel>
     </Border>

@@ -17,81 +17,90 @@
     <Grid>
         <Border Padding="130 10">
             <StackPanel Orientation="Vertical">
-            
-                    <TextBlock Text="Wohin geht's?" FontSize="13pt" FontWeight="Bold" Margin="0 5 0 15" />
 
-                    <!-- From-->
-                    <TextBlock Text="Von" />
-                    <TextBox Padding="5" Text="{Binding StartLocationInput, Mode=TwoWay}"  />
+                <Grid  Margin="0 5 0 15">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="2*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    
+                    <TextBlock Grid.Column="0" Text="Wohin geht's?" FontSize="13pt" FontWeight="Bold" />
+                    <Button Grid.Column="1" Padding="5" Margin="0 0 0 0" Content="Tour importieren (JSON)"/>
 
-                    <!-- To -->
-                    <TextBlock Margin="0 10 0 0" Text="Nach" />
-                    <TextBox Padding="5" Text="{Binding TargetLocationInput, Mode=TwoWay}"  />
+                </Grid>
 
-                    <!--Route Type-->
-                    <TextBlock Margin="0 10 0 0" Text="Typ" />
-                    <ComboBox x:Name="FinishDropdown" SelectedIndex="0" Padding="2">
-                        <ComboBoxItem >Fussweg</ComboBoxItem> <!--TODO Binding-->
-                        <ComboBoxItem>Fahrrad</ComboBoxItem>
-                        <ComboBoxItem>Auto</ComboBoxItem>
-                    </ComboBox>
+                <!-- From-->
+                <TextBlock Text="Von" />
+                <TextBox Padding="5" Text="{Binding StartLocationInput, Mode=TwoWay}"  />
+
+                <!-- To -->
+                <TextBlock Margin="0 10 0 0" Text="Nach" />
+                <TextBox Padding="5" Text="{Binding TargetLocationInput, Mode=TwoWay}"  />
+
+                <!--Route Type-->
+                <TextBlock Margin="0 10 0 0" Text="Typ" />
+                <ComboBox x:Name="FinishDropdown" SelectedIndex="0" Padding="2">
+                    <ComboBoxItem >Fussweg</ComboBoxItem> <!--TODO Binding-->
+                    <ComboBoxItem>Fahrrad</ComboBoxItem>
+                    <ComboBoxItem>Auto</ComboBoxItem>
+                </ComboBox>
 
                 <Button IsDefault="True" Padding="5" Margin="0 30 0 0" Content="Tour suchen" Command="{Binding LookupTourCommand}" />
 
                 
-                    <!-- Show Results (temp) -->
-                    <TextBlock Margin="0 30 0 0"  Text="{Binding Status}" FontSize="18" FontWeight="Bold" />
-                    <Border Visibility="{Binding ShowResult, Converter={StaticResource VisibilityConverter}}" Margin="0 10 0 0" BorderBrush="{StaticResource BrushPrimary1}" Background="#dddddd" Padding="20">
-                        <StackPanel>
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*" />
-                                    <ColumnDefinition Width="*" />
-                                </Grid.ColumnDefinitions>
-                                <Grid.RowDefinitions>
-                                    <RowDefinition />
-                                    <RowDefinition />
-                                    <RowDefinition />
-                                    <RowDefinition />
-                                    <RowDefinition />
-                                </Grid.RowDefinitions>
+                <!-- Show Results (temp) -->
+                <TextBlock Margin="0 30 0 0"  Text="{Binding Status}" FontSize="18" FontWeight="Bold" />
+                <Border Visibility="{Binding ShowResult, Converter={StaticResource VisibilityConverter}}" Margin="0 10 0 0" BorderBrush="{StaticResource BrushPrimary1}" Background="#dddddd" Padding="20">
+                    <StackPanel>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition />
+                                <RowDefinition />
+                                <RowDefinition />
+                                <RowDefinition />
+                                <RowDefinition />
+                            </Grid.RowDefinitions>
 
-                                <!-- Top Left Side -->
-                                <StackPanel Grid.Column="0" Grid.Row="0" Margin="0 10" Orientation="Horizontal">
-                                    <TextBlock MinWidth="80" Text="Start:" />
-                                    <TextBlock Text="{Binding StartLocationResult, Mode=TwoWay}" FontWeight="Bold"/>
-                                </StackPanel>
-
-                                <StackPanel Grid.Column="0" Grid.Row="1" Margin="0 10" Orientation="Horizontal">
-                                    <TextBlock MinWidth="80" Text="Ziel:" />
-                                    <TextBlock Text="{Binding TargetLocationResult, Mode=TwoWay}" FontWeight="Bold"/>
-                                </StackPanel>
-
-                                <StackPanel Grid.Column="0" Grid.Row="2" Margin="0 10" Orientation="Horizontal">
-                                    <TextBlock MinWidth="80" Text="Distanz:" />
-                                    <TextBlock Text="{Binding CurrentTourLookup.Distance, Mode=TwoWay}" FontWeight="Bold"/>
-                                    <TextBlock Text=" km" FontWeight="Bold"/>
-                                </StackPanel>
-
-                                <Image Grid.Column="1" Grid.RowSpan="4" Width="200" HorizontalAlignment="Right" Source="{Binding CurrentTourLookup.Image, Converter={x:Static converter:ByteArrayToBitmapImageConverter.Instance}, Mode=OneWay}" />
-
-                            </Grid>
-
-                            <!-- Top Right Side -->
-                            <Expander Grid.Row="4" Margin="0 10" Header="Navigation">
-                                <ListView ItemsSource="{Binding CurrentTourLookup.NavigationDetails, Mode=TwoWay}">
-                                    <ListView.ItemTemplate>
-                                        <DataTemplate>
-                                            <TextBlock Text="{Binding}" FontWeight="Bold" />
-                                        </DataTemplate>
-                                    </ListView.ItemTemplate>
-                                </ListView>
-                            </Expander>
-
-                            <StackPanel Margin="0 10" Orientation="Vertical">
-                                <TextBlock Margin="0 0 0 10" Text="Gib deiner Tour einen Namen:" />
-                                <TextBox Margin="0 0 100 0" Padding="5" Text="{Binding TourNameInput, Mode=TwoWay}" />
+                            <!-- Top Left Side -->
+                            <StackPanel Grid.Column="0" Grid.Row="0" Margin="0 10" Orientation="Horizontal">
+                                <TextBlock MinWidth="80" Text="Start:" />
+                                <TextBlock Text="{Binding StartLocationResult, Mode=TwoWay}" FontWeight="Bold"/>
                             </StackPanel>
+
+                            <StackPanel Grid.Column="0" Grid.Row="1" Margin="0 10" Orientation="Horizontal">
+                                <TextBlock MinWidth="80" Text="Ziel:" />
+                                <TextBlock Text="{Binding TargetLocationResult, Mode=TwoWay}" FontWeight="Bold"/>
+                            </StackPanel>
+
+                            <StackPanel Grid.Column="0" Grid.Row="2" Margin="0 10" Orientation="Horizontal">
+                                <TextBlock MinWidth="80" Text="Distanz:" />
+                                <TextBlock Text="{Binding CurrentTourLookup.Distance, Mode=TwoWay}" FontWeight="Bold"/>
+                                <TextBlock Text=" km" FontWeight="Bold"/>
+                            </StackPanel>
+
+                            <Image Grid.Column="1" Grid.RowSpan="4" Width="200" HorizontalAlignment="Right" Source="{Binding CurrentTourLookup.Image, Converter={x:Static converter:ByteArrayToBitmapImageConverter.Instance}, Mode=OneWay}" />
+
+                        </Grid>
+
+                        <!-- Top Right Side -->
+                        <Expander Grid.Row="4" Margin="0 10" Header="Navigation">
+                            <ListView ItemsSource="{Binding CurrentTourLookup.NavigationDetails, Mode=TwoWay}">
+                                <ListView.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding}" FontWeight="Bold" />
+                                    </DataTemplate>
+                                </ListView.ItemTemplate>
+                            </ListView>
+                        </Expander>
+
+                        <StackPanel Margin="0 10" Orientation="Vertical">
+                            <TextBlock Margin="0 0 0 10" Text="Gib deiner Tour einen Namen:" />
+                            <TextBox Margin="0 0 100 0" Padding="5" Text="{Binding TourNameInput, Mode=TwoWay}" />
+                        </StackPanel>
 
                         <StackPanel Margin="0 10" Orientation="Vertical">
                             <TextBlock Margin="0 0 0 10" Text="Beschreibung:" />
@@ -100,10 +109,10 @@
 
                         <StackPanel Orientation="Horizontal">
                             <Button IsDefault="True" Padding="5" Margin="0 20 0 0" Content="Speichern" Command="{Binding SaveTourLookupCommand}" />
-                            </StackPanel>
-
                         </StackPanel>
-                    </Border>
+
+                    </StackPanel>
+                </Border>
 
             </StackPanel>
 

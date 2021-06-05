@@ -8,8 +8,12 @@
              d:DesignHeight="450" d:DesignWidth="800">
     <StackPanel>
         <TextBlock Grid.Row="1" HorizontalAlignment="Center" Padding="0 50 0 50" FontSize="15pt" Text="Hallo bei tourbo!" />
-        <Button Padding="5" Margin="0 0 0 10" MaxWidth="200" Grid.Column="2" Content="Meine Statistik anzeigen" Command="{Binding ShowSummaryReportCommand}" />
-        <Button Padding="5" MaxWidth="200" Grid.Column="2" Content="Meine Statistik downloaden" Command="{Binding SaveSummaryReportCommand}" />
+        <Button Padding="5" Margin="0 0 0 10" MaxWidth="200" Content="Meine Statistik anzeigen" Command="{Binding ShowSummaryReportCommand}" />
+        <Button Padding="5" Margin="0 0 0 80" MaxWidth="200" Content="Meine Statistik downloaden" Command="{Binding SaveSummaryReportCommand}" />
 
+        <Button Padding="5" MaxWidth="200" Content="Tour importieren (JSON)" Command="{Binding ImportTourCommand}" />
     </StackPanel>
+
+    
+
 </UserControl>

@@ -34,6 +34,11 @@ namespace TourPlannerApp.BL.Services
         public void ShowTourReport(TourItem selectedTour);
 
         public void SaveTourReport(TourItem selectedTour, string filePath);
+
+        public void ExportTourData(TourItem selectedTour, string filePath);
+
+        public TourItem ImportTourData(string filePath);
         
+        public int AddImportedTour(TourItem currentItem);
     }
 }

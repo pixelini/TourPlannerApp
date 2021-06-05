@@ -2,8 +2,10 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Reflection;
+using Newtonsoft.Json;
 using TourPlannerApp.BL.Reports;
 using TourPlannerApp.DAL;
 using TourPlannerApp.Models;
@@ -259,6 +261,50 @@ namespace TourPlannerApp.BL.Services
             document.GeneratePdf(filePath);
         }
 
+        public void ExportTourData(TourItem selectedTour, string filePath)
+        {
+            Debug.WriteLine(filePath);
+
+            var imageDataAsByteArray = ReadImageFile(selectedTour.PathToImg);
+            if (imageDataAsByteArray != null)
+            {
+                selectedTour.Image = imageDataAsByteArray;
+            }
+
+            var tourAsJson = JsonConvert.SerializeObject(selectedTour, Formatting.Indented);
+            File.WriteAllText(filePath, tourAsJson);
+        }
+
+        public TourItem ImportTourData(string filePath)
+        {
+            // read file into a string and deserialize JSON to a type
+            var newTour = JsonConvert.DeserializeObject<TourItem>(File.ReadAllText(filePath));
+            
+            // if all data here??? -> validate
+            return newTour;
+
+        }
+
+        public int AddImportedTour(TourItem currentItem)
+        {
+            var tourId = AddTour(currentItem);
+
+            // also add existing logs
+            if (currentItem.Log.Count > 1)
+            {
+                foreach (var logEntry in currentItem.Log)
+                {
+                    AddTourLog(tourId, logEntry);
+                }
+            }
+
+            return tourId;
+
+        }
+
+
+        #region Helper Methods
+
         private bool CheckIfTourItemContainsString(TourItem tour, string searchInput)
         {
             foreach (var prop in tour.GetType().GetProperties())
@@ -299,7 +345,26 @@ namespace TourPlannerApp.BL.Services
                 .Any(propLog => propLog.GetValue(classObject, null) != null && propLog.GetValue(classObject, null)
                     .ToString().ToLower().Contains($"{searchInput.ToLower()}"));
         }
-   
+
+
+        private byte[] ReadImageFile(string imageLocation)
+        {
+            byte[] imageData = null;
+            if (File.Exists(imageLocation))
+            {
+                var fileInfo = new FileInfo(imageLocation);
+                var imageFileLength = fileInfo.Length;
+                var fs = new FileStream(imageLocation, FileMode.Open, FileAccess.Read);
+                var br = new BinaryReader(fs);
+                imageData = br.ReadBytes((int)imageFileLength);
+            }
+            return imageData;
+        }
+
+        #endregion
+
+
+
 
     }
 }

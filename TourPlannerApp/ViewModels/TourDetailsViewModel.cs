@@ -52,6 +52,10 @@ namespace TourPlannerApp.ViewModels
         private ICommand _saveTourReportCommand;
         public ICommand SaveTourReportCommand => _saveTourReportCommand ??= new RelayCommand(SaveTourReport);
 
+        private ICommand _exportTourCommand;
+        public ICommand ExportTourCommand => _exportTourCommand ??= new RelayCommand(ExportTourData);
+
+        
 
         public TourDetailsViewModel(TourItem selectedTour, ITourService tourService)
         {
@@ -76,8 +80,8 @@ namespace TourPlannerApp.ViewModels
 
             // Get all class properties with reflection
             var type = typeof(LogEntry);
-            PropertyInfo[] properties = type.GetProperties();
-            foreach (PropertyInfo property in properties)
+            var properties = type.GetProperties();
+            foreach (var property in properties)
             {
                 Debug.WriteLine("{0} = {1}", property.Name, property.GetValue(newLogEntry, null));
             }
@@ -150,8 +154,21 @@ namespace TourPlannerApp.ViewModels
             }
             Debug.WriteLine(saveFileDialog.FileName);
         }
-        
 
+        
+        private void ExportTourData()
+        {
+            var saveFileDialog = new SaveFileDialog();
+            saveFileDialog.Filter = "Json|*.json";
+            saveFileDialog.Title = "Speicherort auswählen ...";
+            var result = saveFileDialog.ShowDialog();
+
+            if (result == true)
+            {
+                var filePath = saveFileDialog.FileName;
+                _tourService.ExportTourData(SelectedTour, filePath);
+            }
+        }
     }
 
 
