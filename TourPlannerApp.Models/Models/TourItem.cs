@@ -35,7 +35,7 @@ namespace TourPlannerApp.Models
         // Turn by turn navigation
         public List<string> NavigationDetails { get; set; }
 
-        public DateTime CreationTime { get; set; }
+        //public DateTime CreationTime { get; set; }
 
         // Optional
         public List<LogEntry> Log { get; set; }

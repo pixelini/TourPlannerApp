@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
@@ -12,8 +14,10 @@ using TourPlannerApp.ViewModels.Base;
 
 namespace TourPlannerApp.ViewModels
 {
-    public class LogEntryDialogViewModel : BaseViewModel
+    public class LogEntryDialogViewModel : BaseViewModel, IDataErrorInfo
     {
+
+        public Dictionary<string, string> ErrorCollection { get; private set; } = new Dictionary<string, string>();
 
         private LogEntry _logEntry;
 
@@ -25,9 +29,9 @@ namespace TourPlannerApp.ViewModels
                 _logEntry.StartTime = Convert.ToDateTime(_startTimeInput);
                 _logEntry.EndTime = Convert.ToDateTime(_endTimeInput);
                 _logEntry.Description = _descriptionInput;
-                _logEntry.Distance = _distanceInput;
+                _logEntry.Distance = float.Parse(_distanceInput);
                 _logEntry.OverallTime = TimeSpan.Parse(_overallTimeInput);
-                _logEntry.Altitude = _altitudeInput;
+                _logEntry.Altitude = float.Parse(_altitudeInput);
                 return _logEntry; 
             } 
             
@@ -101,8 +105,8 @@ namespace TourPlannerApp.ViewModels
 
         }
 
-        private float _distanceInput;
-        public float DistanceInput
+        private string _distanceInput;
+        public string DistanceInput
         {
             get
             {
@@ -137,8 +141,8 @@ namespace TourPlannerApp.ViewModels
             }
         }
 
-        private float _altitudeInput;
-        public float AltitudeInput
+        private string _altitudeInput;
+        public string AltitudeInput
         {
             get
             {
@@ -161,6 +165,127 @@ namespace TourPlannerApp.ViewModels
         private ICommand _saveCommand;
         public ICommand SaveCommand => _saveCommand ??= new RelayCommand(x => Save(this, new EventArgs()));
 
+        public string Error { get { return null; } }
+
+        public string this[string name]
+        {
+            get
+            {
+                string result = null;
+                switch (name)
+                {
+                    case "DescriptionInput":
+                        if (DescriptionInput.Length > 255)
+                        {
+                            result = "Beschreibung darf nicht mehr als 255 Zeichen haben.";
+                        }
+                        break;
+
+                    case "StartTimeInput":
+                        DateTime startDateValue;
+                        DateTime endDateValue;
+                        bool isStartDateValid;
+                        bool isEndDateValid;
+                        isStartDateValid = DateTime.TryParse(StartTimeInput, out startDateValue);
+                        isEndDateValid = DateTime.TryParse(StartTimeInput, out endDateValue);
+
+                        if (!isStartDateValid)
+                        {
+                            result = "Ungültiges Datumsformat.";
+                        } else if (isStartDateValid && isEndDateValid)
+                        {
+                            var startDate = DateTime.Parse(StartTimeInput);
+                            var endDate = DateTime.Parse(EndTimeInput);
+                            if (startDate > endDate)
+                            {
+                                result = "Startdatum muss vor Enddatum liegen.";
+                            }
+                        }
+                        break;
+
+                    case "EndTimeInput":
+                        DateTime startDateValue2;
+                        DateTime endDateValue2;
+                        bool isStartDateValid2;
+                        bool isEndDateValid2;
+                        isStartDateValid2 = DateTime.TryParse(StartTimeInput, out startDateValue2);
+                        isEndDateValid2 = DateTime.TryParse(StartTimeInput, out endDateValue2);
+
+                        if (!isEndDateValid2)
+                        {
+                            result = "Ungültiges Datumsformat.";
+                        } else if (isEndDateValid2 && isStartDateValid2)
+                        {
+                            var startDate = DateTime.Parse(StartTimeInput);
+                            var endDate = DateTime.Parse(EndTimeInput);
+                            if (startDate > endDate)
+                            {
+                                result = "Startdatum muss vor Enddatum liegen.";
+                            }
+                        }
+                        break;
+
+                    case "DistanceInput":
+
+                        if (!String.IsNullOrEmpty(DistanceInput))
+                        {
+                            float numericValue;
+                            bool isNumber = float.TryParse(DistanceInput, out numericValue);
+
+                            if (!isNumber)
+                            {
+                                result = "Bitte Zahl eingeben.";
+                            }
+                        }
+
+                        break;
+
+                    case "AltitudeInput": 
+
+                        if (!String.IsNullOrEmpty(AltitudeInput))
+                        {
+                            float numericValue;
+                            bool isNumber = float.TryParse(AltitudeInput, out numericValue);
+
+                            if (!isNumber)
+                            {
+                                result = "Bitte Zahl eingeben.";
+                            }
+                        }
+
+                        break;
+
+                    case "OverallTimeInput":
+
+                        if (!String.IsNullOrEmpty(OverallTimeInput))
+                        {
+                            TimeSpan timeSpan;
+                            bool isTimeSpan = TimeSpan.TryParse(OverallTimeInput, out timeSpan);
+
+                            if (!isTimeSpan)
+                            {
+                                result = "Bitte im Format hh:mm:ss eingeben.";
+                            }
+                        }
+
+                        break;
+
+                }
+
+                if (ErrorCollection.ContainsKey(name))
+                {
+                    ErrorCollection[name] = result;
+                } else if (result != null) {
+                    ErrorCollection.Add(name, result);
+                }
+
+                RaisePropertyChangedEvent(nameof(ErrorCollection));
+
+                return result;
+            }
+        }
+
+
         public LogEntryDialogViewModel() 
         {
             Ratings = CreateRatings();
@@ -169,9 +294,9 @@ namespace TourPlannerApp.ViewModels
             _startTimeInput = DateTime.Today.ToString();
             _endTimeInput = DateTime.Today.AddDays(1).ToString();
             _descriptionInput = "";
-            _distanceInput = 0;
+            _distanceInput = 0.ToString();
             _overallTimeInput = new TimeSpan(2, 14, 18).ToString();
-            _altitudeInput = 0;
+            _altitudeInput = 0.ToString();
         }
 
         public LogEntryDialogViewModel(LogEntry logEntry)
@@ -183,9 +308,9 @@ namespace TourPlannerApp.ViewModels
             _startTimeInput = logEntry.StartTime.ToString();
             _endTimeInput = logEntry.EndTime.ToString();
             _descriptionInput = logEntry.Description;
-            _distanceInput = logEntry.Distance;
+            _distanceInput = logEntry.Distance.ToString();
             _overallTimeInput = logEntry.OverallTime.ToString();
-            _altitudeInput = logEntry.Altitude;
+            _altitudeInput = logEntry.Altitude.ToString();
         }
 
         private List<SelectableItem> CreateRatings()

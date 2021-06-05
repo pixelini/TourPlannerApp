@@ -18,16 +18,7 @@
         <Border Padding="130 10">
             <StackPanel Orientation="Vertical">
 
-                <Grid  Margin="0 5 0 15">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="2*" />
-                        <ColumnDefinition Width="*" />
-                    </Grid.ColumnDefinitions>
-                    
-                    <TextBlock Grid.Column="0" Text="Wohin geht's?" FontSize="13pt" FontWeight="Bold" />
-                    <Button Grid.Column="1" Padding="5" Margin="0 0 0 0" Content="Tour importieren (JSON)"/>
-
-                </Grid>
+                <TextBlock Grid.Column="0" Margin="0 5 0 15" Text="Wohin geht's?" FontSize="13pt" FontWeight="Bold" />
 
                 <!-- From-->
                 <TextBlock Text="Von" />
@@ -40,7 +31,7 @@
                 <!--Route Type-->
                 <TextBlock Margin="0 10 0 0" Text="Typ" />
                 <ComboBox x:Name="FinishDropdown" SelectedIndex="0" Padding="2">
-                    <ComboBoxItem >Fussweg</ComboBoxItem> <!--TODO Binding-->
+                    <ComboBoxItem >Fussweg</ComboBoxItem>
                     <ComboBoxItem>Fahrrad</ComboBoxItem>
                     <ComboBoxItem>Auto</ComboBoxItem>
                 </ComboBox>
@@ -87,7 +78,7 @@
                         </Grid>
 
                         <!-- Top Right Side -->
-                        <Expander Grid.Row="4" Margin="0 10" Header="Navigation">
+                        <!--<Expander Grid.Row="4" Margin="0 10" Header="Navigation">
                             <ListView ItemsSource="{Binding CurrentTourLookup.NavigationDetails, Mode=TwoWay}">
                                 <ListView.ItemTemplate>
                                     <DataTemplate>
@@ -95,7 +86,7 @@
                                     </DataTemplate>
                                 </ListView.ItemTemplate>
                             </ListView>
-                        </Expander>
+                        </Expander>-->
 
                         <StackPanel Margin="0 10" Orientation="Vertical">
                             <TextBlock Margin="0 0 0 10" Text="Gib deiner Tour einen Namen:" />

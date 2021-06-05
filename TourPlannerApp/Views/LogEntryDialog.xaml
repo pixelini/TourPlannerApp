@@ -6,28 +6,31 @@
         xmlns:local="clr-namespace:TourPlannerApp.Views"
         mc:Ignorable="d"
         Title="Neuer Eintrag" WindowStartupLocation="CenterScreen" SizeToContent="Height" Width="400">
-    <Border Padding="10">
-        <StackPanel>
 
+    
+    <Border Padding="10">
+        
+        <StackPanel>
+            
             <TextBlock Text="Neue Aktivität hinzufügen" FontWeight="Bold" Margin="0 10" />
 
             <TextBlock Margin="0 0 0 5" Text="Tourstart" />
-            <DatePicker Text="{Binding StartTimeInput, Mode=TwoWay}" SelectedDateFormat="Long"></DatePicker>
+            <DatePicker Validation.ErrorTemplate="{StaticResource errorTemplate}" Text="{Binding StartTimeInput, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" SelectedDateFormat="Long"></DatePicker>
 
             <TextBlock Margin="0 10 0 5" Text="Tourende" />
-            <DatePicker Text="{Binding EndTimeInput, Mode=TwoWay}" SelectedDateFormat="Long"></DatePicker>
+            <DatePicker Validation.ErrorTemplate="{StaticResource errorTemplate}" Text="{Binding EndTimeInput, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" SelectedDateFormat="Long"></DatePicker>
 
             <TextBlock Margin="0 10 0 5" Text="Beschreibung" />
-            <TextBox Text="{Binding DescriptionInput, Mode=TwoWay}" Padding="2" />
+            <TextBox Validation.ErrorTemplate="{StaticResource errorTemplate}" Text="{Binding DescriptionInput, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" Padding="2"></TextBox>
 
-            <TextBlock Margin="0 10 0 5" Text="Distanz" />
-            <TextBox Text="{Binding DistanceInput, Mode=TwoWay}" Padding="2" />
+            <TextBlock Margin="0 10 0 5" Text="Distanz in m" />
+            <TextBox Validation.ErrorTemplate="{StaticResource errorTemplate}"  Text="{Binding DistanceInput, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" Padding="2" />
 
             <TextBlock Margin="0 10 0 5" Text="Höhenmeter in m" />
-            <TextBox Text="{Binding AltitudeInput, Mode=TwoWay}" Padding="2" />
+            <TextBox Validation.ErrorTemplate="{StaticResource errorTemplate}" Text="{Binding AltitudeInput, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" Padding="2" />
 
             <TextBlock Margin="0 10 0 5" Text="Dauer in hh:mm:ss" />
-            <TextBox Text="{Binding OverallTimeInput, StringFormat=HH:mm:ss, Mode=TwoWay}" Padding="2" />
+            <TextBox Validation.ErrorTemplate="{StaticResource errorTemplate}" Text="{Binding OverallTimeInput, StringFormat=HH:mm:ss, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" Padding="2" />
 
   
             <!--<TextBlock Margin="0 10 0 5" Text="Dauer" />
