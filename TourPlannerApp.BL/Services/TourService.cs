@@ -154,45 +154,15 @@ namespace TourPlannerApp.BL.Services
 
             var foundItems = new List<TourItem>();
             
-            Debug.WriteLine("Searchinput: " + searchInput );
-
-
-
-            
-
-            var tourAdded = false;
-            
-
-            /* FUNKTIONIERT*/
-
             foreach (var tour in allToursWithLogs)
             {
-                var isMatch = CheckIfTourItemContainsString(tour, searchInput);
-                if (isMatch)
+                if (CheckIfTourItemContainsString(tour, searchInput))
                 {
                     foundItems.Add(tour);
                 }
             }
             
-            
-
             return foundItems;
-
-            /*var foundItems = Items.Where(x => x.Name.ToLower().Contains(SearchInput.ToLower()));
-
-if (!foundItems.Any())
-{
-    Console.WriteLine("No items found.");
-}
-else
-{
-    foreach (var foundItem in foundItems)
-    {
-        SearchResultItems.Add(foundItem);
-    }
-}*/
-
-
         }
         
         public bool Exists(TourItem tourItem)
