@@ -28,7 +28,7 @@ namespace TourPlannerApp.ViewModels
 
         private ITourService _tourService { get; set; }
 
-        public ObservableCollection<TourItem> Items { get; set; }
+        private ObservableCollection<TourItem> _items { get; set; }
         public ObservableCollection<TourItem> SearchResultItems { get; set; }
 
         private string _searchInput;
@@ -94,8 +94,8 @@ namespace TourPlannerApp.ViewModels
             var repository = new TourDataAccess();
             var imgFolder = new PictureAccess();
             _tourService = new TourService(repository, imgFolder);
-            Items = new ObservableCollection<TourItem>(_tourService.GetAllTours());
-            SearchResultItems = new ObservableCollection<TourItem>(Items);
+            _items = new ObservableCollection<TourItem>(_tourService.GetAllTours());
+            SearchResultItems = new ObservableCollection<TourItem>(_items);
             SearchInput = "";
             _currentItem = new TourItem();
 
@@ -111,26 +111,25 @@ namespace TourPlannerApp.ViewModels
         private void Search(object commandParameter)
         {
             SearchResultItems?.Clear();
-            
-            var foundItems = Items.Where(x => x.Name.ToLower().Contains(SearchInput.ToLower()));
 
-            if (!foundItems.Any())
-            {
-                Console.WriteLine("No items found.");
-            }
-            else
-            {
-                foreach (var foundItem in foundItems)
+            var foundItems = _tourService.SearchFullText(SearchInput);
+
+                if (!foundItems.Any())
                 {
-                    SearchResultItems.Add(foundItem);
+                    Console.WriteLine("No items found.");
                 }
-            }
+                else
+                {
+                    foreach (var foundItem in foundItems)
+                    {
+                        SearchResultItems?.Add(foundItem);
+                    }
+                }
+                
         }
 
         private void ShowTour(object commandParameter)
         {
-            //Debug.WriteLine("TESTSTETS: " + commandParameter);
-            Debug.WriteLine("Show Tour: " + CurrentItem.Name + "(ID: " + CurrentItem.Id + ")");
             Navigator.CurrentViewModel = new TourDetailsViewModel(CurrentItem, _tourService);
         }
 
@@ -181,8 +180,8 @@ namespace TourPlannerApp.ViewModels
         private void RefreshTourList()
         {
             SearchInput = "";
-            Items = new ObservableCollection<TourItem>(_tourService.GetAllTours());
-            SearchResultItems = new ObservableCollection<TourItem>(Items);
+            _items = new ObservableCollection<TourItem>(_tourService.GetAllTours());
+            SearchResultItems = new ObservableCollection<TourItem>(_items);
             RaisePropertyChangedEvent(nameof(SearchResultItems));
         }
 

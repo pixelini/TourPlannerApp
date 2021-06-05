@@ -13,7 +13,7 @@ namespace TourPlannerApp.BL.Services
 
         public bool DeleteTour(TourItem tourItem);
         
-        List<TourItem> SearchByName(string tourName);
+        public List<TourItem> SearchFullText(string searchInput);
         
         public bool Exists(TourItem tourItem);
 
@@ -34,6 +34,6 @@ namespace TourPlannerApp.BL.Services
         public void ShowTourReport(TourItem selectedTour);
 
         public void SaveTourReport(TourItem selectedTour, string filePath);
-
+        
     }
 }

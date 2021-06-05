@@ -2,6 +2,8 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
+using System.Reflection;
 using TourPlannerApp.BL.Reports;
 using TourPlannerApp.DAL;
 using TourPlannerApp.Models;
@@ -136,11 +138,63 @@ namespace TourPlannerApp.BL.Services
             return false;
         }
 
-        public List<TourItem> SearchByName(string tourName)
+        public List<TourItem> SearchFullText(string searchInput)
         {
-            throw new System.NotImplementedException();
-        }
+            var allToursWithLogs = GetAllTours();
 
+            if (searchInput == "")
+            {
+                return allToursWithLogs;
+            }
+            
+            foreach (var tour in allToursWithLogs)
+            {
+                tour.Log = GetAllLogsForTour(tour);
+            }
+
+            var foundItems = new List<TourItem>();
+            
+            Debug.WriteLine("Searchinput: " + searchInput );
+
+
+
+            
+
+            var tourAdded = false;
+            
+
+            /* FUNKTIONIERT*/
+
+            foreach (var tour in allToursWithLogs)
+            {
+                var isMatch = CheckIfTourItemContainsString(tour, searchInput);
+                if (isMatch)
+                {
+                    foundItems.Add(tour);
+                }
+            }
+            
+            
+
+            return foundItems;
+
+            /*var foundItems = Items.Where(x => x.Name.ToLower().Contains(SearchInput.ToLower()));
+
+if (!foundItems.Any())
+{
+    Console.WriteLine("No items found.");
+}
+else
+{
+    foreach (var foundItem in foundItems)
+    {
+        SearchResultItems.Add(foundItem);
+    }
+}*/
+
+
+        }
+        
         public bool Exists(TourItem tourItem)
         {
             return _tourDataAccess.Exists(tourItem);
@@ -235,6 +289,47 @@ namespace TourPlannerApp.BL.Services
             document.GeneratePdf(filePath);
         }
 
+        private bool CheckIfTourItemContainsString(TourItem tour, string searchInput)
+        {
+            foreach (var prop in tour.GetType().GetProperties())
+            {
+                if (prop.GetValue(tour) is TourItem.Address)
+                {
+                    var address = (TourItem.Address)prop.GetValue(tour);
+                    if (CheckIfContainsString(address, searchInput))
+                    {
+                        return true;
+                    }
+                }
+                
+                if (prop.Name == "Id") continue;
+                
+                if (prop.GetValue(tour, null) != null && prop.GetValue(tour, null).ToString().ToLower().Contains($"{searchInput.ToLower()}"))
+                {
+                    return true;
+                }
+
+                if (prop.Name == "Log" && tour.Log.Count > 0 && tour.Log != null)
+                {
+                    if (tour.Log.Select(logEntry => CheckIfContainsString(logEntry, searchInput)).Any(isMatch => isMatch))
+                    {
+                        return true;
+                    }
+                }
+
+            }
+            
+            return false;
+        }
+
+        private bool CheckIfContainsString(object classObject, string searchInput)
+        {
+            return classObject.GetType().GetProperties()
+                .Where(propLog => propLog.Name != "Id")
+                .Any(propLog => propLog.GetValue(classObject, null) != null && propLog.GetValue(classObject, null)
+                    .ToString().ToLower().Contains($"{searchInput.ToLower()}"));
+        }
+   
 
     }
 }
