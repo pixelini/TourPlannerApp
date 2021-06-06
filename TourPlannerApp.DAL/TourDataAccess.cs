@@ -204,7 +204,7 @@ namespace TourPlannerApp.DAL
             int success = 1;
 
             var conn = Connect();
-            var sql = "INSERT INTO swe2_tourplanner.log (tour_id, start_time, end_time, description, distance, overall_time, rating, altitude) VALUES (@tour_id, @start_time, @end_time, @description, @distance, @overall_time, @rating, @altitude)";
+            var sql = "INSERT INTO swe2_tourplanner.log (tour_id, start_time, end_time, description, distance, overall_time, rating, altitude, weather, number_of_breaks, number_of_participants, avg_speed) VALUES (@tour_id, @start_time, @end_time, @description, @distance, @overall_time, @rating, @altitude, @weather, @numberOfBreaks, @numberOfParticipants, @avgSpeed)";
 
             using var cmd = new NpgsqlCommand(sql, conn);
             cmd.Parameters.Add(new NpgsqlParameter("@tour_id", tourId));
@@ -215,6 +215,10 @@ namespace TourPlannerApp.DAL
             cmd.Parameters.Add(new NpgsqlParameter("@overall_time", newLogEntry.OverallTime));
             cmd.Parameters.Add(new NpgsqlParameter("@rating", newLogEntry.Rating));
             cmd.Parameters.Add(new NpgsqlParameter("@altitude", newLogEntry.Altitude));
+            cmd.Parameters.Add(new NpgsqlParameter("@weather", newLogEntry.Weather));
+            cmd.Parameters.Add(new NpgsqlParameter("@numberOfBreaks", newLogEntry.NumberOfBreaks));
+            cmd.Parameters.Add(new NpgsqlParameter("@numberOfParticipants", newLogEntry.NumberOfParticipants));
+            cmd.Parameters.Add(new NpgsqlParameter("@avgSpeed", newLogEntry.AvgSpeed));
             cmd.Prepare();
 
             if (cmd.ExecuteNonQuery() == 1)
@@ -231,7 +235,7 @@ namespace TourPlannerApp.DAL
             bool success = false;
 
             var conn = Connect();
-            var sql = " UPDATE swe2_tourplanner.log SET start_time=@startTime, end_time=@endTime, description=@description, distance=@distance, overall_time=@overallTime, rating=@rating, altitude=@altitude WHERE id=@id AND tour_id=@tourId";
+            var sql = " UPDATE swe2_tourplanner.log SET start_time=@startTime, end_time=@endTime, description=@description, distance=@distance, overall_time=@overallTime, rating=@rating, altitude=@altitude, weather=@weather, number_of_breaks=@numberOfBreaks, number_of_participants=@number_of_participants, avg_speed=@avgSpeed WHERE id=@id AND tour_id=@tourId";
 
             using var cmd = new NpgsqlCommand(sql, conn);
             cmd.Parameters.Add(new NpgsqlParameter("@startTime", editedLogEntry.StartTime));
@@ -242,6 +246,10 @@ namespace TourPlannerApp.DAL
             cmd.Parameters.Add(new NpgsqlParameter("@rating", editedLogEntry.Rating));
             cmd.Parameters.Add(new NpgsqlParameter("@altitude", editedLogEntry.Altitude));
             cmd.Parameters.Add(new NpgsqlParameter("@id", editedLogEntry.Id));
+            cmd.Parameters.Add(new NpgsqlParameter("@weather", editedLogEntry.Weather));
+            cmd.Parameters.Add(new NpgsqlParameter("@numberOfBreaks", editedLogEntry.NumberOfBreaks));
+            cmd.Parameters.Add(new NpgsqlParameter("@numberOfParticipants", editedLogEntry.NumberOfParticipants));
+            cmd.Parameters.Add(new NpgsqlParameter("@avgSpeed", editedLogEntry.AvgSpeed));
             cmd.Parameters.Add(new NpgsqlParameter("@tourId", tourId));
 
             cmd.Prepare();
@@ -260,7 +268,7 @@ namespace TourPlannerApp.DAL
             var allLogs = new List<LogEntry>();
 
             var conn = Connect();
-            var sql = "SELECT id, start_time, end_time, description, distance, overall_time, rating, altitude FROM swe2_tourplanner.log WHERE tour_id=@id";
+            var sql = "SELECT id, start_time, end_time, description, distance, overall_time, rating, altitude, weather, number_of_breaks, number_of_participants, avg_speed FROM swe2_tourplanner.log WHERE tour_id=@id";
 
             using var cmd = new NpgsqlCommand(sql, conn);
             cmd.Parameters.Add(new NpgsqlParameter("@id", selectedTour.Id));
@@ -279,8 +287,17 @@ namespace TourPlannerApp.DAL
                     TimeSpan overallTime = reader.GetTimeSpan(5);
                     int rating = reader.GetInt32(6);
                     float altitude = reader.GetFloat(7);
+                        
+                    int weather = reader.GetInt32(8);
+                    int numberOfBreaks = reader.GetInt32(9);
+                    int numberOfParticipants = reader.GetInt32(10);
+                    float avgSpeed = reader.GetFloat(11);
 
-                    var logEntry = new LogEntry { Id = id, StartTime = startTime, EndTime = endTime, Description = description, Distance = distance, OverallTime = overallTime, Rating = rating, Altitude = altitude };
+                    var logEntry = new LogEntry 
+                        { Id = id, StartTime = startTime, EndTime = endTime, Description = description, 
+                            Distance = distance, OverallTime = overallTime, Rating = rating, 
+                            Altitude = altitude, Weather = weather, NumberOfBreaks = numberOfBreaks, 
+                            NumberOfParticipants = numberOfParticipants, AvgSpeed = avgSpeed};
                     allLogs.Add(logEntry);
                 }
             }

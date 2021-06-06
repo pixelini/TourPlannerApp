@@ -20,19 +20,27 @@
             <TextBlock Margin="0 10 0 5" Text="Tourende" />
             <DatePicker Validation.ErrorTemplate="{StaticResource errorTemplate}" Text="{Binding EndTimeInput, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" SelectedDateFormat="Long"></DatePicker>
 
-            <TextBlock Margin="0 10 0 5" Text="Beschreibung" />
+            <TextBlock Margin="0 10 0 5" Text="Beschreibung (optional)" />
             <TextBox Validation.ErrorTemplate="{StaticResource errorTemplate}" Text="{Binding DescriptionInput, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" Padding="2"></TextBox>
 
             <TextBlock Margin="0 10 0 5" Text="Distanz in m" />
             <TextBox Validation.ErrorTemplate="{StaticResource errorTemplate}"  Text="{Binding DistanceInput, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" Padding="2" />
 
-            <TextBlock Margin="0 10 0 5" Text="Höhenmeter in m" />
-            <TextBox Validation.ErrorTemplate="{StaticResource errorTemplate}" Text="{Binding AltitudeInput, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" Padding="2" />
-
             <TextBlock Margin="0 10 0 5" Text="Dauer in hh:mm:ss" />
             <TextBox Validation.ErrorTemplate="{StaticResource errorTemplate}" Text="{Binding OverallTimeInput, StringFormat=HH:mm:ss, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" Padding="2" />
 
-  
+            <TextBlock Margin="0 10 0 5" Text="Höhenmeter in m" />
+            <TextBox Validation.ErrorTemplate="{StaticResource errorTemplate}" Text="{Binding AltitudeInput, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" Padding="2" />
+
+            <TextBlock Margin="0 10 0 5" Text="Durchschnittliche Geschwindigkeit in km/h" />
+            <TextBox Validation.ErrorTemplate="{StaticResource errorTemplate}" Text="{Binding AvgSpeedInput, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" Padding="2" />
+
+            <TextBlock Margin="0 10 0 5" Text="Teilnehmeranzahl" />
+            <TextBox Validation.ErrorTemplate="{StaticResource errorTemplate}" Text="{Binding NumberOfParticipantsInput, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" Padding="2" />
+
+            <TextBlock Margin="0 10 0 5" Text="Anzahl Pausen" />
+            <TextBox Validation.ErrorTemplate="{StaticResource errorTemplate}" Text="{Binding NumberOfBreaksInput, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" Padding="2" />
+            
             <!--<TextBlock Margin="0 10 0 5" Text="Dauer" />
             <StackPanel Orientation="Horizontal">
                 <TextBox MinWidth="40" Padding="2" Text="hh" TextAlignment="Center"/>
@@ -48,6 +56,21 @@
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
                             <RadioButton GroupName="Ratings"
+                                Content="{Binding ItemDescription}"
+                                IsChecked="{Binding IsSelected}"
+                                Margin="0 0 20 10"/>
+                        </DataTemplate>
+
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </StackPanel>
+
+            <StackPanel>
+                <TextBlock Margin="0 20 0 10" Text="Wie war das Wetter?" />
+                <ItemsControl ItemsSource="{Binding WeatherConditions}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <RadioButton GroupName="WeatherConditions"
                                 Content="{Binding ItemDescription}"
                                 IsChecked="{Binding IsSelected}"
                                 Margin="0 0 20 10"/>

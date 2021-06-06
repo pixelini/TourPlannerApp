@@ -16,6 +16,11 @@ namespace TourPlannerApp.Models
         public float Altitude { get; set; }
         public TimeSpan OverallTime { get; set; }
         public int Rating { get; set; }
+        
+        public int Weather { get; set; }
+        public int NumberOfBreaks { get; set; }
+        public int NumberOfParticipants { get; set; }
+        public float AvgSpeed { get; set; }
 
     }
 }

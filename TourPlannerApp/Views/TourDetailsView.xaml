@@ -68,16 +68,6 @@
             <TextBlock Margin="0 0 0 10" Text="Beschreibung:" />
             <TextBlock Margin="0 0 100 0" Text="{Binding SelectedTour.Description, Mode=TwoWay}" FontWeight="Bold"/>
 
-            <Expander Grid.Row="4" Margin="0 10" Header="Navigation:">
-                <ListView ItemsSource="{Binding SelectedTour.NavigationDetails, Mode=TwoWay}">
-                    <ListView.ItemTemplate>
-                        <DataTemplate>
-                            <TextBlock Text="1. Abbiegen" />
-                        </DataTemplate>
-                    </ListView.ItemTemplate>
-                </ListView>
-            </Expander>
-
             <TextBlock Text="Bisherige Aktivitäten" FontWeight="Bold" Margin="0 30 0 0" />
 
             <DataGrid Margin="0 10 0 0" Name="dgLogs" ItemsSource="{Binding LogEntryInfos}" AutoGenerateColumns="False" IsReadOnly="true">
@@ -133,6 +123,16 @@
                         </DataGridTextColumn.ElementStyle>
                     </DataGridTextColumn>
                     
+                    <DataGridTextColumn Header="Beschreibung" Binding="{Binding Description}">
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="{x:Type TextBlock}">
+                                <Setter Property="VerticalAlignment" Value="Center"/>
+                                <Setter Property="HorizontalAlignment" Value="Right"/>
+                                <Setter Property="Margin" Value="5"/>
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
+                    
                     <DataGridTextColumn Header="Höhenmeter" Binding="{Binding Altitude}">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="{x:Type TextBlock}">
@@ -152,11 +152,42 @@
                             </Style>
                         </DataGridTextColumn.ElementStyle>
                     </DataGridTextColumn>
-                    
-                    <DataGridTextColumn Header="Beschreibung" Binding="{Binding Description}">
+
+                    <DataGridTextColumn Header="Wetter" Binding="{Binding Weather}">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="{x:Type TextBlock}">
                                 <Setter Property="VerticalAlignment" Value="Center"/>
+                                <Setter Property="HorizontalAlignment" Value="Right"/>
+                                <Setter Property="Margin" Value="5"/>
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
+                    
+                    <DataGridTextColumn Header="Durchschn. Geschwindigkeit in km/h" Binding="{Binding AvgSpeed}">
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="{x:Type TextBlock}">
+                                <Setter Property="VerticalAlignment" Value="Center"/>
+                                <Setter Property="HorizontalAlignment" Value="Right"/>
+                                <Setter Property="Margin" Value="5"/>
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
+                    
+                    <DataGridTextColumn Header="Teilnehmeranzahl" Binding="{Binding NumberOfParticipants}">
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="{x:Type TextBlock}">
+                                <Setter Property="VerticalAlignment" Value="Center"/>
+                                <Setter Property="HorizontalAlignment" Value="Right"/>
+                                <Setter Property="Margin" Value="5"/>
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
+                    
+                    <DataGridTextColumn Header="Anzahl Pausen" Binding="{Binding NumberOfBreaks}">
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="{x:Type TextBlock}">
+                                <Setter Property="VerticalAlignment" Value="Center"/>
+                                <Setter Property="HorizontalAlignment" Value="Right"/>
                                 <Setter Property="Margin" Value="5"/>
                             </Style>
                         </DataGridTextColumn.ElementStyle>

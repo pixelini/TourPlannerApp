@@ -102,9 +102,21 @@ namespace TourPlannerApp.BL.Reports
                         stack.Item().PaddingBottom(5).Text("Bewertung", textSizeHeadings);
                         stack.Item().PaddingBottom(20).Text(entry.Rating, textSizeValues);
 
+                        stack.Item().PaddingBottom(5).Text("Wetter", textSizeHeadings);
+                        stack.Item().PaddingBottom(20).Text(entry.Weather, textSizeValues);
+                        
+                        stack.Item().PaddingBottom(5).Text("Durchschn. Geschwindigkeit in km/h", textSizeHeadings);
+                        stack.Item().PaddingBottom(20).Text(entry.AvgSpeed, textSizeValues);
+                        
+                        stack.Item().PaddingBottom(5).Text("Teilnehmeranzahl", textSizeHeadings);
+                        stack.Item().PaddingBottom(20).Text(entry.NumberOfParticipants, textSizeValues);
+                        
+                        stack.Item().PaddingBottom(5).Text("Anzahl Pausen", textSizeHeadings);
+                        stack.Item().PaddingBottom(20).Text(entry.NumberOfBreaks, textSizeValues);
+
                         stack.Item().PaddingBottom(5).Text("Beschreibung", textSizeHeadings);
                         stack.Item().PaddingBottom(20).Text(entry.Description, textSizeValues);
-                    
+
                         stack.Item().BorderBottom(1).PaddingBottom(20);
                     }
                 }

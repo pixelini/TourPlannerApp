@@ -74,18 +74,29 @@ namespace TourPlannerApp.BL.Reports
             // Höhenmeter Gesamt
             var sumActivityAltitude = GetSumActivityAltitude();
             
+            // Durschnittliche Durschnittsgeschwindigkeit aller Aktivitäten
+            var avgAvgSpeed = GetAvgAvgSpeedOfActivity();
+            
+            // Durschnittliche Teilnehmeranzahl aller Aktivitäten
+            var avgParticipants = GetAvgParticipantsOfActivity();
+
+            // Durschnittliche Pausenanzahl aller Aktivitäten
+            var avgBreaksParticipants = GetAvgBreaksOfActivity();
+
             // Längste Tour
             var longestActivityData = GetActivityWithLongestDistance();
 
             // Durschnittliche Bewertung aller Aktivitäten
             var avgRating = GetAvgRatingOfActivity();
-
+            
             // Wie viele Touren mit Rating 5 bewertet?
             var countActivitiesWithHighestRating = GetCountActivitiesWithHighestRating();
             
-            // Wie war das Wetter? Regen/Sonne: ( Regenrate? )
-            float rainRate;
-            float sunRate;
+            // Wie war das Wetter? Sonne/Bewölkt/Regen
+            var countRainActivity = GetCountOfRainActivity();
+            var countSunActivity = GetCountOfSunActivity();
+            var countCloudyActivity = GetCountOfCloudyActivity();
+
 
             container.Stack(stack =>
             {
@@ -109,20 +120,51 @@ namespace TourPlannerApp.BL.Reports
 
                     stack.Item().PaddingBottom(5).Text("Höhenmeter insgesamt:", textSizeHeadings);
                     stack.Item().PaddingBottom(20).Text($"{sumActivityAltitude}", textSizeValues);
-                
+                    
+                    stack.Item().PaddingBottom(5).Text("Durchschnittliche Durchschnittsgeschwindigkeit deiner Aktivitäten:", textSizeHeadings);
+                    stack.Item().PaddingBottom(20).Text($"{avgAvgSpeed}km/h", textSizeValues);
+                    
+                    stack.Item().PaddingBottom(5).Text("Durchschnittliche Teilnehmeranzahl deiner Aktivitäten:", textSizeHeadings);
+                    stack.Item().PaddingBottom(20).Text($"{avgParticipants}", textSizeValues);
+                    
+                    stack.Item().PaddingBottom(5).Text("Durchschnittliche Pausenanzahl deiner Aktivitäten:", textSizeHeadings);
+                    stack.Item().PaddingBottom(20).Text($"{avgBreaksParticipants}", textSizeValues);
+                    
                     stack.Item().PaddingBottom(5).Text("Durchschnittliche Bewertung deiner Aktivitäten:", textSizeHeadings);
                     stack.Item().PaddingBottom(20).Text($"{avgRating}", textSizeValues);
-                
-                    stack.Item().PaddingBottom(20).Text($"Du hast {countActivitiesWithHighestRating} von insgesamt {GetCountActivities()} Touren mit der Bestnote bewertet.", textSizeHeadings);
+                    
+                    stack.Item().PaddingBottom(5).Text($"So war das Wetter bei deinen {countActivities} Aktivitäten:", textSizeHeadings);
+                    stack.Item().PaddingBottom(5).Text($"Sonne: {countSunActivity}/{countActivities}", textSizeValues);
+                    stack.Item().PaddingBottom(5).Text($"Bewölkt: {countCloudyActivity}/{countActivities}", textSizeValues);
+                    stack.Item().PaddingBottom(20).Text($"Regen: {countRainActivity}/{countActivities}", textSizeValues);
 
-                    stack.Item().PaddingBottom(20).Text($"Deine längste Tourdistanz war: {longestActivityData.Distance} km. " + 
+                
+                    stack.Item().PaddingBottom(20).Text($"Du hast {countActivitiesWithHighestRating} von insgesamt {GetCountActivities()} Aktivitäten mit der Bestnote bewertet.", textSizeHeadings);
+
+                    stack.Item().PaddingBottom(20).Text($"Deine Aktivitäten mit der längsten Distanz war: {longestActivityData.Distance} km. " + 
                                                         $"(Tour \"{longestActivityData.TourName}\" am {longestActivityData.Date.ToString("dd.MM.yyyy")})", textSizeHeadings);
+                    
                 }
 
                 stack.Item().BorderBottom(1).PaddingBottom(20);
 
             });
             
+        }
+
+        private int GetCountOfSunActivity()
+        {
+            return Model.Select(tour => tour.Log.Where(x => x.Weather == 1)).Select(result => result.Count()).Sum();
+        }
+        
+        private int GetCountOfCloudyActivity()
+        {
+            return Model.Select(tour => tour.Log.Where(x => x.Weather == 2)).Select(result => result.Count()).Sum();
+        }
+
+        private int GetCountOfRainActivity()
+        {
+            return Model.Select(tour => tour.Log.Where(x => x.Weather == 3)).Select(result => result.Count()).Sum();
         }
 
         private int GetCountActivitiesWithHighestRating()
@@ -140,6 +182,24 @@ namespace TourPlannerApp.BL.Reports
         {
             var sumAllRatings = Model.Sum(tour => tour.Log.Sum(x => x.Rating));
             return sumAllRatings / (float)GetCountActivities();
+        }
+        
+        private float GetAvgAvgSpeedOfActivity()
+        {
+            var sumAllAvgSpeeds = Model.Sum(tour => tour.Log.Sum(x => x.AvgSpeed));
+            return sumAllAvgSpeeds / (float)GetCountActivities();
+        }
+        
+        private float GetAvgParticipantsOfActivity()
+        {
+            var sumAllParticipants = Model.Sum(tour => tour.Log.Sum(x => x.NumberOfParticipants));
+            return sumAllParticipants / (float)GetCountActivities();
+        }
+        
+        private float GetAvgBreaksOfActivity()
+        {
+            var sumAllBreaks = Model.Sum(tour => tour.Log.Sum(x => x.NumberOfBreaks));
+            return sumAllBreaks / (float)GetCountActivities();
         }
 
         private float GetSumActivityAltitude()
