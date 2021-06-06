@@ -441,6 +441,7 @@ namespace TourPlannerApp.ViewModels
 
         public LogEntryDialogViewModel() 
         {
+            _logger.Debug($"Ctor: New Log Entry...");
             Ratings = CreateRatings();
             WeatherConditions = CreateWeatherConditions();
             Ratings[0].IsSelected = true; // first element is default option

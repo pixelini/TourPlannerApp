@@ -63,6 +63,7 @@ namespace TourPlannerApp.ViewModels
 
         public EditTourDialogViewModel(TourItem currentTour)
         {
+            _logger.Debug($"Ctor: Edit Tour: {currentTour.Name}");
             CurrentTour = currentTour;
             _tournameInput = CurrentTour.Name;
             _descriptionInput = CurrentTour.Description;

@@ -50,7 +50,8 @@ namespace TourPlannerApp.ViewModels
 
         public HomeViewModel()
         {
-            var repository = new TourDataAccess();
+            _logger.Debug($"Ctor: Home View...");
+            var repository = TourDataAccess.GetInstance();
             var imgFolder = new PictureAccess();
             _tourService = new TourService(repository, imgFolder);
         }

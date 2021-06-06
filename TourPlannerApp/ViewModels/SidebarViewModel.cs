@@ -84,9 +84,10 @@ namespace TourPlannerApp.ViewModels
 
         public SidebarViewModel()
         {
+            _logger.Debug($"Ctor: Sidebar...");
             // sets navigator to the static navigator of the MainViewModel
             Navigator = MainViewModel.Navigator;
-            var repository = new TourDataAccess();
+            var repository = TourDataAccess.GetInstance();
             var imgFolder = new PictureAccess();
             _tourService = new TourService(repository, imgFolder);
             _items = new ObservableCollection<TourItem>(_tourService.GetAllTours());

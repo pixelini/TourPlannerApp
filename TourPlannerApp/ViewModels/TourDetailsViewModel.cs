@@ -54,6 +54,7 @@ namespace TourPlannerApp.ViewModels
 
         public TourDetailsViewModel(TourItem selectedTour, ITourService tourService)
         {
+            _logger.Debug($"Ctor: TourDetails from tour (ID: {selectedTour.Id}, Name: {selectedTour.Name}...");
             SelectedTour = selectedTour;
             _tourService = tourService;
             SelectedTour.Log = _tourService.GetAllLogsForTour(SelectedTour);
@@ -61,7 +62,6 @@ namespace TourPlannerApp.ViewModels
         }
         private void AddLogEntry()
         {
-            //var newLogEntry = new LogEntry();
             LogEntryDialogViewModel = new LogEntryDialogViewModel();
             LogEntryDialogViewModel.Save += AddLogEntryDialogViewModelOnSave;
             LogEntryDialog = new LogEntryDialog(LogEntryDialogViewModel);
@@ -78,7 +78,7 @@ namespace TourPlannerApp.ViewModels
             var properties = type.GetProperties();
             foreach (var property in properties)
             {
-                Debug.WriteLine("{0} = {1}", property.Name, property.GetValue(newLogEntry, null));
+                _logger.Debug($"{property.Name} = {property.GetValue(newLogEntry, null)}");
             }
 
             // TODO: Validate it
@@ -86,7 +86,7 @@ namespace TourPlannerApp.ViewModels
             SelectedTour.Log =_tourService.GetAllLogsForTour(SelectedTour);
             LogEntryInfos = new ObservableCollection<LogEntry>(_tourService.GetAllLogsForTour(SelectedTour));
 
-            // TODO: if successfull -> close
+            // TODO: if successful -> close
             LogEntryDialog.Close();
         }
 
@@ -114,7 +114,6 @@ namespace TourPlannerApp.ViewModels
             LogEntryDialog.Close();
         }
 
-
         private void DeleteLogEntry(object parameter)
         {
             var selectedLogEntry = (LogEntry)parameter;
@@ -125,7 +124,7 @@ namespace TourPlannerApp.ViewModels
                 LogEntryInfos.Remove(selectedLogEntry);
             } else
             {
-                Debug.WriteLine("TourLog konnte nicht geloescht werden.");
+                _logger.Debug("Tourlog couln't be deleted.");
             }
 
         }

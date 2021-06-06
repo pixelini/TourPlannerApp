@@ -1,6 +1,7 @@
 ﻿using Npgsql;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using TourPlannerApp.DAL.Exceptions;
 using TourPlannerApp.Models;
@@ -10,14 +11,22 @@ namespace TourPlannerApp.DAL
 {
     public class TourDataAccess : ITourDataAccess
     {
+        private static Lazy<TourDataAccess> _instance; // Singleton pattern
+        
         private string _connectionString;
+        
+        public static TourDataAccess GetInstance()
+        {
+            _instance ??= new Lazy<TourDataAccess>(() => new TourDataAccess());
 
-        public TourDataAccess()
+            return _instance.Value;
+        }
+
+        private TourDataAccess()
         {
             _connectionString = SettingsManager.GetSettings().Connection;
         }
-        
-        
+
         public List<TourItem> GetAllTours()
         {     
             var allTours = new List<TourItem>();

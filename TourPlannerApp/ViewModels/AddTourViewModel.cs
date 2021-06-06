@@ -161,8 +161,8 @@ namespace TourPlannerApp.ViewModels
 
         public AddTourViewModel()
         {
-            _logger.Info("Add Tour...");
-            var repository = new TourDataAccess();
+            _logger.Debug("Ctor: Add Tour...");
+            var repository = TourDataAccess.GetInstance();
             var imgFolder = new PictureAccess();
             _tourService = new TourService(repository, imgFolder);
             var api = new TourLookupDataAccess();

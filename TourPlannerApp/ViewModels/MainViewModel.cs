@@ -11,6 +11,7 @@ namespace TourPlannerApp.ViewModels
 
         public MainViewModel()
         {
+            _logger.Debug($"Ctor: Main View...");
             Navigator.UpdateCurrentViewModelCommand.Execute(ViewType.Home);
         }
     }
