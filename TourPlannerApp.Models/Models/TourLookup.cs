@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using static TourPlannerApp.Models.TourItem;
 
 namespace TourPlannerApp.Models.Models
@@ -46,6 +41,7 @@ namespace TourPlannerApp.Models.Models
             public string Street { get; set; }
             public string AdminArea1 { get; set; } // Country
             public string AdminArea3 { get; set; } // State
+            
             public string AdminArea5Type { get; set; }
             public string AdminArea1Type { get; set; }
             public string AdminArea3Type { get; set; }
@@ -88,9 +84,6 @@ namespace TourPlannerApp.Models.Models
         public static TourItem ConvertTourLookupToTourItem(TourLookupItem tourLookupItem)
         {
             TourItem tour = new TourItem();
-            //tour.Name = name;
-            //tour.StartLocation = startLocation;
-            //tour.TargetLocation = targetLocation;
 
             if (tourLookupItem.Route.Locations[0] != null && tourLookupItem.Route.Locations[1] != null)
             {
@@ -125,6 +118,7 @@ namespace TourPlannerApp.Models.Models
 
             tour.StartLocation = startLocation;
 
+            // target location data
             var targetLocation = new Address();
             targetLocation.Street = locations[1].Street ??= "";
             targetLocation.PostalCode = locations[1].PostalCode ??= "";

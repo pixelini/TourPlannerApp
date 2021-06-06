@@ -1,16 +1,8 @@
 ﻿using QuestPDF.Drawing;
 using QuestPDF.Fluent;
 using QuestPDF.Infrastructure;
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TourPlannerApp.Models;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace TourPlannerApp.BL.Reports
 {

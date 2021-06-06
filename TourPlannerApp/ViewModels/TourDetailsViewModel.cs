@@ -1,12 +1,7 @@
 ﻿using Microsoft.Win32;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
 using TourPlannerApp.BL.Services;
 using TourPlannerApp.Models;
@@ -17,7 +12,7 @@ namespace TourPlannerApp.ViewModels
 {
     public class TourDetailsViewModel : BaseViewModel
     {
-        private readonly log4net.ILog _log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+        private readonly log4net.ILog _logger = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         private ITourService _tourService { get; set; }
 
         public LogEntryDialog LogEntryDialog { get; set; }

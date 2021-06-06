@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using TourPlannerApp.DAL.Exceptions;
 using TourPlannerApp.Models;
 using static TourPlannerApp.Models.TourItem;
 
@@ -18,8 +19,7 @@ namespace TourPlannerApp.DAL
         
         
         public List<TourItem> GetAllTours()
-        {
-            
+        {     
             var allTours = new List<TourItem>();
 
             var conn = Connect();
@@ -27,31 +27,39 @@ namespace TourPlannerApp.DAL
 
             using var cmd = new NpgsqlCommand(sql, conn);
 
-            var reader = cmd.ExecuteReader();
-            if (reader.HasRows)
+            try
             {
-                while (reader.Read())
+                var reader = cmd.ExecuteReader();
+                if (reader.HasRows)
                 {
-                    int id = reader.GetInt32(0);
-                    string name = reader.GetString(1);
-                    var startAddress = new Address();
-                    startAddress.Street = reader.GetString(2);
-                    startAddress.PostalCode = reader.GetString(3);
-                    startAddress.County = reader.GetString(4);
-                    startAddress.Country = reader.GetString(5);
-                    var targetAddress = new Address();
-                    targetAddress.Street = reader.GetString(6);
-                    targetAddress.PostalCode = reader.GetString(7);
-                    targetAddress.County = reader.GetString(8);
-                    targetAddress.Country = reader.GetString(9);
-                    float distance = reader.GetFloat(10);
-                    string imgPath = reader.GetString(11);
-                    imgPath.Replace("/", "\\");
-                    var tourType = GetTourType(reader.GetString(12));
-                    var description = reader.GetString(13);
-                    var tour = new TourItem { Id = id, Name = name, StartLocation = startAddress, TargetLocation = targetAddress, Distance = distance, PathToImg = imgPath, Description = description };
-                    allTours.Add(tour);
+                    while (reader.Read())
+                    {
+                        int id = reader.GetInt32(0);
+                        string name = reader.GetString(1);
+                        var startAddress = new Address();
+                        startAddress.Street = reader.GetString(2);
+                        startAddress.PostalCode = reader.GetString(3);
+                        startAddress.County = reader.GetString(4);
+                        startAddress.Country = reader.GetString(5);
+                        var targetAddress = new Address();
+                        targetAddress.Street = reader.GetString(6);
+                        targetAddress.PostalCode = reader.GetString(7);
+                        targetAddress.County = reader.GetString(8);
+                        targetAddress.Country = reader.GetString(9);
+                        float distance = reader.GetFloat(10);
+                        string imgPath = reader.GetString(11);
+                        imgPath.Replace("/", "\\");
+                        var tourType = GetTourType(reader.GetString(12));
+                        var description = reader.GetString(13);
+                        var tour = new TourItem { Id = id, Name = name, StartLocation = startAddress, TargetLocation = targetAddress, Distance = distance, PathToImg = imgPath, Description = description };
+                        allTours.Add(tour);
+                    }
                 }
+            }
+            catch (NpgsqlException ex)
+            {
+                Debug.WriteLine("NpgsqlException Error Message ex.Message: " + ex.Message);
+                throw new DataBaseException("Error in database occurred.", ex);
             }
 
             conn.Close();
@@ -64,30 +72,40 @@ namespace TourPlannerApp.DAL
             int id = -1;
 
             var conn = Connect();
-            var sql = "INSERT INTO swe2_tourplanner.tour (name, sl_street, sl_zip, sl_country, sl_county, tl_street, tl_zip, tl_country, tl_county, distance, img_path, type, description) VALUES (@name, @sl_street, @sl_postalcode, @sl_country, @sl_county, @tl_street, @tl_postalcode, @tl_country, @tl_county, @distance, @img_path, @type, @description)";
+           
+                var sql = "INSERT INTO swe2_tourplanner.tour (name, sl_street, sl_zip, sl_country, sl_county, tl_street, tl_zip, tl_country, tl_county, distance, img_path, type, description) VALUES (@name, @sl_street, @sl_postalcode, @sl_country, @sl_county, @tl_street, @tl_postalcode, @tl_country, @tl_county, @distance, @img_path, @type, @description)";
 
-            using var cmd = new NpgsqlCommand(sql, conn);
-            cmd.Parameters.Add(new NpgsqlParameter("@name", tourItem.Name));
-            cmd.Parameters.Add(new NpgsqlParameter("@sl_street", tourItem.StartLocation.Street));
-            cmd.Parameters.Add(new NpgsqlParameter("@sl_postalcode", tourItem.StartLocation.PostalCode));
-            cmd.Parameters.Add(new NpgsqlParameter("@sl_country", tourItem.StartLocation.Country));
-            cmd.Parameters.Add(new NpgsqlParameter("@sl_county", tourItem.StartLocation.County));
-            cmd.Parameters.Add(new NpgsqlParameter("@tl_street", tourItem.TargetLocation.Street));
-            cmd.Parameters.Add(new NpgsqlParameter("@tl_postalcode", tourItem.TargetLocation.PostalCode));
-            cmd.Parameters.Add(new NpgsqlParameter("@tl_country", tourItem.TargetLocation.Country));
-            cmd.Parameters.Add(new NpgsqlParameter("@tl_county", tourItem.TargetLocation.County));
-            cmd.Parameters.Add(new NpgsqlParameter("@distance", tourItem.Distance));
-            cmd.Parameters.Add(new NpgsqlParameter("@img_path", tourItem.PathToImg));
-            cmd.Parameters.Add(new NpgsqlParameter("@type", "Fussweg"));
-            cmd.Parameters.Add(new NpgsqlParameter("@description", tourItem.Description));
-            cmd.Prepare();
+                using var cmd = new NpgsqlCommand(sql, conn);
+                cmd.Parameters.Add(new NpgsqlParameter("@name", tourItem.Name));
+                cmd.Parameters.Add(new NpgsqlParameter("@sl_street", tourItem.StartLocation.Street));
+                cmd.Parameters.Add(new NpgsqlParameter("@sl_postalcode", tourItem.StartLocation.PostalCode));
+                cmd.Parameters.Add(new NpgsqlParameter("@sl_country", tourItem.StartLocation.Country));
+                cmd.Parameters.Add(new NpgsqlParameter("@sl_county", tourItem.StartLocation.County));
+                cmd.Parameters.Add(new NpgsqlParameter("@tl_street", tourItem.TargetLocation.Street));
+                cmd.Parameters.Add(new NpgsqlParameter("@tl_postalcode", tourItem.TargetLocation.PostalCode));
+                cmd.Parameters.Add(new NpgsqlParameter("@tl_country", tourItem.TargetLocation.Country));
+                cmd.Parameters.Add(new NpgsqlParameter("@tl_county", tourItem.TargetLocation.County));
+                cmd.Parameters.Add(new NpgsqlParameter("@distance", tourItem.Distance));
+                cmd.Parameters.Add(new NpgsqlParameter("@img_path", tourItem.PathToImg));
+                cmd.Parameters.Add(new NpgsqlParameter("@type", "Fussweg"));
+                cmd.Parameters.Add(new NpgsqlParameter("@description", tourItem.Description));
+                cmd.Prepare();
 
-            if (cmd.ExecuteNonQuery() == 1)
+            try
             {
-                // get ID from new Item
-                id = GetIdFromTourname(tourItem.Name);
+                if (cmd.ExecuteNonQuery() == 1)
+                {
+                    // get ID from new Item
+                    id = GetIdFromTourname(tourItem.Name);
 
+                }
             }
+            catch (NpgsqlException ex)
+            {
+                Debug.WriteLine("NpgsqlException Error Message ex.Message: " + ex.Message);
+                throw new DataBaseException("Error in database occurred.", ex);
+            }
+
 
             conn.Close();
             return id;
@@ -106,10 +124,19 @@ namespace TourPlannerApp.DAL
             cmd.Parameters.Add(new NpgsqlParameter("@id", tourId));
             cmd.Prepare();
 
-            if (cmd.ExecuteNonQuery() == 1)
+            try
             {
-                success = true;
+                if (cmd.ExecuteNonQuery() == 1)
+                {
+                    success = true;
+                }
             }
+            catch (NpgsqlException ex)
+            {
+                Debug.WriteLine("NpgsqlException Error Message ex.Message: " + ex.Message);
+                throw new DataBaseException("Error in database occurred.", ex);
+            }
+
 
             conn.Close();
             return success;
@@ -130,9 +157,17 @@ namespace TourPlannerApp.DAL
             cmd.Parameters.Add(new NpgsqlParameter("@id", tourItem.Id));
             cmd.Prepare();
 
-            if (cmd.ExecuteNonQuery() == 1)
+            try
             {
-                success = true;
+                if (cmd.ExecuteNonQuery() == 1)
+                {
+                    success = true;
+                }
+            }
+            catch (NpgsqlException ex)
+            {
+                Debug.WriteLine("NpgsqlException Error Message ex.Message: " + ex.Message);
+                throw new DataBaseException("Error in database occurred.", ex);
             }
 
             conn.Close();
@@ -150,33 +185,44 @@ namespace TourPlannerApp.DAL
             cmd.Parameters.Add(new NpgsqlParameter("@id", tourItem.Id));
             cmd.Prepare();
 
-            if (cmd.ExecuteNonQuery() == 1)
+            try
             {
-                success = true;
+                if (cmd.ExecuteNonQuery() == 1)
+                {
+                    success = true;
+                }
+            }
+            catch (NpgsqlException ex)
+            {
+                Debug.WriteLine("NpgsqlException Error Message ex.Message: " + ex.Message);
+                throw new DataBaseException("Error in database occurred.", ex);
             }
 
             conn.Close();
             return success;
         }
 
-        public List<TourItem> SearchByName(string tourName)
-        {
-            throw new System.NotImplementedException();
-        }
-
-
         public bool Exists(TourItem tourItem)
         {
             bool success = false;
             var conn = Connect();
-            var sql = "SELECT * FROM swe2_tourplanner.tour WHERE id = @id";
+            var sql = "SELECT * FROM swe2_tourplanner.tour WHERE name = @name";
 
             using var cmd = new NpgsqlCommand(sql, conn);
-            cmd.Parameters.Add(new NpgsqlParameter("@id", tourItem.Id));
+            cmd.Parameters.Add(new NpgsqlParameter("@name", tourItem.Name));
             cmd.Prepare();
 
-            var reader = cmd.ExecuteReader();
-            success = reader.HasRows;
+            try
+            {
+                var reader = cmd.ExecuteReader();
+                success = reader.HasRows;
+            }
+            catch (NpgsqlException ex)
+            {
+                Debug.WriteLine("NpgsqlException Error Message ex.Message: " + ex.Message);
+                throw new DataBaseException("Error in database occurred.", ex);
+            }
+
             conn.Close();
             return success;
         }
@@ -193,8 +239,17 @@ namespace TourPlannerApp.DAL
 
             cmd.Prepare();
 
-            var reader = cmd.ExecuteReader();
-            success = reader.HasRows;
+            try
+            {
+                var reader = cmd.ExecuteReader();
+                success = reader.HasRows;
+            }
+            catch (NpgsqlException ex)
+            {
+                Debug.WriteLine("NpgsqlException Error Message ex.Message: " + ex.Message);
+                throw new DataBaseException("Error in database occurred.", ex);
+            }
+
             conn.Close();
             return success;
         }
@@ -221,9 +276,17 @@ namespace TourPlannerApp.DAL
             cmd.Parameters.Add(new NpgsqlParameter("@avgSpeed", newLogEntry.AvgSpeed));
             cmd.Prepare();
 
-            if (cmd.ExecuteNonQuery() == 1)
+            try
             {
-                success = 1;
+                if (cmd.ExecuteNonQuery() == 1)
+                {
+                    success = 1;
+                }
+            }
+            catch (NpgsqlException ex)
+            {
+                Debug.WriteLine("NpgsqlException Error Message ex.Message: " + ex.Message);
+                throw new DataBaseException("Error in database occurred.", ex);
             }
 
             conn.Close();
@@ -235,7 +298,7 @@ namespace TourPlannerApp.DAL
             bool success = false;
 
             var conn = Connect();
-            var sql = " UPDATE swe2_tourplanner.log SET start_time=@startTime, end_time=@endTime, description=@description, distance=@distance, overall_time=@overallTime, rating=@rating, altitude=@altitude, weather=@weather, number_of_breaks=@numberOfBreaks, number_of_participants=@number_of_participants, avg_speed=@avgSpeed WHERE id=@id AND tour_id=@tourId";
+            var sql = "UPDATE swe2_tourplanner.log SET start_time=@startTime, end_time=@endTime, description=@description, distance=@distance, overall_time=@overallTime, rating=@rating, altitude=@altitude, weather=@weather, number_of_breaks=@numberOfBreaks, number_of_participants=@numberOfParticipants, avg_speed=@avgSpeed WHERE id=@id AND tour_id=@tourId";
 
             using var cmd = new NpgsqlCommand(sql, conn);
             cmd.Parameters.Add(new NpgsqlParameter("@startTime", editedLogEntry.StartTime));
@@ -254,9 +317,17 @@ namespace TourPlannerApp.DAL
 
             cmd.Prepare();
 
-            if (cmd.ExecuteNonQuery() == 1)
+            try
             {
-                success = true;
+                if (cmd.ExecuteNonQuery() == 1)
+                {
+                    success = true;
+                }
+            }
+            catch (NpgsqlException ex)
+            {
+                Debug.WriteLine("NpgsqlException Error Message ex.Message: " + ex.Message);
+                throw new DataBaseException("Error in database occurred.", ex);
             }
 
             conn.Close();
@@ -274,33 +345,52 @@ namespace TourPlannerApp.DAL
             cmd.Parameters.Add(new NpgsqlParameter("@id", selectedTour.Id));
             cmd.Prepare();
 
-            var reader = cmd.ExecuteReader();
-            if (reader.HasRows)
+            try
             {
-                while (reader.Read())
+                var reader = cmd.ExecuteReader();
+                if (reader.HasRows)
                 {
-                    int id = reader.GetInt32(0);
-                    DateTime startTime = reader.GetDateTime(1);
-                    DateTime endTime = reader.GetDateTime(2);
-                    string description = reader.GetString(3);
-                    float distance = reader.GetFloat(4);
-                    TimeSpan overallTime = reader.GetTimeSpan(5);
-                    int rating = reader.GetInt32(6);
-                    float altitude = reader.GetFloat(7);
-                        
-                    int weather = reader.GetInt32(8);
-                    int numberOfBreaks = reader.GetInt32(9);
-                    int numberOfParticipants = reader.GetInt32(10);
-                    float avgSpeed = reader.GetFloat(11);
+                    while (reader.Read())
+                    {
+                        int id = reader.GetInt32(0);
+                        DateTime startTime = reader.GetDateTime(1);
+                        DateTime endTime = reader.GetDateTime(2);
+                        string description = reader.GetString(3);
+                        float distance = reader.GetFloat(4);
+                        TimeSpan overallTime = reader.GetTimeSpan(5);
+                        int rating = reader.GetInt32(6);
+                        float altitude = reader.GetFloat(7);
 
-                    var logEntry = new LogEntry 
-                        { Id = id, StartTime = startTime, EndTime = endTime, Description = description, 
-                            Distance = distance, OverallTime = overallTime, Rating = rating, 
-                            Altitude = altitude, Weather = weather, NumberOfBreaks = numberOfBreaks, 
-                            NumberOfParticipants = numberOfParticipants, AvgSpeed = avgSpeed};
-                    allLogs.Add(logEntry);
+                        int weather = reader.GetInt32(8);
+                        int numberOfBreaks = reader.GetInt32(9);
+                        int numberOfParticipants = reader.GetInt32(10);
+                        float avgSpeed = reader.GetFloat(11);
+
+                        var logEntry = new LogEntry
+                        {
+                            Id = id,
+                            StartTime = startTime,
+                            EndTime = endTime,
+                            Description = description,
+                            Distance = distance,
+                            OverallTime = overallTime,
+                            Rating = rating,
+                            Altitude = altitude,
+                            Weather = weather,
+                            NumberOfBreaks = numberOfBreaks,
+                            NumberOfParticipants = numberOfParticipants,
+                            AvgSpeed = avgSpeed
+                        };
+                        allLogs.Add(logEntry);
+                    }
                 }
             }
+            catch (NpgsqlException ex)
+            {
+                Debug.WriteLine("NpgsqlException Error Message ex.Message: " + ex.Message);
+                throw new DataBaseException("Error in database occurred.", ex);
+            }
+          
 
             conn.Close();
             return allLogs;
@@ -318,9 +408,17 @@ namespace TourPlannerApp.DAL
             cmd.Parameters.Add(new NpgsqlParameter("@tourId", selectedTour.Id));
             cmd.Prepare();
 
-            if (cmd.ExecuteNonQuery() == 1)
+            try
             {
-                success = true;
+                if (cmd.ExecuteNonQuery() == 1)
+                {
+                    success = true;
+                }
+            }
+            catch (NpgsqlException ex)
+            {
+                Debug.WriteLine("NpgsqlException Error Message ex.Message: " + ex.Message);
+                throw new DataBaseException("Error in database occurred.", ex);
             }
 
             conn.Close();
@@ -337,8 +435,18 @@ namespace TourPlannerApp.DAL
             cmd.Parameters.Add(new NpgsqlParameter("@tourId", tourId));
             cmd.Prepare();
 
-            var reader = cmd.ExecuteReader();
-            success = reader.HasRows;
+            try
+            {
+
+                var reader = cmd.ExecuteReader();
+                success = reader.HasRows;
+            }
+            catch (NpgsqlException ex)
+            {
+                Debug.WriteLine("NpgsqlException Error Message ex.Message: " + ex.Message);
+                throw new DataBaseException("Error in database occurred.", ex);
+            }
+
             conn.Close();
             return success;
         }
@@ -354,9 +462,17 @@ namespace TourPlannerApp.DAL
             cmd.Parameters.Add(new NpgsqlParameter("@tourId", tourId));
             cmd.Prepare();
 
-            if (cmd.ExecuteNonQuery() == 1)
+            try
             {
-                success = true;
+                if (cmd.ExecuteNonQuery() == 1)
+                {
+                    success = true;
+                }
+            }
+            catch (NpgsqlException ex)
+            {
+                Debug.WriteLine("NpgsqlException Error Message ex.Message: " + ex.Message);
+                throw new DataBaseException("Error in database occurred.", ex);
             }
 
             conn.Close();
@@ -368,9 +484,17 @@ namespace TourPlannerApp.DAL
 
         private NpgsqlConnection Connect()
         {
-            var conn = new NpgsqlConnection(_connectionString);
-            conn.Open();
-            return conn;
+            try
+            {
+                var conn = new NpgsqlConnection(_connectionString);
+                conn.Open();
+                return conn;
+            }
+            catch (NpgsqlException ex)
+            {
+                throw new DataBaseException("Connection to database failed.", ex);
+            }
+
         }
 
         private TourItemType GetTourType(string value)
@@ -405,13 +529,21 @@ namespace TourPlannerApp.DAL
             cmd.Parameters.Add(new NpgsqlParameter("@name", tourName));
             cmd.Prepare();
 
-            var reader = cmd.ExecuteReader();
-            if (reader.HasRows)
+            try
             {
-                while (reader.Read())
+                var reader = cmd.ExecuteReader();
+                if (reader.HasRows)
                 {
-                    id = reader.GetInt32(0);
+                    while (reader.Read())
+                    {
+                        id = reader.GetInt32(0);
+                    }
                 }
+            }
+            catch (NpgsqlException ex)
+            {
+                Debug.WriteLine("NpgsqlException Error Message ex.Message: " + ex.Message);
+                throw new DataBaseException("Error in database occurred.", ex);
             }
 
             conn.Close();

@@ -1,5 +1,4 @@
 ﻿using System.IO;
-using System.Text.Json.Serialization;
 using Newtonsoft.Json;
 
 namespace TourPlannerApp.Models

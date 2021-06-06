@@ -1,13 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Input;
 using TourPlannerApp.Models;
 using TourPlannerApp.ViewModels.Base;
@@ -16,6 +10,7 @@ namespace TourPlannerApp.ViewModels
 {
     public class LogEntryDialogViewModel : BaseViewModel, IDataErrorInfo
     {
+        private readonly log4net.ILog _logger = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
         public Dictionary<string, string> ErrorCollection { get; private set; } = new Dictionary<string, string>();
 

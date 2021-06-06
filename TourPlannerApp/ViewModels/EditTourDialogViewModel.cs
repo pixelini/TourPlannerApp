@@ -1,9 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Input;
 using TourPlannerApp.Models;
 using TourPlannerApp.ViewModels.Base;
@@ -12,7 +7,9 @@ namespace TourPlannerApp.ViewModels
 {
     public class EditTourDialogViewModel : BaseViewModel
     {
-
+        
+        private readonly log4net.ILog _logger = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+        
         public TourItem CurrentTour { get; set; }
 
         public string StartLocationFull { get => CurrentTour.GetStartLocationAsString(); set { } }

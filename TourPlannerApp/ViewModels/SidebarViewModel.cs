@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
 using TourPlannerApp.BL.Services;
 using TourPlannerApp.DAL;
@@ -14,13 +10,12 @@ using System.Diagnostics; //for debug-mode
 using TourPlannerApp.Navigator;
 using TourPlannerApp.Store;
 using TourPlannerApp.Views;
-using System.Threading;
 
 namespace TourPlannerApp.ViewModels
 {
     public class SidebarViewModel : BaseViewModel
     {
-        private readonly log4net.ILog _log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+        private readonly log4net.ILog _logger = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
         public EditTourDialog EditTourDialog { get; set; }
         public EditTourDialogViewModel EditTourDialogViewModel { get; set; }

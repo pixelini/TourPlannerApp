@@ -1,12 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TourPlannerApp.Models;
-using System.Drawing;
 
 namespace TourPlannerApp.DAL
 {
@@ -37,7 +31,7 @@ namespace TourPlannerApp.DAL
             }
             catch (Exception e)
             {
-                //Console.WriteLine(e);
+                Console.WriteLine(e);
                 return "";
             }
             

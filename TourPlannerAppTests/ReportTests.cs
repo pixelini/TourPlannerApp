@@ -1,12 +1,8 @@
 using System;
 using NUnit.Framework;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using Moq;
 using TourPlannerApp.BL.Reports;
-using TourPlannerApp.BL.Services;
-using TourPlannerApp.DAL;
 using TourPlannerApp.Models;
 
 namespace TourPlannerAppTests

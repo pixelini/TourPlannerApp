@@ -1,5 +1,4 @@
-﻿using System.Threading.Tasks;
-using TourPlannerApp.DAL;
+﻿using TourPlannerApp.DAL;
 using TourPlannerApp.Models;
 using TourPlannerApp.Models.Models;
 using static TourPlannerApp.Models.Models.TourLookup;

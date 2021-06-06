@@ -1,15 +1,12 @@
 ﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
-using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using TourPlannerApp.Models;
-using TourPlannerApp.Models.Models;
 using static TourPlannerApp.Models.Models.TourLookup;
 
 namespace TourPlannerApp.DAL

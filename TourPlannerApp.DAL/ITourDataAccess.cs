@@ -13,8 +13,6 @@ namespace TourPlannerApp.DAL
 
         public bool DeleteTour(TourItem tourItem);
 
-        List<TourItem> SearchByName(string tourName);
-
         public bool Exists(TourItem tourItem);
 
         public bool Exists(int tourId, LogEntry logEntry);

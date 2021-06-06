@@ -1,5 +1,8 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
+using System.Windows;
 using System.Windows.Input;
+using TourPlannerApp.BL.Exceptions;
 using TourPlannerApp.BL.Services;
 using TourPlannerApp.DAL;
 using TourPlannerApp.Models;
@@ -10,7 +13,7 @@ namespace TourPlannerApp.ViewModels
 {
     public class AddTourViewModel : BaseViewModel
     {
-        private readonly log4net.ILog _log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+        private readonly log4net.ILog _logger = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
         private ITourService _tourService { get; set; }
 
@@ -158,7 +161,7 @@ namespace TourPlannerApp.ViewModels
 
         public AddTourViewModel()
         {
-            _log.Info("Add Tour...");
+            _logger.Info("Add Tour...");
             var repository = new TourDataAccess();
             var imgFolder = new PictureAccess();
             _tourService = new TourService(repository, imgFolder);
@@ -203,7 +206,20 @@ namespace TourPlannerApp.ViewModels
             Debug.WriteLine("Add Tour...");
             CurrentTourLookup.Name = TourNameInput;
             CurrentTourLookup.Description = TourDescriptionInput;
-            _tourService.AddTour(CurrentTourLookup);
+
+            try
+            {
+                _tourService.AddTour(CurrentTourLookup);
+            }
+            catch (TourCollisionException e)
+            {
+                MessageBox.Show("Tour mit Namen \"" + e.TourName + "\" existiert bereits. Bitte verwende einen anderen Namen.", "Fehler", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.Message, "Fehler", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            
             TourEvents.AnnounceNewTour();
 
         }

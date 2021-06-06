@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TourPlannerApp.Models;
-using static TourPlannerApp.Models.Models.TourLookup;
+﻿using static TourPlannerApp.Models.Models.TourLookup;
 
 namespace TourPlannerApp.DAL
 {

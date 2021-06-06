@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using static TourPlannerApp.Models.Models.TourLookup;
 
 namespace TourPlannerApp.Models
 {
@@ -11,7 +10,6 @@ namespace TourPlannerApp.Models
         
         public int Id { get; set; }
         
-        // Optional
         public string Name { get; set; }
         public string Description { get; set; }
         public Address StartLocation { get; set; }
@@ -34,12 +32,9 @@ namespace TourPlannerApp.Models
 
         // Turn by turn navigation
         public List<string> NavigationDetails { get; set; }
-
-        //public DateTime CreationTime { get; set; }
-
+        
         // Optional
         public List<LogEntry> Log { get; set; }
-        
         
         public string GetStartLocationAsString() => GetLocationString(StartLocation);
 
