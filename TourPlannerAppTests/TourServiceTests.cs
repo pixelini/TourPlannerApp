@@ -263,6 +263,23 @@ namespace TourPlannerAppTests
             }
         }
         
+        [Test]
+        public void ExportTourData_SavingJsonSuccessful()
+        {
+            // Arrange
+            var filepath = Environment.CurrentDirectory + @"\TestTourJson.json";
+            _tour.PathToImg = "valid/path/to/img.png";
+            _tour.Image = new byte[]{ 0, 100, 120, 210, 255 };
+
+            // Act
+            _tourService.ExportTourData(_tour, filepath);
+
+            // Assert
+            Assert.That(File.Exists(filepath));
+
+            // Cleanup
+            DeleteIfExists(filepath);
+        }
         
         private bool PdfContainsAllTextsInGivenList(string path, List<string> allTextsToFind)
         {

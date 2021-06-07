@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Windows.Input;
 using TourPlannerApp.Models;
@@ -20,18 +21,25 @@ namespace TourPlannerApp.ViewModels
         { 
             get 
             {
-                _logEntry.Rating = SelectedRating.ItemValue;
-                _logEntry.Weather = SelectedWeatherCondition.ItemValue;
-                _logEntry.StartTime = Convert.ToDateTime(_startTimeInput);
-                _logEntry.EndTime = Convert.ToDateTime(_endTimeInput);
-                _logEntry.Description = _descriptionInput;
-                _logEntry.Distance = float.Parse(_distanceInput);
-                _logEntry.OverallTime = TimeSpan.Parse(_overallTimeInput);
-                _logEntry.Altitude = float.Parse(_altitudeInput);
-                _logEntry.AvgSpeed = float.Parse(_avgSpeedInput);
-                _logEntry.NumberOfBreaks = Int32.Parse(_numberOfBreaksInput);
-                _logEntry.NumberOfParticipants = Int32.Parse(_numberOfParticipantsInput);
-                return _logEntry; 
+                try
+                {
+                    _logEntry.Rating = SelectedRating.ItemValue;
+                    _logEntry.Weather = SelectedWeatherCondition.ItemValue;
+                    _logEntry.StartTime = Convert.ToDateTime(_startTimeInput);
+                    _logEntry.EndTime = Convert.ToDateTime(_endTimeInput);
+                    _logEntry.Description = _descriptionInput;
+                    _logEntry.Distance = float.Parse(_distanceInput);
+                    _logEntry.OverallTime = TimeSpan.Parse(_overallTimeInput);
+                    _logEntry.Altitude = float.Parse(_altitudeInput);
+                    _logEntry.AvgSpeed = float.Parse(_avgSpeedInput);
+                    _logEntry.NumberOfBreaks = Int32.Parse(_numberOfBreaksInput);
+                    _logEntry.NumberOfParticipants = Int32.Parse(_numberOfParticipantsInput);            
+                }
+                catch (FormatException e)
+                {
+                    Debug.WriteLine("Format not correct.");
+                }
+                return _logEntry;
             } 
             
             set { } 
@@ -41,8 +49,6 @@ namespace TourPlannerApp.ViewModels
         public List<SelectableItem> Ratings { get; set; }
         
         public List<SelectableItem> WeatherConditions { get; set; }
-
-        //private SelectableItem _selectedRating;
 
         public SelectableItem SelectedRating
         {
