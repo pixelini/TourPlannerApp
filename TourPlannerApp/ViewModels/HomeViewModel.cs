@@ -93,9 +93,6 @@ namespace TourPlannerApp.ViewModels
                 EditTourDialogViewModel.Save += EditTourDialogViewModelOnSave;
                 EditTourDialog = new EditTourDialog(EditTourDialogViewModel);
                 bool? isClosed = EditTourDialog.ShowDialog();
-                Debug.WriteLine("Is Open: " + isClosed);
-                //Navigator.CurrentViewModel = new TourDetailsViewModel(CurrentItem, _tourService);
-                
             }
 
         }
@@ -105,12 +102,8 @@ namespace TourPlannerApp.ViewModels
             // get new Data
             CurrentItem.Name = EditTourDialogViewModel.TournameInput;
             CurrentItem.Description = EditTourDialogViewModel.DescriptionInput;
-
-            // TODO: Validate it
             _tourService.AddImportedTour(CurrentItem);
             TourEvents.AnnounceNewTour();
-
-            // TODO: if successfull -> close
             EditTourDialog.Close();
         }
 

@@ -21,11 +21,6 @@ namespace TourPlannerApp.BL.Services
 
         private IPictureAccess _tourPictureAccess;
 
-        //public TourService(ITourDataAccess tourDataAccess)
-        //{
-        //    _tourDataAccess = tourDataAccess;
-        //}
-
         public TourService(ITourDataAccess tourDataAccess, IPictureAccess tourImgAccess)
         {
             _tourDataAccess = tourDataAccess;
@@ -42,7 +37,6 @@ namespace TourPlannerApp.BL.Services
             }
             catch (DataBaseException e)
             {
-                Debug.WriteLine(e);
                 _logger.Error($"Database Error: {e}");
             }
 
@@ -90,19 +84,15 @@ namespace TourPlannerApp.BL.Services
                     tourId = _tourDataAccess.AddTour(newTourItem);
                     if (tourId >= 0)
                     {
-                        Debug.WriteLine("Tour was successfully added.");
                         _logger.Info($"Tour successfully added: (ID: {newTourItem.Id}, Name: {newTourItem.Name}).");
                         return tourId;
                     }
 
-                    Debug.WriteLine("Tour couldn't be added.");
                     _logger.Info($"Tour couldn't be added. (ID: {newTourItem.Id}, Name: {newTourItem.Name}).");
                     return tourId;
                 }
                 catch (DataBaseException e)
                 {
-                    Debug.WriteLine(e);
-                    Debug.WriteLine("Tour couldn't be added. DatabaseException");
                     _logger.Error($"Tour couldn't be added. Database Error: {e}");
                 }
 
@@ -110,11 +100,9 @@ namespace TourPlannerApp.BL.Services
             }
             else
             {
-                Debug.WriteLine("Tour already exits.");
                 _logger.Debug($"Tour already exits. TourCollisionException is thrown.");
                 throw new TourCollisionException("Tour already exits.", newTourItem.Name);
             }
- 
 
             return tourId;
         }
@@ -128,7 +116,6 @@ namespace TourPlannerApp.BL.Services
                 bool success = _tourDataAccess.UpdateTour(tourItem);
                 if (success)
                 {
-                    Debug.WriteLine("Tour was successfully updated.");
                     _logger.Info($"Tour successfully updated: (ID: {tourItem.Id}, Name: {tourItem.Name}).");
                     return true;
                 }
@@ -167,7 +154,6 @@ namespace TourPlannerApp.BL.Services
                     if (_tourDataAccess.DeleteTour(tourItem))
                     {
                         _logger.Info($"Tour successfully deleted: (ID: {tourItem.Id}, Name: {tourItem.Name}).");
-                        Debug.WriteLine("Tour was successfully deleted.");
 
                         // Delete Image
                         _tourPictureAccess.DeletePicture(tourItem.PathToImg);
@@ -185,14 +171,13 @@ namespace TourPlannerApp.BL.Services
                 }
                 catch (Exception e)
                 {
-                    Debug.WriteLine("Tour couldn't be deleted. " + e);
+                    _logger.Error($"Tour couldn't be deleted. Unknown Error: {e}");
                 }
 
 
             }
             else
             {
-                Debug.WriteLine("Tour doesn't exits.");
                 _logger.Debug($"Tour doesn't exits. TourNotFoundException is thrown.");
                 throw new TourNotFoundException("Tour doesn't exits.", tourItem.Name);
             }
@@ -231,7 +216,6 @@ namespace TourPlannerApp.BL.Services
             catch (Exception e)
             {
                 _logger.Error($"Unknown Error: {e}");
-                Debug.WriteLine(e);
             }
 
             return null;
@@ -246,7 +230,6 @@ namespace TourPlannerApp.BL.Services
             catch (DataBaseException e)
             {
                 _logger.Error($"Database Error: {e}");
-                Debug.WriteLine(e);
             }
 
             return false;
@@ -261,7 +244,6 @@ namespace TourPlannerApp.BL.Services
             catch (DataBaseException e)
             {
                 _logger.Error($"Database Error: {e}");
-                Debug.WriteLine(e);
             }
 
             return false;
@@ -276,7 +258,6 @@ namespace TourPlannerApp.BL.Services
             catch (DataBaseException e)
             {
                 _logger.Error($"Database Error: {e}");
-                Debug.WriteLine(e);
             }
 
             return -1;
@@ -291,7 +272,6 @@ namespace TourPlannerApp.BL.Services
             catch (DataBaseException e)
             {
                 _logger.Error($"Database Error: {e}");
-                Debug.WriteLine(e);
             }
 
             return false;
@@ -306,7 +286,6 @@ namespace TourPlannerApp.BL.Services
             catch (DataBaseException e)
             {
                 _logger.Error($"Database Error: {e}");
-                Debug.WriteLine(e);
             }
 
             return null;
@@ -325,12 +304,10 @@ namespace TourPlannerApp.BL.Services
                     // delete if log exists
                     if (_tourDataAccess.DeleteLogEntry(selectedTour, selectedLogEntry))
                     {
-                        Debug.WriteLine("Log was successfully deleted.");
                         _logger.Info($"Log successfully deleted: (ID: {selectedLogEntry.Id}, from Tour: {selectedTour.Name}).");
                         return true;
                     }
 
-                    Debug.WriteLine("Log couldn't be deleted.");
                     _logger.Info($"Log couldn't be deleted. (ID: {selectedLogEntry.Id}, from Tour: {selectedTour.Name}).");
 
                     return false;
@@ -338,12 +315,10 @@ namespace TourPlannerApp.BL.Services
                 catch (DataBaseException e)
                 {
                     _logger.Error($"Database Error: {e}");
-                    Debug.WriteLine(e);
                 }
 
             } else
             {
-                Debug.WriteLine("Log does not exist.");
                 _logger.Debug($"Log doesn't exits. LogNotFoundException is thrown.");
                 throw new LogNotFoundException("Log doesn't exits.", selectedTour.Name);
             }
@@ -401,8 +376,6 @@ namespace TourPlannerApp.BL.Services
 
         public void ExportTourData(TourItem selectedTour, string filePath)
         {
-            Debug.WriteLine(filePath);
-
             var imageDataAsByteArray = ReadImageFile(selectedTour.PathToImg);
             if (imageDataAsByteArray != null)
             {
