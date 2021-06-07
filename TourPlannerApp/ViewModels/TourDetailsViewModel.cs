@@ -81,12 +81,10 @@ namespace TourPlannerApp.ViewModels
                 _logger.Debug($"{property.Name} = {property.GetValue(newLogEntry, null)}");
             }
 
-            // TODO: Validate it
             _tourService.AddTourLog(SelectedTour.Id, newLogEntry);
             SelectedTour.Log =_tourService.GetAllLogsForTour(SelectedTour);
             LogEntryInfos = new ObservableCollection<LogEntry>(_tourService.GetAllLogsForTour(SelectedTour));
-
-            // TODO: if successful -> close
+            
             LogEntryDialog.Close();
         }
 
@@ -103,14 +101,12 @@ namespace TourPlannerApp.ViewModels
         {
             var editedLogEntry = LogEntryDialogViewModel.LogEntry;
 
-            // TODO: Validate it
             if (_tourService.UpdateTourLog(SelectedTour.Id, editedLogEntry))
             {
                 SelectedTour.Log = _tourService.GetAllLogsForTour(SelectedTour);
                 LogEntryInfos = new ObservableCollection<LogEntry>(_tourService.GetAllLogsForTour(SelectedTour));
             }
 
-            // TODO: if successfull -> close
             LogEntryDialog.Close();
         }
 

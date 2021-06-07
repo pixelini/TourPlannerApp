@@ -147,12 +147,8 @@ namespace TourPlannerApp.ViewModels
             // get new Data
             CurrentItem.Name = EditTourDialogViewModel.TournameInput;
             CurrentItem.Description = EditTourDialogViewModel.DescriptionInput;
-
-            // TODO: Validate it
             _tourService.UpdateTour(CurrentItem);
             RefreshTourList();
-
-            // TODO: if successfull -> close
             EditTourDialog.Close();
         }
 
